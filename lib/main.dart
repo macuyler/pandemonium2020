@@ -27,11 +27,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Block> _blocks = [
-    new Block(x: 100, y: 100, color: Colors.blue),
-  ];
+  List<Block> _blocks = [];
   int _blockToDrag = -1;
   int _score = 0;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _newBlock();
+  }
 
   void _newBlock() {
     final size = MediaQuery.of(context).size;
@@ -86,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
       }
       setState(() {
         _blockToDrag = -1;
-        _score += scored ? 1 : 0;
+        _score += scored ? 1 : -1;
       });
     }
   }

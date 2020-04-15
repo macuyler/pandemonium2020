@@ -66,6 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _handlePanEnd(details) {
     final size = MediaQuery.of(context).size;
     bool scored = false;
+    bool touched = false;
     if (_blockToDrag != -1) {
       Block block = _blocks[_blockToDrag];
       List<Color> colors = [];
@@ -77,8 +78,10 @@ class _MyHomePageState extends State<MyHomePage> {
       if (colors.length > 0) {
         int houses = leftColors.length;
         for (var i = 0; i < houses; i++) {
-          double y = (i * (size.height * (2/3)) / houses) + 20;
+          double yFactor = (size.height * (2/3)) / houses;
+          double y = (i * yFactor) + (yFactor / 2) - (houseHeight / 2);
           if (block.y + blockHeight >= y && block.y <= y + houseHeight) {
+            touched = true;
             if (block.color == colors[i]) {
               scored = true;
             }
@@ -90,7 +93,9 @@ class _MyHomePageState extends State<MyHomePage> {
       }
       setState(() {
         _blockToDrag = -1;
-        _score += scored ? 1 : -1;
+        if (touched) {
+          _score += scored ? 1 : -1;
+        }
       });
     }
   }
@@ -103,7 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
       if (b.x < 0 || b.x > size.width - blockWidth) {
         b.updatePos(dx: -details.delta.dx, dy: 0);
       }
-      if (b.y < 0 || b.y > size.height * (8/15) - blockHeight + 20 + houseHeight) {
+      if (b.y < 0 || b.y > size.height * (8/15) - blockHeight + (houseHeight * (3/2))) {
         b.updatePos(dx: 0, dy: -details.delta.dy);
       }
       setState(() {

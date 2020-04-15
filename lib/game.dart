@@ -53,7 +53,7 @@ class GamePainter extends CustomPainter {
     double yFactor = (size.height * (2/3)) / houses;
     // Draw Sides
     for (var i = 0; i < houses; i++) {
-      double y = (yFactor * i) + (size.height * (1/3)) + 20;
+      double y = (yFactor * i) + (yFactor / 2) + (size.height * (1/3)) - (houseHeight / 2);
       Rect rl = Rect.fromLTWH(0, y, houseWidth, houseHeight);
       Rect rr = Rect.fromLTWH(size.width - houseWidth, y, houseWidth, houseHeight);
       paint.color = leftColors[i];

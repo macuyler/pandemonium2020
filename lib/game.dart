@@ -5,7 +5,8 @@ import 'globals.dart';
 class GamePainter extends CustomPainter {
   List<Block> blocks;
   int score;
-  GamePainter({ this.blocks, this.score });
+  String time;
+  GamePainter({ this.blocks, this.score, this.time });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -14,6 +15,10 @@ class GamePainter extends CustomPainter {
       ..color = Colors.blue
       ..isAntiAlias = true;
     drawScore(canvas, size);
+    drawTime(canvas, size);
+    if (time == '00:00') {
+      drawHelper(canvas, size);
+    }
     drawBottom(canvas, size, paint);
     drawHouses(canvas, size, paint);
     paint.color = Colors.blue;
@@ -23,14 +28,11 @@ class GamePainter extends CustomPainter {
     });
   }
 
-  void drawScore(Canvas canvas, Size size) {
+  TextPainter drawText({Size size, String text, TextStyle textStyle}) {
     final textPainter = TextPainter(
       text: TextSpan(
-        text: 'Score: ${this.score}',
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 30,
-        ),
+        text: text,
+        style: textStyle,
       ),
       textDirection: TextDirection.ltr,
       textAlign: TextAlign.center,
@@ -39,7 +41,45 @@ class GamePainter extends CustomPainter {
       minWidth: size.width,
       maxWidth: size.width,
     );
+    return textPainter;
+  }
+
+  void drawScore(Canvas canvas, Size size) {
+    final textPainter = drawText(
+      size: size,
+      text: 'Score: ${this.score}',
+      textStyle: TextStyle(
+        color: Colors.black,
+        fontSize: 30,
+      )
+    );
     final offset = Offset(0, (size.height / 6) - 15);
+    textPainter.paint(canvas, offset);
+  }
+
+  void drawTime(Canvas canvas, Size size) {
+    final textPainter = drawText(
+      size: size,
+      text: 'Time: ${this.time}',
+      textStyle: TextStyle(
+        fontSize: 25,
+        color: Colors.black
+      )
+    );
+    final offset = Offset(0, (size.height / 6) + 30);
+    textPainter.paint(canvas, offset);
+  }
+
+  void drawHelper(Canvas canvas, Size size) {
+    final textPainter = drawText(
+      size: size,
+      text: 'Double tap to start!',
+      textStyle: TextStyle(
+        fontSize: 20,
+        color: Colors.grey[500]
+      )
+    );
+    final offset = Offset(0, (size.height / 6) + 70);
     textPainter.paint(canvas, offset);
   }
 

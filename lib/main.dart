@@ -54,9 +54,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    for (int i = 0; i < this.patients; i++) {
-      _newBlock();
-    }
   }
 
   void _setClockTime(int seconds) {
@@ -74,6 +71,10 @@ class _MyHomePageState extends State<MyHomePage> {
       _startTime = DateTime.now();
       _score = 0;
       _houseScores = {};
+      _blocks = [];
+      for (int i = 0; i < this.patients; i++) {
+        _newBlock();
+      }
       _clockTime = '01:00';
     });
     _tick();

@@ -15,7 +15,7 @@ flutter run
 
 ## TODO
 
-- [ ] Total Points per House
+- [x] Total Points per House
 - [ ] Remove all points from house if infected enters
 - [ ] Make players walk around on road
 - [ ] Infect other players who contact infected

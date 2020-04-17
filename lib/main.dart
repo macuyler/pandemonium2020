@@ -47,6 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Block> _blocks = [];
   int _blockToDrag = -1;
   int _score = 0;
+  Map<Color, int> _houseScores = {};
   DateTime _startTime;
   String _clockTime = '00:00';
 
@@ -102,6 +103,14 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  int _getTotalScore() {
+    int total = 0;
+    _houseScores.forEach((_, int i) {
+      total += i;
+    });
+    return total;
+  }
+
   void _newBlock() {
     final size = MediaQuery.of(context).size;
     Random r = Random();
@@ -137,6 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final size = MediaQuery.of(context).size;
     bool scored = false;
     bool touched = false;
+    Color house;
     if (_blockToDrag != -1) {
       Block block = _blocks[_blockToDrag];
       List<Color> colors = [];
@@ -151,6 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
           double yFactor = (size.height * (2/3)) / houses;
           double y = (i * yFactor) + (yFactor / 2) - (houseHeight / 2);
           if (block.y + blockHeight >= y && block.y <= y + houseHeight) {
+            house = colors[i];
             touched = true;
             if (block.color == colors[i]) {
               scored = true;
@@ -164,7 +175,12 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         _blockToDrag = -1;
         if (touched) {
-          _score += scored ? 1 : -1;
+          if (_houseScores.containsKey(house)) {
+            _houseScores[house] += scored ? 1 : -1;
+          } else {
+            _houseScores[house] = scored ? 1 : -1;
+          }
+          _score = _getTotalScore();
         }
       });
     }

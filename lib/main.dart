@@ -92,7 +92,8 @@ class _MyHomePageState extends State<MyHomePage> {
     _blocks.add(new Block(
       x: (size.width / 2) - (blockWidth / 2),
       y: (size.height * (1/3)) - (blockHeight / 2),
-      color: sides[r.nextInt(2)][r.nextInt(leftColors.length)]
+      color: sides[r.nextInt(2)][r.nextInt(leftColors.length)],
+      infected: Random().nextInt(5) == 0,
     ));
     setState(() {
       _blocks = _blocks;
@@ -156,7 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final size = MediaQuery.of(context).size;
     if (_blockToDrag != -1) {
       Block oldB = _blocks[_blockToDrag];
-      Block b = new Block(x: oldB.x, y: oldB.y, color: oldB.color);
+      Block b = new Block(x: oldB.x, y: oldB.y, color: oldB.color, infected: oldB.infected);
       b.updatePos(dx: details.delta.dx, dy: details.delta.dy);
       if (b.x < 0 || b.x > size.width - blockWidth) {
         b.updatePos(dx: -details.delta.dx, dy: 0);

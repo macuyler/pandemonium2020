@@ -24,7 +24,25 @@ class GamePainter extends CustomPainter {
     paint.color = Colors.blue;
     blocks.forEach((block) {
       paint.color = block.color;
-      canvas.drawRect(Rect.fromLTWH(block.x, block.y + size.height * (1/3), blockWidth, blockHeight), paint);
+      double x = block.x;
+      double y = block.y + size.height * (1/3);
+      // Face
+      canvas.drawRect(Rect.fromLTWH(x, y, blockWidth, blockHeight), paint);
+      paint.color = Colors.black;
+      // Left eye
+      canvas.drawRect(Rect.fromLTWH(x + (blockWidth / 4) - (blockWidth / 16), y + (blockHeight / 4) - (blockHeight / 16), blockWidth / 8, blockHeight / 8), paint);
+      // Right eye
+      canvas.drawRect(Rect.fromLTWH(x + (blockWidth * 3 / 4) - (blockWidth / 16), y + (blockHeight / 4) - (blockHeight / 16), blockWidth / 8, blockHeight / 8), paint);
+      if (block.infected) {
+        paint.color = Colors.white;
+        // Mask
+        canvas.drawRect(Rect.fromLTWH(x + (blockWidth / 4), y + (blockHeight / 2), blockWidth / 2, blockHeight / 2), paint);
+        // Mask Strap
+        canvas.drawRect(Rect.fromLTWH(x, y + (blockHeight / 2), blockWidth, blockHeight / 16), paint);
+      } else {
+        // Mouth
+        canvas.drawArc(Rect.fromLTWH(x + (blockWidth / 4), y + (blockHeight / 2) - 2, blockWidth / 2, blockHeight / 2), 180, 360, true, paint);
+      }
     });
   }
 

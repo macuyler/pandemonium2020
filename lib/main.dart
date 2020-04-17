@@ -146,6 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final size = MediaQuery.of(context).size;
     bool scored = false;
     bool touched = false;
+    bool infected = false;
     Color house;
     if (_blockToDrag != -1) {
       Block block = _blocks[_blockToDrag];
@@ -163,6 +164,7 @@ class _MyHomePageState extends State<MyHomePage> {
           if (block.y + blockHeight >= y && block.y <= y + houseHeight) {
             house = colors[i];
             touched = true;
+            infected = block.infected;
             if (block.color == colors[i]) {
               scored = true;
             }
@@ -176,9 +178,13 @@ class _MyHomePageState extends State<MyHomePage> {
         _blockToDrag = -1;
         if (touched) {
           if (_houseScores.containsKey(house)) {
-            _houseScores[house] += scored ? 1 : -1;
+            if (infected && _houseScores[house] > 0) {
+              _houseScores[house] = 0;
+            } else {
+              _houseScores[house] += infected || !scored ? -1 : 1;
+            }
           } else {
-            _houseScores[house] = scored ? 1 : -1;
+            _houseScores[house] = infected || !scored ? -1 : 1;
           }
           _score = _getTotalScore();
         }

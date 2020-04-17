@@ -73,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _houseScores = {};
       _blocks = [];
       for (int i = 0; i < this.patients; i++) {
-        _newBlock();
+        _newBlock(canBeInfected: false);
       }
       _clockTime = '01:00';
     });
@@ -114,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return total;
   }
 
-  void _newBlock() {
+  void _newBlock({bool canBeInfected = true}) {
     final size = MediaQuery.of(context).size;
     Random r = Random();
     List<List> sides = [leftColors, rightColors];
@@ -126,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
       x: (Random().nextDouble() * (size.width - (houseWidth * 2) - 10 - blockWidth)) + houseWidth + 5,
       y: (Random().nextDouble() * (size.height * (2/3) - 40 - blockHeight)) + 20,
       color: sides[r.nextInt(2)][r.nextInt(this.houses)],
-      infected: Random().nextInt(this.infRate) == 0,
+      infected: canBeInfected ? Random().nextInt(this.infRate) == 0 : false,
       dx: dx,
       dy: dy,
     ));

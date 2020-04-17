@@ -73,6 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _startTime = DateTime.now();
       _score = 0;
+      _houseScores = {};
       _clockTime = '01:00';
     });
     _tick();
@@ -86,8 +87,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _tick() {
     if (_startTime != null) {
-      Timer(Duration(seconds: 1), () {
+      Timer(Duration(milliseconds: 10), () {
         _tick();
+        _update();
         _updateClock(DateTime.now());
       });
     }
@@ -115,11 +117,17 @@ class _MyHomePageState extends State<MyHomePage> {
     final size = MediaQuery.of(context).size;
     Random r = Random();
     List<List> sides = [leftColors, rightColors];
+    double dx = Random().nextDouble();
+    dx *= Random().nextBool() ? -1 : 1;
+    double dy = Random().nextDouble();
+    dy *= Random().nextBool() ? -1 : 1;
     _blocks.add(new Block(
       x: (Random().nextDouble() * (size.width - (houseWidth * 2) - 10 - blockWidth)) + houseWidth + 5,
       y: (Random().nextDouble() * (size.height * (2/3) - 40 - blockHeight)) + 20,
       color: sides[r.nextInt(2)][r.nextInt(this.houses)],
       infected: Random().nextInt(this.infRate) == 0,
+      dx: dx,
+      dy: dy,
     ));
     setState(() {
       _blocks = _blocks;
@@ -195,8 +203,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _handlePanUpdate(details) {
     final size = MediaQuery.of(context).size;
     if (_blockToDrag != -1) {
-      Block oldB = _blocks[_blockToDrag];
-      Block b = new Block(x: oldB.x, y: oldB.y, color: oldB.color, infected: oldB.infected);
+      Block b = _blocks[_blockToDrag];
       b.updatePos(dx: details.delta.dx, dy: details.delta.dy);
       if (b.x < 0 || b.x > size.width - blockWidth) {
         b.updatePos(dx: -details.delta.dx, dy: 0);
@@ -212,6 +219,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _blank(_) {}
 
+  void _update() {
+    final size = MediaQuery.of(context).size;
+    _blocks.asMap().forEach((i, block) {
+      if (i != _blockToDrag) {
+        block.updatePos(dx: block.dx, dy: block.dy);
+        if (block.x < houseWidth + 5 || block.x + blockWidth > size.width - houseWidth - 5) {
+          block.updatePos(dx: -block.dx, dy: 0);
+          block.setDirection(dx: -block.dx, dy: block.dy);
+        }
+        if (block.y < 20 || block.y + blockHeight > size.height * (2/3) - 20) {
+          block.updatePos(dx: 0, dy: -block.dy);
+          block.setDirection(dx: block.dx, dy: -block.dy);
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     bool running = _startTime != null;
@@ -225,7 +249,12 @@ class _MyHomePageState extends State<MyHomePage> {
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           child: CustomPaint(
-            painter: GamePainter(blocks: _blocks, score: _score, time: _clockTime, houses: this.houses),
+            painter: GamePainter(
+              blocks: _blocks, 
+              score: _score,
+              time: _clockTime,
+              houses: this.houses,
+            ),
           ),
         ),
       ),

@@ -124,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
     dy *= Random().nextBool() ? -1 : 1;
     _blocks.add(new Block(
       x: (Random().nextDouble() * (size.width - (houseWidth * 2) - 10 - blockWidth)) + houseWidth + 5,
-      y: (Random().nextDouble() * (size.height * (2/3) - 40 - blockHeight)) + 20,
+      y: (Random().nextDouble() * (size.height * (2/3) - 40 - blockHeight - houseHeight)) + 20 + houseHeight,
       color: sides[r.nextInt(2)][r.nextInt(this.houses)],
       infected: canBeInfected ? Random().nextInt(this.infRate) == 0 : false,
       dx: dx,
@@ -226,13 +226,15 @@ class _MyHomePageState extends State<MyHomePage> {
       if (i != _blockToDrag) {
         int ickFactor = block.infected ? 2 : 1;
         block.updatePos(dx: block.dx / ickFactor, dy: block.dy / ickFactor);
-        if (block.x < houseWidth + 5 || block.x + blockWidth > size.width - houseWidth - 5) {
-          block.updatePos(dx: -block.dx / ickFactor, dy: 0);
-          block.setDirection(dx: -block.dx, dy: block.dy);
+        if (block.x < houseWidth + 5) {
+          block.setDirection(dx: block.dx.abs(), dy: block.dy);
+        } else if (block.x + blockWidth > size.width - houseWidth - 5) {
+          block.setDirection(dx: block.dx.abs() * -1, dy: block.dy);
         }
-        if (block.y < 20 || block.y + blockHeight > size.height * (2/3) - 20) {
-          block.updatePos(dx: 0, dy: -block.dy / ickFactor);
-          block.setDirection(dx: block.dx, dy: -block.dy);
+        if (block.y < 10 + houseHeight) {
+          block.setDirection(dx: block.dx, dy: block.dy.abs());
+        } else if (block.y + blockHeight > size.height * (2/3) - 20) {
+          block.setDirection(dx: block.dx, dy: block.dy.abs() * -1);
         }
          _blocks.asMap().forEach((j, other) {
           if (i != j && other.infected && blockCol(block, other)) {

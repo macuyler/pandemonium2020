@@ -22,6 +22,7 @@ class GamePainter extends CustomPainter {
     }
     drawBottom(canvas, size, paint);
     drawHouses(canvas, size, paint);
+    drawHostpital(canvas, size, paint);
     paint.color = Colors.blue;
     blocks.forEach((block) {
       paint.color = block.color;
@@ -119,6 +120,21 @@ class GamePainter extends CustomPainter {
       canvas.drawRect(rl, paint);
       paint.color = rightColors[i];
       canvas.drawRect(rr, paint);
+    }
+  }
+
+  void drawHostpital(Canvas canvas, Size size, Paint paint) {
+    Rect hr = Rect.fromLTWH(houseWidth + 20, (size.height / 3) + 5, size.width - (houseWidth + 20) * 2, houseHeight);
+    paint.color = Colors.white;
+    canvas.drawRect(hr, paint);
+    int beds = 3;
+    for (int i = 0; i < beds; i++) {
+      double xFactor = (size.width - (houseWidth + 20) * 2) / beds;
+      double x = (xFactor * i) + (xFactor / 2) + houseWidth + 20 - (blockWidth / 2) - 4;
+      double y = (size.height / 3) + 5 + (houseHeight / 2) - (blockHeight / 2) - 4;
+      Rect r = Rect.fromLTWH(x, y, blockWidth + 8, blockHeight + 8);
+      paint.color = Color.fromRGBO(207, 207, 207, 1);
+      canvas.drawRect(r, paint);
     }
   }
 

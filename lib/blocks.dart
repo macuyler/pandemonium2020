@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './globals.dart';
 
 class Block {
   double x;
@@ -22,4 +23,14 @@ class Block {
   void setInfected(bool inf) {
     this.infected = inf;
   }
+}
+
+bool blockCol(block, other) {
+  bool collided = false;
+  if (block.x + blockWidth > other.x && block.x < other.x + blockWidth) {
+    if (block.y + blockHeight > other.y && block.y < other.y + blockHeight) {
+      collided = true;
+    }
+  }
+  return collided;
 }

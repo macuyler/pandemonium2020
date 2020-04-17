@@ -223,15 +223,21 @@ class _MyHomePageState extends State<MyHomePage> {
     final size = MediaQuery.of(context).size;
     _blocks.asMap().forEach((i, block) {
       if (i != _blockToDrag) {
-        block.updatePos(dx: block.dx, dy: block.dy);
+        int ickFactor = block.infected ? 2 : 1;
+        block.updatePos(dx: block.dx / ickFactor, dy: block.dy / ickFactor);
         if (block.x < houseWidth + 5 || block.x + blockWidth > size.width - houseWidth - 5) {
-          block.updatePos(dx: -block.dx, dy: 0);
+          block.updatePos(dx: -block.dx / ickFactor, dy: 0);
           block.setDirection(dx: -block.dx, dy: block.dy);
         }
         if (block.y < 20 || block.y + blockHeight > size.height * (2/3) - 20) {
-          block.updatePos(dx: 0, dy: -block.dy);
+          block.updatePos(dx: 0, dy: -block.dy / ickFactor);
           block.setDirection(dx: block.dx, dy: -block.dy);
         }
+         _blocks.asMap().forEach((j, other) {
+          if (i != j && other.infected && blockCol(block, other)) {
+            block.setInfected(true);
+          }
+        });
       }
     });
   }

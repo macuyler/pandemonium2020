@@ -18,7 +18,7 @@ flutter run
 - [x] Total Points per House
 - [x] Remove all points from house if infected enters
 - [x] Make players walk around on road
-- [ ] Infect other players who contact infected
+- [x] Infect other players who contact infected
 - [ ] Build hospital
 - [ ] All infected to be healed in hospital after `healTime` passes
 - [ ] Build out level progression

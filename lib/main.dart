@@ -23,22 +23,39 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key}) : super(key: key);
 
+  final int gameDuration = 60;
+  final int numPatients = 5;
+  final int infectionRate = 5;
+  final int houses = 5;
+
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyHomePageState createState() => _MyHomePageState(
+    dur: gameDuration,
+    patients: numPatients,
+    infRate: infectionRate,
+    houses: houses,
+  );
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  int dur;
+  int patients;
+  int infRate;
+  int houses;
+  _MyHomePageState({ this.dur, this.patients, this.infRate, this.houses });
+
   List<Block> _blocks = [];
   int _blockToDrag = -1;
   int _score = 0;
   DateTime _startTime;
-  int _durationSeconds = 60;
   String _clockTime = '00:00';
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _newBlock();
+    for (int i = 0; i < this.patients; i++) {
+      _newBlock();
+    }
   }
 
   void _setClockTime(int seconds) {
@@ -78,8 +95,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void _updateClock(DateTime now) {
     if (_startTime != null) {
       int diff = ((now.millisecondsSinceEpoch - _startTime.millisecondsSinceEpoch) / 1000).floor();
-      _setClockTime(_durationSeconds - diff);
-      if (diff >= _durationSeconds) {
+      _setClockTime(this.dur - diff);
+      if (diff >= this.dur) {
         _stopTimer();
       }
     }
@@ -90,10 +107,10 @@ class _MyHomePageState extends State<MyHomePage> {
     Random r = Random();
     List<List> sides = [leftColors, rightColors];
     _blocks.add(new Block(
-      x: (size.width / 2) - (blockWidth / 2),
-      y: (size.height * (1/3)) - (blockHeight / 2),
-      color: sides[r.nextInt(2)][r.nextInt(leftColors.length)],
-      infected: Random().nextInt(5) == 0,
+      x: (Random().nextDouble() * (size.width - (houseWidth * 2) - 10 - blockWidth)) + houseWidth + 5,
+      y: (Random().nextDouble() * (size.height * (2/3) - 40 - blockHeight)) + 20,
+      color: sides[r.nextInt(2)][r.nextInt(this.houses)],
+      infected: Random().nextInt(this.infRate) == 0,
     ));
     setState(() {
       _blocks = _blocks;
@@ -129,7 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
         colors = rightColors;
       }
       if (colors.length > 0) {
-        int houses = leftColors.length;
+        int houses = this.houses;
         for (var i = 0; i < houses; i++) {
           double yFactor = (size.height * (2/3)) / houses;
           double y = (i * yFactor) + (yFactor / 2) - (houseHeight / 2);
@@ -186,7 +203,7 @@ class _MyHomePageState extends State<MyHomePage> {
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           child: CustomPaint(
-            painter: GamePainter(blocks: _blocks, score: _score, time: _clockTime),
+            painter: GamePainter(blocks: _blocks, score: _score, time: _clockTime, houses: this.houses),
           ),
         ),
       ),

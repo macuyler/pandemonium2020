@@ -6,7 +6,8 @@ class GamePainter extends CustomPainter {
   List<Block> blocks;
   int score;
   String time;
-  GamePainter({ this.blocks, this.score, this.time });
+  int houses;
+  GamePainter({ this.blocks, this.score, this.time, this.houses });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -107,7 +108,7 @@ class GamePainter extends CustomPainter {
   }
 
   void drawHouses(Canvas canvas, Size size, Paint paint) {
-    int houses = leftColors.length;
+    int houses = this.houses;
     double yFactor = (size.height * (2/3)) / houses;
     // Draw Sides
     for (var i = 0; i < houses; i++) {

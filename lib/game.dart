@@ -4,10 +4,11 @@ import 'globals.dart';
 
 class GamePainter extends CustomPainter {
   List<Block> blocks;
+  List<Block> hospital;
   int score;
   String time;
   int houses;
-  GamePainter({ this.blocks, this.score, this.time, this.houses });
+  GamePainter({ this.blocks, this.hospital, this.score, this.time, this.houses });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -25,26 +26,7 @@ class GamePainter extends CustomPainter {
     drawHostpital(canvas, size, paint);
     paint.color = Colors.blue;
     blocks.forEach((block) {
-      paint.color = block.color;
-      double x = block.x;
-      double y = block.y + size.height * (1/3);
-      // Face
-      canvas.drawRect(Rect.fromLTWH(x, y, blockWidth, blockHeight), paint);
-      paint.color = Colors.black;
-      // Left eye
-      canvas.drawRect(Rect.fromLTWH(x + (blockWidth / 4) - (blockWidth / 16), y + (blockHeight / 4) - (blockHeight / 16), blockWidth / 8, blockHeight / 8), paint);
-      // Right eye
-      canvas.drawRect(Rect.fromLTWH(x + (blockWidth * 3 / 4) - (blockWidth / 16), y + (blockHeight / 4) - (blockHeight / 16), blockWidth / 8, blockHeight / 8), paint);
-      if (block.infected) {
-        paint.color = Colors.white;
-        // Mask
-        canvas.drawRect(Rect.fromLTWH(x + (blockWidth / 4), y + (blockHeight / 2), blockWidth / 2, blockHeight / 2), paint);
-        // Mask Strap
-        canvas.drawRect(Rect.fromLTWH(x, y + (blockHeight / 2), blockWidth, blockHeight / 16), paint);
-      } else {
-        // Mouth
-        canvas.drawArc(Rect.fromLTWH(x + (blockWidth / 4), y + (blockHeight / 2) - 2, blockWidth / 2, blockHeight / 2), 180, 360, true, paint);
-      }
+      drawBlock(canvas, size, paint, block);
     });
   }
 
@@ -135,6 +117,32 @@ class GamePainter extends CustomPainter {
       Rect r = Rect.fromLTWH(x, y, blockWidth + 8, blockHeight + 8);
       paint.color = Color.fromRGBO(207, 207, 207, 1);
       canvas.drawRect(r, paint);
+      if (this.hospital[i] is Block) {
+        drawBlock(canvas, size, paint, this.hospital[i]);
+      }
+    }
+  }
+
+  void drawBlock(Canvas canvas, Size size, Paint paint, Block block) {
+    double x = block.x;
+    double y = block.y + size.height * (1/3);
+    paint.color = block.color;
+    // Face
+    canvas.drawRect(Rect.fromLTWH(x, y, blockWidth, blockHeight), paint);
+    paint.color = Colors.black;
+    // Left eye
+    canvas.drawRect(Rect.fromLTWH(x + (blockWidth / 4) - (blockWidth / 16), y + (blockHeight / 4) - (blockHeight / 16), blockWidth / 8, blockHeight / 8), paint);
+    // Right eye
+    canvas.drawRect(Rect.fromLTWH(x + (blockWidth * 3 / 4) - (blockWidth / 16), y + (blockHeight / 4) - (blockHeight / 16), blockWidth / 8, blockHeight / 8), paint);
+    if (block.infected) {
+      paint.color = Colors.white;
+      // Mask
+      canvas.drawRect(Rect.fromLTWH(x + (blockWidth / 4), y + (blockHeight / 2), blockWidth / 2, blockHeight / 2), paint);
+      // Mask Strap
+      canvas.drawRect(Rect.fromLTWH(x, y + (blockHeight / 2), blockWidth, blockHeight / 16), paint);
+    } else {
+      // Mouth
+      canvas.drawArc(Rect.fromLTWH(x + (blockWidth / 4), y + (blockHeight / 2) - 2, blockWidth / 2, blockHeight / 2), 180, 360, true, paint);
     }
   }
 

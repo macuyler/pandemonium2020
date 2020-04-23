@@ -23,10 +23,11 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key}) : super(key: key);
 
-  final int gameDuration = 60;
-  final int numPatients = 5;
-  final int infectionRate = 5;
-  final int houses = 5;
+  final int gameDuration = 60; // seconds
+  final int numPatients = 5; // number of
+  final int infectionRate = 5; // 1 out of
+  final int houses = 5; // number of
+  final int healTime = 5; // seconds
 
   @override
   _MyHomePageState createState() => _MyHomePageState(
@@ -34,6 +35,7 @@ class MyHomePage extends StatefulWidget {
     patients: numPatients,
     infRate: infectionRate,
     houses: houses,
+    healTime: healTime,
   );
 }
 
@@ -42,9 +44,11 @@ class _MyHomePageState extends State<MyHomePage> {
   int patients;
   int infRate;
   int houses;
-  _MyHomePageState({ this.dur, this.patients, this.infRate, this.houses });
+  int healTime;
+  _MyHomePageState({ this.dur, this.patients, this.infRate, this.houses, this.healTime });
 
   List<Block> _blocks = [];
+  List<Block> _hospital = new List(3);
   int _blockToDrag = -1;
   int _score = 0;
   Map<Color, int> _houseScores = {};
@@ -72,6 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _score = 0;
       _houseScores = {};
       _blocks = [];
+      _hospital = new List(3);
       for (int i = 0; i < this.patients; i++) {
         _newBlock(canBeInfected: false);
       }
@@ -115,35 +120,44 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _newBlock({bool canBeInfected = true}) {
-    final size = MediaQuery.of(context).size;
-    Random r = Random();
-    List<List> sides = [leftColors, rightColors];
-    double dx = Random().nextDouble();
-    dx *= Random().nextBool() ? -1 : 1;
-    double dy = Random().nextDouble();
-    dy *= Random().nextBool() ? -1 : 1;
-    _blocks.add(new Block(
-      x: (Random().nextDouble() * (size.width - (houseWidth * 2) - 10 - blockWidth)) + houseWidth + 5,
-      y: (Random().nextDouble() * (size.height * (2/3) - 40 - blockHeight - houseHeight)) + 20 + houseHeight,
-      color: sides[r.nextInt(2)][r.nextInt(this.houses)],
-      infected: canBeInfected ? Random().nextInt(this.infRate) == 0 : false,
-      dx: dx,
-      dy: dy,
-    ));
-    setState(() {
-      _blocks = _blocks;
-    });
+    if (_blocks.length < patients) {
+      final size = MediaQuery.of(context).size;
+      Random r = Random();
+      List<List> sides = [leftColors, rightColors];
+      double dx = Random().nextDouble();
+      dx *= Random().nextBool() ? -1 : 1;
+      double dy = Random().nextDouble();
+      dy *= Random().nextBool() ? -1 : 1;
+      _blocks.add(new Block(
+        x: (Random().nextDouble() * (size.width - (houseWidth * 2) - 10 - blockWidth)) + houseWidth + 5,
+        y: (Random().nextDouble() * (size.height * (2/3) - 40 - blockHeight - houseHeight)) + 20 + houseHeight,
+        color: sides[r.nextInt(2)][r.nextInt(this.houses)],
+        infected: canBeInfected ? Random().nextInt(this.infRate) == 0 : false,
+        dx: dx,
+        dy: dy,
+      ));
+      setState(() {
+        _blocks = _blocks;
+      });
+    }
   }
 
   void _handlePanStart(details) {
+    double tX = details.globalPosition.dx;
+    double tY = details.globalPosition.dy - (MediaQuery.of(context).size.height * (1/3));
+    int forgivness = 15;
+    bool checkBlock(Block block) =>
+      tX >= block.x - forgivness && tX <= block.x + blockWidth + forgivness &&
+      tY >= block.y - forgivness && tY <= block.y + blockHeight + forgivness;
+    _hospital.asMap().forEach((i, block) {
+      if (block is Block && checkBlock(block)) {
+        _hospital[i] = null;
+        block.leaveHospit();
+        _blocks.add(block);
+      }
+    });
     _blocks.asMap().forEach((i, block) {
-      double tX = details.globalPosition.dx;
-      double tY = details.globalPosition.dy - (MediaQuery.of(context).size.height * (1/3));
-      int forgivness = 15;
-      if (
-        tX >= block.x - forgivness && tX <= block.x + blockWidth + forgivness &&
-        tY >= block.y - forgivness && tY <= block.y + blockHeight + forgivness
-      ) {
+      if (checkBlock(block)) {
         setState(() {
           _blockToDrag = i;
         });
@@ -181,6 +195,26 @@ class _MyHomePageState extends State<MyHomePage> {
             _newBlock();
             break;
           }
+        }
+      } else {
+        double hX = houseWidth + 20;
+        double hY = 5;
+        double hW = size.width - (houseWidth + 20) * 2;
+        double hH = houseHeight;
+        if (
+          block.x + blockWidth >= hX && block.x <= hX + hW &&
+          block.y + blockHeight >= hY && block.y <= hY + hH &&
+          block.infected && _hospital.contains(null)
+        ) {
+          int hI = _hospital.indexWhere((a) => a == null);
+          int beds = 3;
+          double xFactor = (size.width - (houseWidth + 20) * 2) / beds;
+          block.x = (xFactor * hI) + (xFactor / 2) + houseWidth + 20 - (blockWidth / 2);
+          block.y = 5 + (houseHeight / 2) - (blockHeight / 2);
+          block.hospitalize();
+          _hospital[hI] = block;
+          _blocks.removeAt(_blockToDrag);
+          _newBlock();
         }
       }
       setState(() {
@@ -242,6 +276,11 @@ class _MyHomePageState extends State<MyHomePage> {
           }
         });
       }
+      _hospital.asMap().forEach((i, block) {
+        if (block != null) {
+          block.checkHealth(this.healTime);
+        }
+      });
     });
   }
 
@@ -259,7 +298,8 @@ class _MyHomePageState extends State<MyHomePage> {
           height: MediaQuery.of(context).size.height,
           child: CustomPaint(
             painter: GamePainter(
-              blocks: _blocks, 
+              blocks: _blocks,
+              hospital: _hospital,
               score: _score,
               time: _clockTime,
               houses: this.houses,

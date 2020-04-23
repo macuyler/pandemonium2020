@@ -8,6 +8,7 @@ class Block {
   double dy;
   Color color;
   bool infected;
+  DateTime startHospit;
   Block({this.x, this.y, this.color, this.infected, this.dx, this.dy});
 
   void updatePos({dx: double, dy: double}) {
@@ -22,6 +23,23 @@ class Block {
 
   void setInfected(bool inf) {
     this.infected = inf;
+  }
+
+  void hospitalize() {
+    this.startHospit = DateTime.now();
+  }
+
+  void leaveHospit() {
+    this.startHospit = null;
+  }
+
+  void checkHealth(int healTime) {
+    if (
+      this.infected && this.startHospit != null &&
+      (DateTime.now().millisecondsSinceEpoch - this.startHospit.millisecondsSinceEpoch) / 1000 > healTime
+    ) {
+      this.setInfected(false);
+    }
   }
 }
 

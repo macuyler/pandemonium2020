@@ -271,8 +271,20 @@ class _MyHomePageState extends State<MyHomePage> {
           block.setDirection(dx: block.dx, dy: block.dy.abs() * -1);
         }
          _blocks.asMap().forEach((j, other) {
-          if (i != j && other.infected && blockCol(block, other)) {
+          if (i != j && j != _blockToDrag && other.infected && blockCol(block, other)) {
             block.setInfected(true);
+          }
+          if (blockCol(block, other)) {
+             if (block.y < other.y) {
+              block.setDirection(dx: block.dx, dy: block.dy.abs() * -1);
+             } else if (block.y > other.y) {
+              block.setDirection(dx: block.dx, dy: block.dy.abs());
+             }
+             if (block.x < other.x) {
+              block.setDirection(dx: block.dx.abs() * -1, dy: block.dy);
+             } else if (block.x > other.x) {
+              block.setDirection(dx: block.dx.abs(), dy: block.dy);
+             }
           }
         });
       }

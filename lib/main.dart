@@ -274,7 +274,7 @@ class _MyHomePageState extends State<MyHomePage> {
           if (i != j && j != _blockToDrag && other.infected && blockCol(block, other)) {
             block.setInfected(true);
           }
-          if (blockCol(block, other)) {
+          if (blockCol(block, other) && j != _blockToDrag) {
              if (block.y < other.y) {
               block.setDirection(dx: block.dx, dy: block.dy.abs() * -1);
              } else if (block.y > other.y) {

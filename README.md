@@ -19,6 +19,6 @@ flutter run
 - [x] Remove all points from house if infected enters
 - [x] Make players walk around on road
 - [x] Infect other players who contact infected
-- [ ] Build hospital
-- [ ] All infected to be healed in hospital after `healTime` passes
+- [x] Build hospital
+- [x] All infected to be healed in hospital after `healTime` passes
 - [ ] Build out level progression

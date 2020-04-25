@@ -22,7 +22,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key}) : super(key: key);
-
   final int gameDuration = 60; // seconds
   final int numPatients = 5; // number of
   final int infectionRate = 5; // 1 out of
@@ -80,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
       for (int i = 0; i < this.patients; i++) {
         _newBlock(canBeInfected: false);
       }
-      _clockTime = '01:00';
+      _setClockTime(this.dur);
     });
     _tick();
   }

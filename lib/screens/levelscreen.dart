@@ -16,17 +16,24 @@ class _LevelScreenState extends State<LevelScreen> {
   Widget _getLevel() {
     if (_levelIndex >= 0) {
       Level level = levels[_levelIndex];
-      return GameScreen(level: level);
+      return GameScreen(
+        level: level,
+        onClose: () {
+          setState(() {
+            _levelIndex = -1;
+          });
+        }
+      );
     }
     return null;
   }
 
-  List<Widget> _getButtons() {
+  List<Widget> _getButtons(BuildContext context) {
     List<Widget> buttons = [];
     levels.asMap().forEach((i, level) {
       buttons.add(OutlineButton(
         child: SizedBox(
-          width: 100,
+          width: MediaQuery.of(context).size.width * 0.75,
           height: 40,
           child: Center(
             child: Text(level.name,
@@ -58,7 +65,7 @@ class _LevelScreenState extends State<LevelScreen> {
           padding: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            children: _getButtons()
+            children: _getButtons(context)
           ),
         )
       ),

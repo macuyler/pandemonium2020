@@ -8,7 +8,8 @@ import '../globals.dart';
 
 class GameScreen extends StatefulWidget {
   final Level level;
-  GameScreen({Key key, this.level}) : super(key: key);
+  final Function onClose;
+  GameScreen({Key key, this.level, this.onClose}) : super(key: key);
 
   @override
   _GameScreenState createState() => _GameScreenState(
@@ -35,6 +36,7 @@ class _GameScreenState extends State<GameScreen> {
   Map<Color, int> _houseScores = {};
   DateTime _startTime;
   String _clockTime = '00:00';
+  bool _showMenu = false;
 
   @override
   void didChangeDependencies() {
@@ -69,6 +71,7 @@ class _GameScreenState extends State<GameScreen> {
   void _stopTimer() {
     setState(() {
       _startTime = null;
+      _showMenu = true;
     });
   }
 
@@ -277,6 +280,81 @@ class _GameScreenState extends State<GameScreen> {
     });
   }
 
+  Widget _buildMenu(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height * (2/3) + 2 - 100,
+      margin: EdgeInsets.only(bottom: 100),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(bottom: 50),
+              child: Text('Game Over',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 40
+                )
+              ),
+            ),
+            RaisedButton(
+              color: Colors.blue,
+              child: SizedBox(
+                width: 140,
+                height: 40,
+                child: Center(
+                  child: Text('Play Again',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white
+                    ),
+                  ),
+                ),
+              ),
+              onPressed: () {
+                setState(() {
+                  _showMenu = false;
+                  _clockTime = '00:00';
+                });
+              }
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 18),
+              child: OutlineButton(
+                color: Colors.white,
+                splashColor: Color.fromRGBO(255, 255, 255, 0.6),
+                highlightColor: Color.fromRGBO(255, 255, 255, 0.6),
+                borderSide: BorderSide(
+                  color: Color.fromRGBO(255, 255, 255, 0.8),
+                  width: 1.0,
+                ),
+                child: SizedBox(
+                  width: 140,
+                  height: 40,
+                  child: Center(
+                    child: Text('Select Level',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white
+                      ),
+                    ),
+                  ),
+                ),
+                onPressed: () {
+                  widget.onClose();
+                }
+              ),
+            )
+          ],
+        )
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     bool running = _startTime != null;
@@ -285,7 +363,7 @@ class _GameScreenState extends State<GameScreen> {
         onPanStart: running ? _handlePanStart : _blank,
         onPanEnd: running ? _handlePanEnd : _blank,
         onPanUpdate: running ? _handlePanUpdate : _blank,
-        onDoubleTap:  !running ? _startTimer : _stopTimer,
+        onDoubleTap:  !_showMenu && !running ? _startTimer : _stopTimer,
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
@@ -300,6 +378,15 @@ class _GameScreenState extends State<GameScreen> {
           ),
         ),
       ),
+      bottomSheet: _showMenu ? BottomSheet(
+        backgroundColor: Color.fromRGBO(0, 0, 0, 0.9),
+        builder: _buildMenu,
+        onClosing: () {
+          setState(() {
+            _showMenu = true;
+          });
+        },
+      ) : null,
     );
   }
 }

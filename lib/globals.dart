@@ -11,7 +11,7 @@ const double houseHeight = 60;
 
 List<Level> levels = [
   new Level(
-    name: 'Level 1',
+    name: 'Getting Started',
     gameDuration: 60,
     numPatients: 3,
     infectionRate: 20,
@@ -19,7 +19,7 @@ List<Level> levels = [
     healTime: 3
   ),
   new Level(
-    name: 'Level 2',
+    name: 'Take it up a notch',
     gameDuration: 60,
     numPatients: 5,
     infectionRate: 10,
@@ -27,7 +27,15 @@ List<Level> levels = [
     healTime: 5
   ),
   new Level(
-    name: 'Hard One',
+    name: 'Speed round',
+    gameDuration: 10,
+    numPatients: 3,
+    infectionRate: 100,
+    houses: 2,
+    healTime: 2
+  ),
+  new Level(
+    name: 'The Hard One',
     gameDuration: 60,
     numPatients: 5,
     infectionRate: 5,

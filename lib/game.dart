@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'blocks.dart';
-import 'globals.dart';
+import './schemas/blocks.dart';
+import './globals.dart';
 
 class GamePainter extends CustomPainter {
   List<Block> blocks;

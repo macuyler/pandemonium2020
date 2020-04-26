@@ -12,13 +12,3 @@ git clone https://github.com/Macuyler/pandemonium2020.git
 cd pandemonium2020
 flutter run
 ```
-
-## TODO
-
-- [x] Total Points per House
-- [x] Remove all points from house if infected enters
-- [x] Make players walk around on road
-- [x] Infect other players who contact infected
-- [x] Build hospital
-- [x] All infected to be healed in hospital after `healTime` passes
-- [ ] Build out level progression

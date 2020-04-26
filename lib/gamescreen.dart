@@ -3,24 +3,20 @@ import 'dart:math';
 import 'dart:async';
 import './game.dart';
 import './blocks.dart';
+import './levels.dart';
 import './globals.dart';
 
 class GameScreen extends StatefulWidget {
-  GameScreen({Key key}) : super(key: key);
-
-  final int gameDuration = 60; // seconds
-  final int numPatients = 5; // number of
-  final int infectionRate = 5; // 1 out of
-  final int houses = 5; // number of
-  final int healTime = 5; // seconds
+  final Level level;
+  GameScreen({Key key, this.level}) : super(key: key);
 
   @override
   _GameScreenState createState() => _GameScreenState(
-    dur: gameDuration,
-    patients: numPatients,
-    infRate: infectionRate,
-    houses: houses,
-    healTime: healTime,
+    dur: level.gameDuration,
+    patients: level.numPatients,
+    infRate: level.infectionRate,
+    houses: level.houses,
+    healTime: level.healTime,
   );
 }
 

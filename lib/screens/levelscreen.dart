@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import './gamescreen.dart';
-import './levels.dart';
-import './globals.dart';
+import '../schemas/levels.dart';
+import '../globals.dart';
 
 class LevelScreen extends StatefulWidget {
   LevelScreen({Key key}) : super(key: key);

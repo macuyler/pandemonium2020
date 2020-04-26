@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'dart:async';
-import './game.dart';
-import './blocks.dart';
-import './levels.dart';
-import './globals.dart';
+import '../game.dart';
+import '../schemas/blocks.dart';
+import '../schemas/levels.dart';
+import '../globals.dart';
 
 class GameScreen extends StatefulWidget {
   final Level level;

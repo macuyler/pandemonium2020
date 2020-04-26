@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pandemonium2020/levelscreen.dart';
+import './screens/levelscreen.dart';
 
 void main() => runApp(MyApp());
 

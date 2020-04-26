@@ -129,7 +129,7 @@ class _GameScreenState extends State<GameScreen> {
   void _handlePanStart(details) {
     double tX = details.globalPosition.dx;
     double tY = details.globalPosition.dy - (MediaQuery.of(context).size.height * (1/3));
-    int forgivness = 15;
+    int forgivness = 2;
     bool checkBlock(Block block) =>
       tX >= block.x - forgivness && tX <= block.x + blockWidth + forgivness &&
       tY >= block.y - forgivness && tY <= block.y + blockHeight + forgivness;
@@ -233,6 +233,8 @@ class _GameScreenState extends State<GameScreen> {
       setState(() {
         _blocks[_blockToDrag] = b;
       });
+    } else {
+      _handlePanStart(details);
     }
   }
 

@@ -25,7 +25,7 @@ class DatabaseHelper {
   // This is the actual database filename that is saved in the docs directory.
   static final _databaseName = "Pandemonium.db";
   // Increment this version when you need to change the schema.
-  static final _databaseVersion = 1;
+  static final _databaseVersion = 2;
 
   // Make this a singleton class.
   DatabaseHelper._privateConstructor();
@@ -55,6 +55,7 @@ class DatabaseHelper {
     await db.execute('''
       CREATE TABLE $tableLevels (
       $columnId INTEGER PRIMARY KEY,
+      $columnName TEXT NOT NULL,
       $columnGameDur INTEGER NOT NULL,
       $columnNumPat INTEGER NOT NULL,
       $columnInfecRate INTEGER NOT NULL,
@@ -76,31 +77,32 @@ class DatabaseHelper {
   // Levels API
   Future<int> insertLevel(Level level) async {
     Database db = await database;
-    Map<String, dynamic> levelMap = {
-      columnName: level.name,
-      columnGameDur: level.gameDuration,
-      columnNumPat: level.numPatients,
-      columnInfecRate: level.infectionRate,
-      columnHouses: level.houses,
-      columnHealTime: level.healTime,
-    };
-    int id = await db.insert(tableLevels, levelMap);
+    int id = await db.insert(tableLevels, level.toMap());
     return id;
   }
 
   Future<List> getLevels() async {
     Database db = await database;
     List<Map> levelMaps = await db.query(tableLevels);
-    List<Level> levels = levelMaps.map((m) =>
-      new Level(
+    List<Level> levels = [];
+    levelMaps.forEach((m) {
+      Level l = new Level(
+        id: m[columnId],
         name: m[columnName],
         gameDuration: m[columnGameDur],
         numPatients: m[columnNumPat],
         infectionRate: m[columnInfecRate],
         houses: m[columnHouses],
         healTime: m[columnHealTime]
-      ));
+      );
+      levels.add(l);
+    });
     return levels;
+  }
+
+  Future<int> clearLevels() async {
+    Database db = await database;
+    return await db.delete(tableLevels, where: '$columnId != ?', whereArgs: [-1]);
   }
 
 

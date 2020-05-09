@@ -9,6 +9,11 @@ const double blockHeight = 45;
 const double houseWidth = 60;
 const double houseHeight = 60;
 
+const int oneStar = 35;
+const int twoStar = 45;
+const int threeStar = 60;
+const int secToStar = 60;
+
 List<Level> staticLevels = [
   new Level(
     name: 'Getting Started',

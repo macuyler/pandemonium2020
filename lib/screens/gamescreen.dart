@@ -4,6 +4,7 @@ import 'dart:async';
 import '../game.dart';
 import '../schemas/blocks.dart';
 import '../schemas/levels.dart';
+import '../ui/stars.dart';
 import '../globals.dart';
 import '../db.dart';
 
@@ -313,34 +314,6 @@ class _GameScreenState extends State<GameScreen> {
     });
   }
 
-  Widget _buildStars(BuildContext context) {
-    bool didStar(int star) => _score >= star * (this.dur / secToStar);
-    Widget one = Icon(didStar(oneStar) ? Icons.star : Icons.star_border);
-    Widget two = Icon(didStar(twoStar) ? Icons.star : Icons.star_border);
-    Widget three = Icon(didStar(threeStar) ? Icons.star : Icons.star_border);
-    List<Widget> stars = [one, two, three];
-    List<Widget> styledStars = [];
-    stars.forEach((star) {
-      styledStars.add(IconTheme(
-        data: IconThemeData(
-          color: Colors.amber,
-          size: 80,
-        ),
-        child: star,
-      ));
-    });
-    return SizedBox(
-      width: 280,
-      child: Padding(
-        padding: EdgeInsets.only(bottom: 30),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: styledStars,
-        ),
-      )
-    );
-  }
-
   Widget _buildMenu(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -350,7 +323,7 @@ class _GameScreenState extends State<GameScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            _buildStars(context),
+            Stars(score: _score, dur: this.dur, size: 80),
             Padding(
               padding: EdgeInsets.only(bottom: 30),
               child: Text('Game Over',

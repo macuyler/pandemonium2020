@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import './gamescreen.dart';
 import '../schemas/levels.dart';
+import '../ui/stars.dart';
 import '../globals.dart';
 import '../db.dart';
 
@@ -14,6 +15,7 @@ class LevelScreen extends StatefulWidget {
 class _LevelScreenState extends State<LevelScreen> {
   DatabaseHelper _db = DatabaseHelper.instance;
   List<Level> _levels = [];
+  List<int> _highScores = [];
   int _levelIndex = -1;
 
   @override
@@ -34,6 +36,25 @@ class _LevelScreenState extends State<LevelScreen> {
     }
     setState(() {
       _levels = levels;
+      _highScores = List<int>.generate(levels.length, (i) => 0);
+    });
+    _getHighScores();
+  }
+
+  void _getHighScores() async {
+    List<int> highScores = [];
+    for (int i = 0; i < _levels.length; i++) {
+      Level level = _levels[i];
+      List<int> scores = await _db.getLevelScores(level.id);
+      scores.sort((a, b) => b - a);
+      if (scores.length > 0) {
+        highScores.add(scores[0]);
+      } else {
+        highScores.add(0);
+      }
+    }
+    setState(() {
+      _highScores = highScores;
     });
   }
 
@@ -60,11 +81,18 @@ class _LevelScreenState extends State<LevelScreen> {
           width: MediaQuery.of(context).size.width * 0.75,
           height: 40,
           child: Center(
-            child: Text(level.name,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(level.name,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20
+                  ),
+                ),
+                Stars(score: _highScores[i], dur: level.gameDuration, size: 20),
+              ],
             ),
           ),
         ),

@@ -6,9 +6,10 @@ class GamePainter extends CustomPainter {
   List<Block> blocks;
   List<Block> hospital;
   int score;
+  int highScore;
   String time;
   int houses;
-  GamePainter({ this.blocks, this.hospital, this.score, this.time, this.houses });
+  GamePainter({ this.blocks, this.hospital, this.score, this.highScore, this.time, this.houses });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -17,6 +18,7 @@ class GamePainter extends CustomPainter {
       ..color = Colors.blue
       ..isAntiAlias = true;
     drawScore(canvas, size);
+    drawHighScore(canvas, size);
     drawTime(canvas, size);
     if (time == '00:00') {
       drawHelper(canvas, size);
@@ -30,14 +32,14 @@ class GamePainter extends CustomPainter {
     });
   }
 
-  TextPainter drawText({Size size, String text, TextStyle textStyle}) {
+  TextPainter drawText({Size size, String text, TextStyle textStyle, TextAlign textAlign = TextAlign.center}) {
     final textPainter = TextPainter(
       text: TextSpan(
         text: text,
         style: textStyle,
       ),
       textDirection: TextDirection.ltr,
-      textAlign: TextAlign.center,
+      textAlign: textAlign,
     );
     textPainter.layout(
       minWidth: size.width,
@@ -56,6 +58,20 @@ class GamePainter extends CustomPainter {
       )
     );
     final offset = Offset(0, (size.height / 6) - 15);
+    textPainter.paint(canvas, offset);
+  }
+
+  void drawHighScore(Canvas canvas, Size size) {
+    final textPainter = drawText(
+      size: size,
+      text: 'High Score: ${this.highScore}',
+      textStyle: TextStyle(
+        color: Colors.black87,
+        fontSize: 20,
+      ),
+      textAlign: TextAlign.start
+    );
+    final offset = Offset(30, ((size.height / 6) - 15) / 2);
     textPainter.paint(canvas, offset);
   }
 

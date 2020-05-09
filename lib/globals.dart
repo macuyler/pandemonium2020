@@ -9,7 +9,7 @@ const double blockHeight = 45;
 const double houseWidth = 60;
 const double houseHeight = 60;
 
-List<Level> levels = [
+List<Level> staticLevels = [
   new Level(
     name: 'Getting Started',
     gameDuration: 60,

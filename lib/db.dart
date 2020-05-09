@@ -123,7 +123,15 @@ class DatabaseHelper {
       columns: [columnScore],
       where: '$columnLevelID = ?',
       whereArgs: [levelId]);
-    List<int> scores = scoreMaps.map((m) => m[columnScore]);
+    List<int> scores = [];
+    scoreMaps.forEach((m) {
+      scores.add(m[columnScore]);
+    });
     return scores;
+  }
+
+  Future<int> clearLevelScores(int levelId) async {
+    Database db = await database;
+    return await db.delete(tableScores, where: '$columnLevelID = ?', whereArgs: [levelId]);
   }
 }

@@ -5,6 +5,7 @@ import '../game.dart';
 import '../schemas/blocks.dart';
 import '../schemas/levels.dart';
 import '../globals.dart';
+import '../db.dart';
 
 class GameScreen extends StatefulWidget {
   final Level level;
@@ -18,6 +19,7 @@ class GameScreen extends StatefulWidget {
     infRate: level.infectionRate,
     houses: level.houses,
     healTime: level.healTime,
+    levelId: level.id,
   );
 }
 
@@ -27,20 +29,48 @@ class _GameScreenState extends State<GameScreen> {
   int infRate;
   int houses;
   int healTime;
-  _GameScreenState({ this.dur, this.patients, this.infRate, this.houses, this.healTime });
+  int levelId;
+  _GameScreenState({ this.dur, this.patients, this.infRate, this.houses, this.healTime, this.levelId });
 
+  DatabaseHelper _db = DatabaseHelper.instance;
   List<Block> _blocks = [];
   List<Block> _hospital = new List(3);
   int _blockToDrag = -1;
   int _score = 0;
+  int _highScore = 0;
   Map<Color, int> _houseScores = {};
   DateTime _startTime;
   String _clockTime = '00:00';
   bool _showMenu = false;
 
   @override
+  void initState() {
+    super.initState();
+    _getHighScore();
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+  }
+
+  void _getHighScore() async {
+    List<int> scores = await _db.getLevelScores(this.levelId);
+    scores.sort((a, b) => b - a);
+    if (scores.length > 0) {
+      setState(() {
+        _highScore = scores[0];
+      });
+    }
+  }
+
+  void _saveScore() async {
+    int s = _score;
+    int hs = _highScore;
+    if (s > hs) {
+      await _db.clearLevelScores(this.levelId);
+      await _db.insertScore(s, this.levelId);
+    }
   }
 
   void _setClockTime(int seconds) {
@@ -73,6 +103,7 @@ class _GameScreenState extends State<GameScreen> {
       _startTime = null;
       _showMenu = true;
     });
+    _saveScore();
   }
 
   void _tick() {
@@ -317,6 +348,7 @@ class _GameScreenState extends State<GameScreen> {
                 ),
               ),
               onPressed: () {
+                _getHighScore();
                 setState(() {
                   _showMenu = false;
                   _clockTime = '00:00';
@@ -374,6 +406,7 @@ class _GameScreenState extends State<GameScreen> {
               blocks: _blocks,
               hospital: _hospital,
               score: _score,
+              highScore: _highScore,
               time: _clockTime,
               houses: this.houses,
             ),

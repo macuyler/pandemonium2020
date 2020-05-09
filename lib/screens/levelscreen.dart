@@ -84,14 +84,10 @@ class _LevelScreenState extends State<LevelScreen> {
       appBar: AppBar(
         title: Text('Level Select'),
       ),
-      body: Center(
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: _getButtons(context)
-          ),
-        )
+      body: ListView(
+        shrinkWrap: true,
+        padding: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+        children: _getButtons(context)
       ),
     );
   }

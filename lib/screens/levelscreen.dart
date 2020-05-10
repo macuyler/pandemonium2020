@@ -34,6 +34,7 @@ class _LevelScreenState extends State<LevelScreen> {
       });
       levels = await _db.getLevels();
     }
+    levels.sort((a, b) => a.order - b.order);
     setState(() {
       _levels = levels;
       _highScores = List<int>.generate(levels.length, (i) => 0);

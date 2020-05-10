@@ -14,6 +14,7 @@ Future<List<Level>> getCloudLevels() async {
       infectionRate: doc.data['infectionRate'],
       houses: doc.data['houses'],
       healTime: doc.data['healTime'],
+      order: doc.data['order']
     );
     levels.add(l);
   });

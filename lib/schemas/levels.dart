@@ -6,7 +6,8 @@ class Level {
   int infectionRate; // 1 out of
   int houses; // number of
   int healTime; // seconds
-  Level({ this.id, this.name, this.gameDuration, this.numPatients, this.infectionRate, this.houses, this.healTime });
+  int order;
+  Level({ this.id, this.name, this.gameDuration, this.numPatients, this.infectionRate, this.houses, this.healTime, this.order });
 
   Map<String, dynamic> toMap() {
     return {
@@ -17,6 +18,7 @@ class Level {
       'infectionRate': this.infectionRate,
       'houses': this.houses,
       'healTime': this.healTime,
+      'levelOrder': this.order
     };
   }
 }

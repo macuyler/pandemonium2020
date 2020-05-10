@@ -16,6 +16,7 @@ final String columnNumPat = 'numPatients';
 final String columnInfecRate = 'infectionRate';
 final String columnHouses = 'houses';
 final String columnHealTime = 'healTime';
+final String columnOrder = 'levelOrder';
 final String columnScore = 'score';
 final String columnLevelID = 'levelID';
 
@@ -25,7 +26,7 @@ class DatabaseHelper {
   // This is the actual database filename that is saved in the docs directory.
   static final _databaseName = "Pandemonium.db";
   // Increment this version when you need to change the schema.
-  static final _databaseVersion = 3;
+  static final _databaseVersion = 4;
 
   // Make this a singleton class.
   DatabaseHelper._privateConstructor();
@@ -61,7 +62,8 @@ class DatabaseHelper {
       $columnNumPat INTEGER NOT NULL,
       $columnInfecRate INTEGER NOT NULL,
       $columnHouses INTEGER NOT NULL,
-      $columnHealTime INTEGER NOT NULL
+      $columnHealTime INTEGER NOT NULL,
+      $columnOrder INTEGER NOT NULL
       )
       ''');
     await db.execute('''
@@ -94,7 +96,8 @@ class DatabaseHelper {
         numPatients: m[columnNumPat],
         infectionRate: m[columnInfecRate],
         houses: m[columnHouses],
-        healTime: m[columnHealTime]
+        healTime: m[columnHealTime],
+        order: m[columnOrder]
       );
       levels.add(l);
     });

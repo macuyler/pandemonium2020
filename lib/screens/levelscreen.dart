@@ -64,6 +64,7 @@ class _LevelScreenState extends State<LevelScreen> {
       return GameScreen(
         level: level,
         onClose: () {
+          _getHighScores();
           setState(() {
             _levelIndex = -1;
           });

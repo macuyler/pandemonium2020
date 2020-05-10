@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "887271546139",
+    "firebase_url": "https://pandemonium2020-f17b1.firebaseio.com",
+    "project_id": "pandemonium2020-f17b1",
+    "storage_bucket": "pandemonium2020-f17b1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:887271546139:android:a781e040fed78ecb38c7be",
+        "android_client_info": {
+          "package_name": "com.macuyler.pandemonium2020"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "887271546139-mu20uvb7djrv5d9mtqqdkqndig66hb8i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4NzGpKvmrV1VKB5PunZsLDgih4x3H3Sw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "887271546139-mu20uvb7djrv5d9mtqqdkqndig66hb8i.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "887271546139-gluscvhdlqvs1lgrn1fr8kab7htpf24t.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.macuyler.pandemonium2020"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

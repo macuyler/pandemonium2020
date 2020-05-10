@@ -7,7 +7,7 @@ Future<List<Level>> getCloudLevels() async {
   List<Level> levels = [];
   snap.documents.asMap().forEach((i, doc) {
     Level l = new Level(
-      id: i,
+      id: doc.documentID,
       name: doc.data['name'],
       gameDuration: doc.data['gameDuration'],
       numPatients: doc.data['numPatients'],

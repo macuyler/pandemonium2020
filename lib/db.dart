@@ -25,7 +25,7 @@ class DatabaseHelper {
   // This is the actual database filename that is saved in the docs directory.
   static final _databaseName = "Pandemonium.db";
   // Increment this version when you need to change the schema.
-  static final _databaseVersion = 2;
+  static final _databaseVersion = 3;
 
   // Make this a singleton class.
   DatabaseHelper._privateConstructor();
@@ -55,6 +55,7 @@ class DatabaseHelper {
     await db.execute('''
       CREATE TABLE $tableLevels (
       $columnId INTEGER PRIMARY KEY,
+      $columnLevelID TEXT NOT NULL,
       $columnName TEXT NOT NULL,
       $columnGameDur INTEGER NOT NULL,
       $columnNumPat INTEGER NOT NULL,
@@ -67,8 +68,8 @@ class DatabaseHelper {
       CREATE TABLE $tableScores (
       $columnId INTEGER PRIMARY KEY,
       $columnScore INTEGER NOT NULL,
-      $columnLevelID INTEGER NOT NULL,
-      FOREIGN KEY($columnLevelID) REFERENCES $tableLevels($columnId)
+      $columnLevelID TEXT NOT NULL,
+      FOREIGN KEY($columnLevelID) REFERENCES $tableLevels($columnLevelID)
       )
       ''');
   }
@@ -87,7 +88,7 @@ class DatabaseHelper {
     List<Level> levels = [];
     levelMaps.forEach((m) {
       Level l = new Level(
-        id: m[columnId],
+        id: m[columnLevelID],
         name: m[columnName],
         gameDuration: m[columnGameDur],
         numPatients: m[columnNumPat],
@@ -107,7 +108,7 @@ class DatabaseHelper {
 
 
   // Scores API
-  Future<int> insertScore(int score, int levelId) async {
+  Future<int> insertScore(int score, String levelId) async {
     Database db = await database;
     Map<String, dynamic> scoreMap = {
       columnScore: score,
@@ -117,7 +118,7 @@ class DatabaseHelper {
     return id;
   }
 
-  Future<List> getLevelScores(int levelId) async {
+  Future<List> getLevelScores(String levelId) async {
     Database db = await database;
     List<Map> scoreMaps = await db.query(tableScores,
       columns: [columnScore],
@@ -130,7 +131,7 @@ class DatabaseHelper {
     return scores;
   }
 
-  Future<int> clearLevelScores(int levelId) async {
+  Future<int> clearLevelScores(String levelId) async {
     Database db = await database;
     return await db.delete(tableScores, where: '$columnLevelID = ?', whereArgs: [levelId]);
   }

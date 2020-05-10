@@ -30,7 +30,7 @@ class _GameScreenState extends State<GameScreen> {
   int infRate;
   int houses;
   int healTime;
-  int levelId;
+  String levelId;
   _GameScreenState({ this.dur, this.patients, this.infRate, this.houses, this.healTime, this.levelId });
 
   DatabaseHelper _db = DatabaseHelper.instance;

@@ -1,5 +1,5 @@
 class Level {
-  int id;
+  String id;
   String name;
   int gameDuration; // seconds
   int numPatients; // number of
@@ -10,6 +10,7 @@ class Level {
 
   Map<String, dynamic> toMap() {
     return {
+      'levelID': this.id,
       'name': this.name,
       'gameDuration': this.gameDuration,
       'numPatients': this.numPatients,

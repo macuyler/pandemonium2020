@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import './gamescreen.dart';
 import '../schemas/levels.dart';
 import '../ui/stars.dart';
-import '../globals.dart';
 import '../db.dart';
+import '../firebase.dart';
 
 class LevelScreen extends StatefulWidget {
   LevelScreen({Key key}) : super(key: key);
@@ -26,10 +26,10 @@ class _LevelScreenState extends State<LevelScreen> {
 
   void _syncLevelsDB() async {
     List<Level> levels = await _db.getLevels();
-    // TODO: replace staticLevels with a cloud database allowing for hot level updates
-    if (!equalLevels(levels, staticLevels)) {
+    List<Level> cloudLevels = await getCloudLevels();
+    if (!equalLevels(levels, cloudLevels)) {
       await _db.clearLevels();
-      staticLevels.forEach((l) async {
+      cloudLevels.forEach((l) async {
         await _db.insertLevel(l);
       });
       levels = await _db.getLevels();

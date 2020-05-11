@@ -15,8 +15,10 @@ class LevelScreen extends StatefulWidget {
 class _LevelScreenState extends State<LevelScreen> {
   DatabaseHelper _db = DatabaseHelper.instance;
   List<Level> _levels = [];
+  List<Level> _newLevels = [];
   List<int> _highScores = [];
   int _levelIndex = -1;
+  bool _showUpdate = false;
 
   @override
   void initState() {
@@ -26,6 +28,7 @@ class _LevelScreenState extends State<LevelScreen> {
 
   void _syncLevelsDB() async {
     List<Level> levels = await _db.getLevels();
+    _setLevels(levels);
     List<Level> cloudLevels = await getCloudLevels();
     if (!equalLevels(levels, cloudLevels)) {
       await _db.clearLevels();
@@ -33,7 +36,14 @@ class _LevelScreenState extends State<LevelScreen> {
         await _db.insertLevel(l);
       });
       levels = await _db.getLevels();
+      setState(() {
+        _showUpdate = true;
+        _newLevels = levels;
+      });
     }
+  }
+
+  void _setLevels(List<Level> levels) {
     levels.sort((a, b) => a.order - b.order);
     setState(() {
       _levels = levels;
@@ -75,37 +85,34 @@ class _LevelScreenState extends State<LevelScreen> {
     return null;
   }
 
-  List<Widget> _getButtons(BuildContext context) {
-    List<Widget> buttons = [];
-    _levels.asMap().forEach((i, level) {
-      buttons.add(OutlineButton(
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.75,
-          height: 40,
-          child: Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Text(level.name,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20
-                  ),
+  Widget _buildButton(BuildContext context, int i) {
+    Level level = _levels[i];
+    return OutlineButton(
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.75,
+        height: 40,
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(level.name,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20
                 ),
-                Stars(score: _highScores[i], dur: level.gameDuration, size: 20),
-              ],
-            ),
+              ),
+              Stars(score: _highScores[i], dur: level.gameDuration, size: 20),
+            ],
           ),
         ),
-        onPressed: () {
-          setState(() {
-            _levelIndex = i;
-          });
-        },
-      ));
-    });
-    return buttons;
+      ),
+      onPressed: () {
+        setState(() {
+          _levelIndex = i;
+        });
+      },
+    );
   }
 
   @override
@@ -114,11 +121,19 @@ class _LevelScreenState extends State<LevelScreen> {
       appBar: AppBar(
         title: Text('Level Select'),
       ),
-      body: ListView(
+      body: ListView.builder(
+        itemBuilder: _buildButton,
+        itemCount: _levels.length,
         shrinkWrap: true,
         padding: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-        children: _getButtons(context)
       ),
+      floatingActionButton: _showUpdate ? FloatingActionButton.extended(
+        label: Text('Load New Levels!'),
+        onPressed: () {
+          _showUpdate = false;
+          _setLevels(_newLevels);
+        },
+      ) : null,
     );
   }
 }

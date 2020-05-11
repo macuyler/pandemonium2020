@@ -28,7 +28,7 @@ bool equalLevels(List<Level> l1s, List<Level> l2s) {
   if (l1s.length != l2s.length) return false;
   for (int i = 0; i < l1s.length; i++) {
     Map<String, dynamic> l1 = l1s[i].toMap();
-    Map<String, dynamic> l2 = l2s[i].toMap();
+    Map<String, dynamic> l2 = l2s.where((e) => e.id == l1['levelID']).single.toMap();
     l1.keys.forEach((key) {
       if (l1[key] != l2[key]) {
         r = false;

@@ -120,6 +120,7 @@ class _LevelScreenState extends State<LevelScreen> {
     return _levelIndex >= 0 ? _getLevel() : Scaffold(
       appBar: AppBar(
         title: Text('Level Select'),
+        centerTitle: true,
       ),
       body: ListView.builder(
         itemBuilder: _buildButton,

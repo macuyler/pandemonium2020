@@ -103,6 +103,10 @@ class _GameScreenState extends State<GameScreen> {
     setState(() {
       _startTime = null;
       _showMenu = true;
+      _score = 0;
+      _houseScores = {};
+      _blocks = [];
+      _hospital = new List(3);
     });
     _saveScore();
   }
@@ -399,7 +403,7 @@ class _GameScreenState extends State<GameScreen> {
         onPanStart: running ? _handlePanStart : _blank,
         onPanEnd: running ? _handlePanEnd : _blank,
         onPanUpdate: running ? _handlePanUpdate : _blank,
-        onDoubleTap:  !_showMenu && !running ? _startTimer : _stopTimer,
+        onDoubleTap:  !_showMenu && !running ? _startTimer : () {},
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,

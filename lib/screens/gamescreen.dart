@@ -415,6 +415,30 @@ class _GameScreenState extends State<GameScreen> {
           ),
         ),
       ),
+      floatingActionButton: Align(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(15, 60, 0, 0),
+          child: FlatButton.icon(
+            onPressed: () {
+              setState(() {
+                _startTime = null;
+              });
+              widget.onClose();
+            },
+            label: Text("Back",
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.black87,
+              ),
+            ),
+            icon: Icon(Icons.arrow_back_ios,
+              size: 18,
+              color: Colors.black87,
+            ), 
+          ),
+        ),
+        alignment: Alignment.topLeft,
+      ),
       bottomSheet: _showMenu ? BottomSheet(
         backgroundColor: Color.fromRGBO(0, 0, 0, 0.9),
         builder: _buildMenu,

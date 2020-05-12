@@ -71,7 +71,7 @@ class GamePainter extends CustomPainter {
       ),
       textAlign: TextAlign.start
     );
-    final offset = Offset(30, ((size.height / 6) - 15) / 2);
+    final offset = Offset(size.width - 30 - 130, ((size.height / 6) - 15) / 2);
     textPainter.paint(canvas, offset);
   }
 

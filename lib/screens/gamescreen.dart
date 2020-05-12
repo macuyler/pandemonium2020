@@ -103,7 +103,6 @@ class _GameScreenState extends State<GameScreen> {
     setState(() {
       _startTime = null;
       _showMenu = true;
-      _score = 0;
       _houseScores = {};
       _blocks = [];
       _hospital = new List(3);

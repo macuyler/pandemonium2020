@@ -148,6 +148,7 @@ class _LevelScreenState extends State<LevelScreen> {
       appBar: AppBar(
         title: Text('Level Select'),
         centerTitle: true,
+        brightness: Brightness.dark,
       ),
       body: ListView.builder(
         itemBuilder: _buildButton,

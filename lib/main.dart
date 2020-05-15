@@ -69,18 +69,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: 1.0,
               ),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(45),
+                borderRadius: BorderRadius.circular(35),
               ),
               child: SizedBox(
                 width: 160,
-                height: 45,
+                height: 35,
                 child: Center(
                   child: Text('START',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
-                      fontSize: 26
+                      fontSize: 22
                     ),
                   ),
                 )

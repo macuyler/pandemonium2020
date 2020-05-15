@@ -6,6 +6,7 @@ import '../schemas/blocks.dart';
 import '../schemas/levels.dart';
 import '../ui/stars.dart';
 import '../ui/buttons.dart';
+import '../ui/statusbar.dart';
 import '../globals.dart';
 import '../db.dart';
 
@@ -378,14 +379,7 @@ class _GameScreenState extends State<GameScreen> {
   Widget build(BuildContext context) {
     bool running = _startTime != null;
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(0),
-        child: AppBar(
-          backgroundColor: Color.fromRGBO(0, 0, 0, 0),
-          brightness: Brightness.light,
-          elevation: 0,
-        )
-      ),
+      appBar: getStatusBar(Brightness.light),
       body: GestureDetector(
         onPanStart: running ? _handlePanStart : _blank,
         onPanEnd: running ? _handlePanEnd : _blank,

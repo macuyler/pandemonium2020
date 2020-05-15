@@ -12,7 +12,8 @@ import '../db.dart';
 class GameScreen extends StatefulWidget {
   final Level level;
   final Function onClose;
-  GameScreen({Key key, this.level, this.onClose}) : super(key: key);
+  final Function onNext;
+  GameScreen({Key key, this.level, this.onClose, this.onNext}) : super(key: key);
 
   @override
   _GameScreenState createState() => _GameScreenState();
@@ -341,7 +342,8 @@ class _GameScreenState extends State<GameScreen> {
               text: 'Next Level',
               icon: Icons.keyboard_arrow_right,
               onPressed: () {
-                print('Clicked!!');
+                _cleanState();
+                widget.onNext();
               },
               main: true,
             ),

@@ -6,6 +6,7 @@ import '../schemas/blocks.dart';
 import '../schemas/levels.dart';
 import '../ui/stars.dart';
 import '../ui/buttons.dart';
+import '../ui/statusbar.dart';
 import '../globals.dart';
 import '../db.dart';
 
@@ -386,6 +387,7 @@ class _GameScreenState extends State<GameScreen> {
       _updated = false;
     }
     return Scaffold(
+      appBar: getStatusBar(Brightness.light),
       body: GestureDetector(
         onPanStart: running ? _handlePanStart : _blank,
         onPanEnd: running ? _handlePanEnd : _blank,
@@ -432,7 +434,7 @@ class _GameScreenState extends State<GameScreen> {
         alignment: Alignment.topLeft,
       ),
       bottomSheet: _showMenu ? BottomSheet(
-        backgroundColor: Color.fromRGBO(0, 0, 0, 0.9),
+        backgroundColor: Color.fromRGBO(25, 25, 25, 1),
         builder: _buildMenu,
         onClosing: () {
           setState(() {

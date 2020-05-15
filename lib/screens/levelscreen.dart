@@ -102,12 +102,19 @@ class _LevelScreenState extends State<LevelScreen> {
     return Padding(
       padding: EdgeInsets.only(bottom: 15),
       child: OutlineButton(
+        color: Colors.white,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(40),
+          borderRadius: BorderRadius.circular(45),
+        ),
+        splashColor: Color.fromRGBO(255, 255, 255, 0.6),
+        highlightColor: Color.fromRGBO(255, 255, 255, 0.6),
+        borderSide: BorderSide(
+          color: Color.fromRGBO(255, 255, 255, 0.8),
+          width: 1.0,
         ),
         child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.75,
-          height: 40,
+          height: 45,
           child: Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -116,7 +123,8 @@ class _LevelScreenState extends State<LevelScreen> {
                 Text(level.name,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 20
+                    fontSize: 20,
+                    color: Colors.white,
                   ),
                 ),
                 Stars(score: _highScores[i], dur: level.gameDuration, size: 20),
@@ -136,9 +144,14 @@ class _LevelScreenState extends State<LevelScreen> {
   @override
   Widget build(BuildContext context) {
     return _currentLevel != null ? _getLevel() : Scaffold(
+      backgroundColor: Color.fromRGBO(25, 25, 25, 1),
       appBar: AppBar(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
         title: Text('Level Select'),
         centerTitle: true,
+        brightness: Brightness.dark,
       ),
       body: ListView.builder(
         itemBuilder: _buildButton,

@@ -5,34 +5,21 @@ import '../game.dart';
 import '../schemas/blocks.dart';
 import '../schemas/levels.dart';
 import '../ui/stars.dart';
+import '../ui/buttons.dart';
 import '../globals.dart';
 import '../db.dart';
 
 class GameScreen extends StatefulWidget {
   final Level level;
   final Function onClose;
-  GameScreen({Key key, this.level, this.onClose}) : super(key: key);
+  final Function onNext;
+  GameScreen({Key key, this.level, this.onClose, this.onNext}) : super(key: key);
 
   @override
-  _GameScreenState createState() => _GameScreenState(
-    dur: level.gameDuration,
-    patients: level.numPatients,
-    infRate: level.infectionRate,
-    houses: level.houses,
-    healTime: level.healTime,
-    levelId: level.id,
-  );
+  _GameScreenState createState() => _GameScreenState();
 }
 
 class _GameScreenState extends State<GameScreen> {
-  int dur;
-  int patients;
-  int infRate;
-  int houses;
-  int healTime;
-  String levelId;
-  _GameScreenState({ this.dur, this.patients, this.infRate, this.houses, this.healTime, this.levelId });
-
   DatabaseHelper _db = DatabaseHelper.instance;
   List<Block> _blocks = [];
   List<Block> _hospital = new List(3);
@@ -55,8 +42,22 @@ class _GameScreenState extends State<GameScreen> {
     super.didChangeDependencies();
   }
 
+  void _cleanState() {
+    setState(() {
+      _db = DatabaseHelper.instance;
+      _blocks = [];
+      _hospital = new List(3);
+      _blockToDrag = -1;
+      _score = 0;
+      _highScore = 0;
+      _houseScores = {};
+      _clockTime = '00:00';
+      _showMenu = false;
+    });
+  }
+
   void _getHighScore() async {
-    List<int> scores = await _db.getLevelScores(this.levelId);
+    List<int> scores = await _db.getLevelScores(widget.level.id);
     scores.sort((a, b) => b - a);
     if (scores.length > 0) {
       setState(() {
@@ -69,8 +70,8 @@ class _GameScreenState extends State<GameScreen> {
     int s = _score;
     int hs = _highScore;
     if (s > hs) {
-      await _db.clearLevelScores(this.levelId);
-      await _db.insertScore(s, this.levelId);
+      await _db.clearLevelScores(widget.level.id);
+      await _db.insertScore(s, widget.level.id);
     }
   }
 
@@ -91,10 +92,10 @@ class _GameScreenState extends State<GameScreen> {
       _houseScores = {};
       _blocks = [];
       _hospital = new List(3);
-      for (int i = 0; i < this.patients; i++) {
+      for (int i = 0; i < widget.level.numPatients; i++) {
         _newBlock(canBeInfected: false);
       }
-      _setClockTime(this.dur);
+      _setClockTime(widget.level.gameDuration);
     });
     _tick();
   }
@@ -123,8 +124,8 @@ class _GameScreenState extends State<GameScreen> {
   void _updateClock(DateTime now) {
     if (_startTime != null) {
       int diff = ((now.millisecondsSinceEpoch - _startTime.millisecondsSinceEpoch) / 1000).floor();
-      _setClockTime(this.dur - diff);
-      if (diff >= this.dur) {
+      _setClockTime(widget.level.gameDuration - diff);
+      if (diff >= widget.level.gameDuration) {
         _stopTimer();
       }
     }
@@ -139,7 +140,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void _newBlock({bool canBeInfected = true}) {
-    if (_blocks.length < patients) {
+    if (_blocks.length < widget.level.numPatients) {
       final size = MediaQuery.of(context).size;
       Random r = Random();
       List<List> sides = [leftColors, rightColors];
@@ -150,8 +151,8 @@ class _GameScreenState extends State<GameScreen> {
       _blocks.add(new Block(
         x: (Random().nextDouble() * (size.width - (houseWidth * 2) - 10 - blockWidth)) + houseWidth + 5,
         y: (Random().nextDouble() * (size.height * (2/3) - 40 - blockHeight - houseHeight)) + 20 + houseHeight,
-        color: sides[r.nextInt(2)][r.nextInt(this.houses)],
-        infected: canBeInfected ? Random().nextInt(this.infRate) == 0 : false,
+        color: sides[r.nextInt(2)][r.nextInt(widget.level.houses)],
+        infected: canBeInfected ? Random().nextInt(widget.level.infectionRate) == 0 : false,
         dx: dx,
         dy: dy,
       ));
@@ -199,7 +200,7 @@ class _GameScreenState extends State<GameScreen> {
         colors = rightColors;
       }
       if (colors.length > 0) {
-        int houses = this.houses;
+        int houses = widget.level.houses;
         for (var i = 0; i < houses; i++) {
           double yFactor = (size.height * (2/3)) / houses;
           double y = (i * yFactor) + (yFactor / 2) - (houseHeight / 2);
@@ -311,25 +312,26 @@ class _GameScreenState extends State<GameScreen> {
       }
       _hospital.asMap().forEach((i, block) {
         if (block != null) {
-          block.checkHealth(this.healTime);
+          block.checkHealth(widget.level.healTime);
         }
       });
     });
   }
 
+  bool _didStar(int star) => _score >= star * (widget.level.gameDuration / secToStar);
+
   Widget _buildMenu(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * (2/3) + 2 - 100,
-      margin: EdgeInsets.only(bottom: 100),
+      height: MediaQuery.of(context).size.height * (2/3) + 2,
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Stars(score: _score, dur: this.dur, size: 80),
+            Stars(score: _score, dur: widget.level.gameDuration, size: 80),
             Padding(
-              padding: EdgeInsets.only(bottom: 30),
-              child: Text('Game Over',
+              padding: EdgeInsets.symmetric(vertical: 25),
+              child: Text(_didStar(oneStar) ? 'Level Complete!' : 'Game Over!',
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -337,57 +339,35 @@ class _GameScreenState extends State<GameScreen> {
                 )
               ),
             ),
-            RaisedButton(
-              color: Colors.blue,
-              child: SizedBox(
-                width: 140,
-                height: 40,
-                child: Center(
-                  child: Text('Play Again',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white
-                    ),
-                  ),
-                ),
-              ),
+            _didStar(oneStar) ? ActionButton(
+              text: 'Next Level',
+              icon: Icons.keyboard_arrow_right,
+              onPressed: () {
+                _cleanState();
+                widget.onNext();
+              },
+              main: true,
+            ) : Text(''),
+            ActionButton(
+              text: 'Play Again',
+              icon: Icons.replay,
+              main: !_didStar(oneStar),
               onPressed: () {
                 _getHighScore();
                 setState(() {
                   _showMenu = false;
                   _clockTime = '00:00';
                 });
-              }
+              },
             ),
-            Padding(
-              padding: EdgeInsets.only(top: 18),
-              child: OutlineButton(
-                color: Colors.white,
-                splashColor: Color.fromRGBO(255, 255, 255, 0.6),
-                highlightColor: Color.fromRGBO(255, 255, 255, 0.6),
-                borderSide: BorderSide(
-                  color: Color.fromRGBO(255, 255, 255, 0.8),
-                  width: 1.0,
-                ),
-                child: SizedBox(
-                  width: 140,
-                  height: 40,
-                  child: Center(
-                    child: Text('Select Level',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white
-                      ),
-                    ),
-                  ),
-                ),
-                onPressed: () {
-                  widget.onClose();
-                }
-              ),
-            )
+            ActionButton(
+              text: 'Select Level',
+              icon: Icons.list,
+              onPressed: () {
+                _cleanState();
+                widget.onClose();
+              },
+            ),
           ],
         )
       ),
@@ -413,7 +393,7 @@ class _GameScreenState extends State<GameScreen> {
               score: _score,
               highScore: _highScore,
               time: _clockTime,
-              houses: this.houses,
+              houses: widget.level.houses,
             ),
           ),
         ),

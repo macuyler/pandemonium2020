@@ -27,13 +27,10 @@ class Stars extends StatelessWidget {
     return SizedBox(
       width: 3.5 * this.size,
       height: this.size + 2,
-      child: Padding(
-        padding: EdgeInsets.only(bottom: 30),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: styledStars,
-        ),
-      )
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: styledStars,
+      ),
     );
   }
 }

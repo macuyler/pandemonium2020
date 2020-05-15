@@ -18,7 +18,18 @@ class _LevelScreenState extends State<LevelScreen> {
   List<Level> _newLevels = [];
   List<int> _highScores = [];
   int _levelIndex = -1;
+  Level _currentLevel;
   bool _showUpdate = false;
+
+  get levelIndex => _levelIndex;
+  set levelIndex(int i) {
+    _levelIndex = i;
+    if (i >= 0 && i < _levels.length) {
+      _currentLevel = _levels[i];
+    } else {
+      _currentLevel = null;
+    }
+  }
 
   @override
   void initState() {
@@ -70,19 +81,20 @@ class _LevelScreenState extends State<LevelScreen> {
   }
 
   Widget _getLevel() {
-    if (_levelIndex >= 0) {
-      Level level = _levels[_levelIndex];
-      return GameScreen(
-        level: level,
-        onClose: () {
-          _getHighScores();
-          setState(() {
-            _levelIndex = -1;
-          });
-        }
-      );
-    }
-    return null;
+    return GameScreen(
+      level: _currentLevel,
+      onClose: () {
+        _getHighScores();
+        setState(() {
+          levelIndex = -1;
+        });
+      },
+      onNext: () {
+        setState(() {
+          levelIndex += 1;
+        });
+      },
+    );
   }
 
   Widget _buildButton(BuildContext context, int i) {
@@ -109,7 +121,7 @@ class _LevelScreenState extends State<LevelScreen> {
       ),
       onPressed: () {
         setState(() {
-          _levelIndex = i;
+          levelIndex = i;
         });
       },
     );
@@ -117,7 +129,7 @@ class _LevelScreenState extends State<LevelScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return _levelIndex >= 0 ? _getLevel() : Scaffold(
+    return _currentLevel != null ? _getLevel() : Scaffold(
       appBar: AppBar(
         title: Text('Level Select'),
         centerTitle: true,

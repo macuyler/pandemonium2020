@@ -47,8 +47,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             OutlineButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
               child: SizedBox(
-                width: 140,
+                width: MediaQuery.of(context).size.width * 0.5,
                 height: 20,
                 child: Text('START',
                   textAlign: TextAlign.center,

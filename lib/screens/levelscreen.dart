@@ -99,31 +99,37 @@ class _LevelScreenState extends State<LevelScreen> {
 
   Widget _buildButton(BuildContext context, int i) {
     Level level = _levels[i];
-    return OutlineButton(
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.75,
-        height: 40,
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text(level.name,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20
+    return Padding(
+      padding: EdgeInsets.only(bottom: 15),
+      child: OutlineButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(40),
+        ),
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.75,
+          height: 40,
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(level.name,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20
+                  ),
                 ),
-              ),
-              Stars(score: _highScores[i], dur: level.gameDuration, size: 20),
-            ],
+                Stars(score: _highScores[i], dur: level.gameDuration, size: 20),
+              ],
+            ),
           ),
         ),
+        onPressed: () {
+          setState(() {
+            levelIndex = i;
+          });
+        },
       ),
-      onPressed: () {
-        setState(() {
-          levelIndex = i;
-        });
-      },
     );
   }
 

@@ -29,35 +29,44 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return _showLevels ? LevelScreen() : Scaffold(
+      backgroundColor: Color.fromRGBO(25, 25, 25, 1),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text('Pandemonium',
               style: TextStyle(
-                color: Colors.black,
+                color: Colors.white,
                 fontSize: 28
               ),
             ),
             Text('2020',
               style: TextStyle(
-                color: Colors.black,
+                color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 70
               ),
             ),
             OutlineButton(
+              color: Colors.white,
+              splashColor: Color.fromRGBO(255, 255, 255, 0.6),
+              highlightColor: Color.fromRGBO(255, 255, 255, 0.6),
+              borderSide: BorderSide(
+                color: Color.fromRGBO(255, 255, 255, 0.8),
+                width: 1.0,
+              ),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(45),
               ),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.5,
-                height: 20,
+                height: 45,
                 child: Text('START',
                   textAlign: TextAlign.center,
                   style: TextStyle(
+                    color: Colors.white,
                     fontWeight: FontWeight.w600,
-                    fontSize: 18
+                    fontSize: 30
                   ),
                 ),
               ),

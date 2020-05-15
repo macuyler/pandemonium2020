@@ -30,6 +30,7 @@ class _GameScreenState extends State<GameScreen> {
   DateTime _startTime;
   String _clockTime = '00:00';
   bool _showMenu = false;
+  bool _updated = false;
 
   @override
   void initState() {
@@ -345,6 +346,9 @@ class _GameScreenState extends State<GameScreen> {
               onPressed: () {
                 _cleanState();
                 widget.onNext();
+                setState(() {
+                  _updated = true;
+                });
               },
               main: true,
             ) : Text(''),
@@ -377,6 +381,10 @@ class _GameScreenState extends State<GameScreen> {
   @override
   Widget build(BuildContext context) {
     bool running = _startTime != null;
+    if (_updated) {
+      _getHighScore();
+      _updated = false;
+    }
     return Scaffold(
       body: GestureDetector(
         onPanStart: running ? _handlePanStart : _blank,
@@ -394,6 +402,7 @@ class _GameScreenState extends State<GameScreen> {
               highScore: _highScore,
               time: _clockTime,
               houses: widget.level.houses,
+              showHelper: _clockTime == '00:00' && !_showMenu,
             ),
           ),
         ),

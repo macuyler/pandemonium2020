@@ -318,19 +318,20 @@ class _GameScreenState extends State<GameScreen> {
     });
   }
 
+  bool _didStar(int star) => _score >= star * (widget.level.gameDuration / secToStar);
+
   Widget _buildMenu(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * (2/3) + 2 - 100,
-      margin: EdgeInsets.only(bottom: 100),
+      height: MediaQuery.of(context).size.height * (2/3) + 2,
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Stars(score: _score, dur: widget.level.gameDuration, size: 80),
             Padding(
-              padding: EdgeInsets.only(bottom: 30),
-              child: Text('Game Over',
+              padding: EdgeInsets.symmetric(vertical: 25),
+              child: Text(_didStar(oneStar) ? 'Level Complete!' : 'Game Over!',
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -338,7 +339,7 @@ class _GameScreenState extends State<GameScreen> {
                 )
               ),
             ),
-            ActionButton(
+            _didStar(oneStar) ? ActionButton(
               text: 'Next Level',
               icon: Icons.keyboard_arrow_right,
               onPressed: () {
@@ -346,10 +347,11 @@ class _GameScreenState extends State<GameScreen> {
                 widget.onNext();
               },
               main: true,
-            ),
+            ) : Text(''),
             ActionButton(
               text: 'Play Again',
               icon: Icons.replay,
+              main: !_didStar(oneStar),
               onPressed: () {
                 _getHighScore();
                 setState(() {

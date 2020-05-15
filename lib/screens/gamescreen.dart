@@ -5,6 +5,7 @@ import '../game.dart';
 import '../schemas/blocks.dart';
 import '../schemas/levels.dart';
 import '../ui/stars.dart';
+import '../ui/buttons.dart';
 import '../globals.dart';
 import '../db.dart';
 
@@ -337,121 +338,32 @@ class _GameScreenState extends State<GameScreen> {
                 )
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 18),
-              child: RaisedButton(
-                color: Colors.blue,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(40),
-                ),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  height: 40,
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text('Next Level',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 10),
-                          child: Icon(Icons.keyboard_arrow_right,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                onPressed: () {
-                  print('Clicked!!');
-                },
-              ),
-            ), 
-            RaisedButton(
-              color: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(40),
-              ),
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width * 0.5,
-                height: 40,
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text('Play Again',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 10),
-                        child: Icon(Icons.replay,
-                          color: Colors.white,
-                        ), 
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+            ActionButton(
+              text: 'Next Level',
+              icon: Icons.keyboard_arrow_right,
+              onPressed: () {
+                print('Clicked!!');
+              },
+              main: true,
+            ),
+            ActionButton(
+              text: 'Play Again',
+              icon: Icons.replay,
               onPressed: () {
                 _getHighScore();
                 setState(() {
                   _showMenu = false;
                   _clockTime = '00:00';
                 });
-              }
+              },
             ),
-            Padding(
-              padding: EdgeInsets.only(top: 18),
-              child: OutlineButton(
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(40),
-                ),
-                splashColor: Color.fromRGBO(255, 255, 255, 0.6),
-                highlightColor: Color.fromRGBO(255, 255, 255, 0.6),
-                borderSide: BorderSide(
-                  color: Color.fromRGBO(255, 255, 255, 0.8),
-                  width: 1.0,
-                ),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  height: 40,
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text('Select Level',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 10),
-                            child: Icon(Icons.list,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                onPressed: () {
-                  widget.onClose();
-                }
-              ),
-            )
+            ActionButton(
+              text: 'Select Level',
+              icon: Icons.list,
+              onPressed: () {
+                widget.onClose();
+              },
+            ),
           ],
         )
       ),

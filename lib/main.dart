@@ -59,16 +59,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 borderRadius: BorderRadius.circular(45),
               ),
               child: SizedBox(
-                width: MediaQuery.of(context).size.width * 0.5,
+                width: 160,
                 height: 45,
-                child: Text('START',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 30
+                child: Center(
+                  child: Text('START',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 26
+                    ),
                   ),
-                ),
+                )
               ),
               onPressed: () {
                 setState(() {

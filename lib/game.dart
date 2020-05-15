@@ -9,7 +9,8 @@ class GamePainter extends CustomPainter {
   int highScore;
   String time;
   int houses;
-  GamePainter({ this.blocks, this.hospital, this.score, this.highScore, this.time, this.houses });
+  bool showHelper;
+  GamePainter({ this.blocks, this.hospital, this.score, this.highScore, this.time, this.houses, this.showHelper });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -20,7 +21,7 @@ class GamePainter extends CustomPainter {
     drawScore(canvas, size);
     drawHighScore(canvas, size);
     drawTime(canvas, size);
-    if (time == '00:00') {
+    if (this.showHelper) {
       drawHelper(canvas, size);
     }
     drawBottom(canvas, size, paint);

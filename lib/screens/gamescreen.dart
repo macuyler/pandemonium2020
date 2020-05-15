@@ -402,6 +402,7 @@ class _GameScreenState extends State<GameScreen> {
               highScore: _highScore,
               time: _clockTime,
               houses: widget.level.houses,
+              showHelper: _clockTime == '00:00' && !_showMenu,
             ),
           ),
         ),

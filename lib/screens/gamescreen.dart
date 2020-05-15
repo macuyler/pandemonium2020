@@ -423,7 +423,7 @@ class _GameScreenState extends State<GameScreen> {
         alignment: Alignment.topLeft,
       ),
       bottomSheet: _showMenu ? BottomSheet(
-        backgroundColor: Color.fromRGBO(0, 0, 0, 0.9),
+        backgroundColor: Color.fromRGBO(25, 25, 25, 1),
         builder: _buildMenu,
         onClosing: () {
           setState(() {

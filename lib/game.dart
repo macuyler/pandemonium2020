@@ -102,7 +102,7 @@ class GamePainter extends CustomPainter {
   }
 
   void drawBottom(Canvas canvas, Size size, Paint paint) {
-    paint.color = Colors.black;
+    paint.color = Color.fromRGBO(25, 25, 25, 1);
     canvas.drawRect(Rect.fromLTWH(0, size.height * (1/3), size.width, size.height * (2/3)), paint);
   }
 

@@ -337,18 +337,68 @@ class _GameScreenState extends State<GameScreen> {
                 )
               ),
             ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 18),
+              child: RaisedButton(
+                color: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(40),
+                ),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  height: 40,
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text('Next Level',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.white
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 10),
+                          child: Icon(Icons.keyboard_arrow_right,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                onPressed: () {
+                  print('Clicked!!');
+                },
+              ),
+            ), 
             RaisedButton(
               color: Colors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(40),
+              ),
               child: SizedBox(
-                width: 140,
+                width: MediaQuery.of(context).size.width * 0.5,
                 height: 40,
                 child: Center(
-                  child: Text('Play Again',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text('Play Again',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Icon(Icons.replay,
+                          color: Colors.white,
+                        ), 
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -364,6 +414,9 @@ class _GameScreenState extends State<GameScreen> {
               padding: EdgeInsets.only(top: 18),
               child: OutlineButton(
                 color: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(40),
+                ),
                 splashColor: Color.fromRGBO(255, 255, 255, 0.6),
                 highlightColor: Color.fromRGBO(255, 255, 255, 0.6),
                 borderSide: BorderSide(
@@ -371,15 +424,26 @@ class _GameScreenState extends State<GameScreen> {
                   width: 1.0,
                 ),
                 child: SizedBox(
-                  width: 140,
+                  width: MediaQuery.of(context).size.width * 0.5,
                   height: 40,
                   child: Center(
-                    child: Text('Select Level',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white
-                      ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text('Select Level',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.white
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 10),
+                            child: Icon(Icons.list,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

@@ -471,13 +471,13 @@ class _GameScreenState extends State<GameScreen> {
               "Back",
               style: TextStyle(
                 fontSize: 20,
-                color: Colors.black87,
+                color: Colors.white70,
               ),
             ),
             icon: Icon(
               Icons.arrow_back_ios,
               size: 18,
-              color: Colors.black87,
+              color: Colors.white70,
             ),
           ),
         ),

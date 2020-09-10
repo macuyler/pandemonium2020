@@ -67,7 +67,7 @@ class GamePainter extends CustomPainter {
   void drawBackground(Canvas canvas, Size size, Paint paint) {
     if (this.background != null) {
       Rect src = Rect.fromLTWH(0, 0, 1280, 720);
-      Rect dst = Rect.fromLTWH(0, 0, size.width, size.height * (1 / 3));
+      Rect dst = Rect.fromLTWH(0, 0, size.width, size.height * (1 / 3) + 1);
       canvas.drawImageRect(this.background, src, dst, paint);
     }
   }
@@ -77,7 +77,7 @@ class GamePainter extends CustomPainter {
         size: size,
         text: 'Score: ${this.score}',
         textStyle: TextStyle(
-          color: Colors.black,
+          color: Colors.white,
           fontSize: 30,
         ));
     final offset = Offset(0, (size.height / 6) - 15);
@@ -89,11 +89,11 @@ class GamePainter extends CustomPainter {
         size: size,
         text: 'High Score: ${this.highScore}',
         textStyle: TextStyle(
-          color: Colors.black87,
+          color: Colors.white70,
           fontSize: 20,
         ),
         textAlign: TextAlign.start);
-    final offset = Offset(size.width - 30 - 130, ((size.height / 6) - 15) / 2);
+    final offset = Offset(size.width - 30 - 130, 32);
     textPainter.paint(canvas, offset);
   }
 
@@ -101,7 +101,7 @@ class GamePainter extends CustomPainter {
     final textPainter = drawText(
         size: size,
         text: 'Time: ${this.time}',
-        textStyle: TextStyle(fontSize: 25, color: Colors.black));
+        textStyle: TextStyle(fontSize: 25, color: Colors.white));
     final offset = Offset(0, (size.height / 6) + 30);
     textPainter.paint(canvas, offset);
   }
@@ -110,8 +110,8 @@ class GamePainter extends CustomPainter {
     final textPainter = drawText(
         size: size,
         text: 'Double tap to start!',
-        textStyle: TextStyle(fontSize: 20, color: Colors.grey[500]));
-    final offset = Offset(0, (size.height / 6) + 70);
+        textStyle: TextStyle(fontSize: 20, color: Colors.white70));
+    final offset = Offset(0, (size.height * 1 / 3) - 30);
     textPainter.paint(canvas, offset);
   }
 

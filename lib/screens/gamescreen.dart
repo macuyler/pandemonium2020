@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'dart:math';
 import 'dart:async';
+import 'dart:typed_data';
+import 'dart:ui' as UI;
 import '../game.dart';
 import '../schemas/blocks.dart';
 import '../schemas/levels.dart';
@@ -14,10 +17,19 @@ class GameScreen extends StatefulWidget {
   final Level level;
   final Function onClose;
   final Function onNext;
-  GameScreen({Key key, this.level, this.onClose, this.onNext}) : super(key: key);
+  GameScreen({Key key, this.level, this.onClose, this.onNext})
+      : super(key: key);
 
   @override
   _GameScreenState createState() => _GameScreenState();
+}
+
+Future<UI.Image> _loadImage(AssetBundleImageKey key) async {
+  final ByteData data = await key.bundle.load(key.name);
+  if (data == null) throw 'Unable to read data';
+  var codec = await UI.instantiateImageCodec(data.buffer.asUint8List());
+  var frame = await codec.getNextFrame();
+  return frame.image;
 }
 
 class _GameScreenState extends State<GameScreen> {
@@ -32,11 +44,13 @@ class _GameScreenState extends State<GameScreen> {
   String _clockTime = '00:00';
   bool _showMenu = false;
   bool _updated = false;
+  UI.Image background;
 
   @override
   void initState() {
     super.initState();
     _getHighScore();
+    _getBackground();
   }
 
   @override
@@ -55,6 +69,14 @@ class _GameScreenState extends State<GameScreen> {
       _houseScores = {};
       _clockTime = '00:00';
       _showMenu = false;
+    });
+  }
+
+  void _getBackground() async {
+    UI.Image img = await _loadImage(AssetBundleImageKey(
+        bundle: rootBundle, name: 'assets/images/city.jpeg', scale: 1.0));
+    setState(() {
+      background = img;
     });
   }
 
@@ -125,7 +147,10 @@ class _GameScreenState extends State<GameScreen> {
 
   void _updateClock(DateTime now) {
     if (_startTime != null) {
-      int diff = ((now.millisecondsSinceEpoch - _startTime.millisecondsSinceEpoch) / 1000).floor();
+      int diff =
+          ((now.millisecondsSinceEpoch - _startTime.millisecondsSinceEpoch) /
+                  1000)
+              .floor();
       _setClockTime(widget.level.gameDuration - diff);
       if (diff >= widget.level.gameDuration) {
         _stopTimer();
@@ -151,10 +176,18 @@ class _GameScreenState extends State<GameScreen> {
       double dy = Random().nextDouble();
       dy *= Random().nextBool() ? -1 : 1;
       _blocks.add(new Block(
-        x: (Random().nextDouble() * (size.width - (houseWidth * 2) - 10 - blockWidth)) + houseWidth + 5,
-        y: (Random().nextDouble() * (size.height * (2/3) - 40 - blockHeight - houseHeight)) + 20 + houseHeight,
+        x: (Random().nextDouble() *
+                (size.width - (houseWidth * 2) - 10 - blockWidth)) +
+            houseWidth +
+            5,
+        y: (Random().nextDouble() *
+                (size.height * (2 / 3) - 40 - blockHeight - houseHeight)) +
+            20 +
+            houseHeight,
         color: sides[r.nextInt(2)][r.nextInt(widget.level.houses)],
-        infected: canBeInfected ? Random().nextInt(widget.level.infectionRate) == 0 : false,
+        infected: canBeInfected
+            ? Random().nextInt(widget.level.infectionRate) == 0
+            : false,
         dx: dx,
         dy: dy,
       ));
@@ -166,11 +199,14 @@ class _GameScreenState extends State<GameScreen> {
 
   void _handlePanStart(details) {
     double tX = details.globalPosition.dx;
-    double tY = details.globalPosition.dy - (MediaQuery.of(context).size.height * (1/3));
+    double tY = details.globalPosition.dy -
+        (MediaQuery.of(context).size.height * (1 / 3));
     int forgivness = 2;
     bool checkBlock(Block block) =>
-      tX >= block.x - forgivness && tX <= block.x + blockWidth + forgivness &&
-      tY >= block.y - forgivness && tY <= block.y + blockHeight + forgivness;
+        tX >= block.x - forgivness &&
+        tX <= block.x + blockWidth + forgivness &&
+        tY >= block.y - forgivness &&
+        tY <= block.y + blockHeight + forgivness;
     _hospital.asMap().forEach((i, block) {
       if (block is Block && checkBlock(block)) {
         _hospital[i] = null;
@@ -198,13 +234,14 @@ class _GameScreenState extends State<GameScreen> {
       List<Color> colors = [];
       if (block.x >= 0 && block.x <= houseWidth) {
         colors = leftColors;
-      } else if (block.x + blockWidth >= size.width - houseWidth && block.x + blockWidth <= size.width) {
+      } else if (block.x + blockWidth >= size.width - houseWidth &&
+          block.x + blockWidth <= size.width) {
         colors = rightColors;
       }
       if (colors.length > 0) {
         int houses = widget.level.houses;
         for (var i = 0; i < houses; i++) {
-          double yFactor = (size.height * (2/3)) / houses;
+          double yFactor = (size.height * (2 / 3)) / houses;
           double y = (i * yFactor) + (yFactor / 2) - (houseHeight / 2);
           if (block.y + blockHeight >= y && block.y <= y + houseHeight) {
             house = colors[i];
@@ -223,15 +260,20 @@ class _GameScreenState extends State<GameScreen> {
         double hY = 5;
         double hW = size.width - (houseWidth + 20) * 2;
         double hH = houseHeight;
-        if (
-          block.x + blockWidth >= hX && block.x <= hX + hW &&
-          block.y + blockHeight >= hY && block.y <= hY + hH &&
-          block.infected && _hospital.contains(null)
-        ) {
+        if (block.x + blockWidth >= hX &&
+            block.x <= hX + hW &&
+            block.y + blockHeight >= hY &&
+            block.y <= hY + hH &&
+            block.infected &&
+            _hospital.contains(null)) {
           int hI = _hospital.indexWhere((a) => a == null);
           int beds = 3;
           double xFactor = (size.width - (houseWidth + 20) * 2) / beds;
-          block.x = (xFactor * hI) + (xFactor / 2) + houseWidth + 20 - (blockWidth / 2);
+          block.x = (xFactor * hI) +
+              (xFactor / 2) +
+              houseWidth +
+              20 -
+              (blockWidth / 2);
           block.y = 5 + (houseHeight / 2) - (blockHeight / 2);
           block.hospitalize();
           _hospital[hI] = block;
@@ -265,7 +307,9 @@ class _GameScreenState extends State<GameScreen> {
       if (b.x < 0 || b.x > size.width - blockWidth) {
         b.updatePos(dx: -details.delta.dx, dy: 0);
       }
-      if (b.y < 0 || b.y > size.height * (8/15) - blockHeight + (houseHeight * (3/2))) {
+      if (b.y < 0 ||
+          b.y >
+              size.height * (8 / 15) - blockHeight + (houseHeight * (3 / 2))) {
         b.updatePos(dx: 0, dy: -details.delta.dy);
       }
       setState(() {
@@ -291,24 +335,27 @@ class _GameScreenState extends State<GameScreen> {
         }
         if (block.y < 10 + houseHeight) {
           block.setDirection(dx: block.dx, dy: block.dy.abs());
-        } else if (block.y + blockHeight > size.height * (2/3) - 20) {
+        } else if (block.y + blockHeight > size.height * (2 / 3) - 20) {
           block.setDirection(dx: block.dx, dy: block.dy.abs() * -1);
         }
-         _blocks.asMap().forEach((j, other) {
-          if (i != j && j != _blockToDrag && other.infected && blockCol(block, other)) {
+        _blocks.asMap().forEach((j, other) {
+          if (i != j &&
+              j != _blockToDrag &&
+              other.infected &&
+              blockCol(block, other)) {
             block.setInfected(true);
           }
           if (blockCol(block, other) && j != _blockToDrag) {
-             if (block.y < other.y) {
+            if (block.y < other.y) {
               block.setDirection(dx: block.dx, dy: block.dy.abs() * -1);
-             } else if (block.y > other.y) {
+            } else if (block.y > other.y) {
               block.setDirection(dx: block.dx, dy: block.dy.abs());
-             }
-             if (block.x < other.x) {
+            }
+            if (block.x < other.x) {
               block.setDirection(dx: block.dx.abs() * -1, dy: block.dy);
-             } else if (block.x > other.x) {
+            } else if (block.x > other.x) {
               block.setDirection(dx: block.dx.abs(), dy: block.dy);
-             }
+            }
           }
         });
       }
@@ -320,62 +367,62 @@ class _GameScreenState extends State<GameScreen> {
     });
   }
 
-  bool _didStar(int star) => _score >= star * (widget.level.gameDuration / secToStar);
+  bool _didStar(int star) =>
+      _score >= star * (widget.level.gameDuration / secToStar);
 
   Widget _buildMenu(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * (2/3) + 2,
+      height: MediaQuery.of(context).size.height * (2 / 3) + 2,
       child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Stars(score: _score, dur: widget.level.gameDuration, size: 80),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 25),
-              child: Text(_didStar(oneStar) ? 'Level Complete!' : 'Game Over!',
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Stars(score: _score, dur: widget.level.gameDuration, size: 80),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 25),
+            child: Text(_didStar(oneStar) ? 'Level Complete!' : 'Game Over!',
                 style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 40
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 40)),
+          ),
+          _didStar(oneStar)
+              ? ActionButton(
+                  text: 'Next Level',
+                  icon: Icons.keyboard_arrow_right,
+                  onPressed: () {
+                    _cleanState();
+                    widget.onNext();
+                    setState(() {
+                      _updated = true;
+                    });
+                  },
+                  main: true,
                 )
-              ),
-            ),
-            _didStar(oneStar) ? ActionButton(
-              text: 'Next Level',
-              icon: Icons.keyboard_arrow_right,
-              onPressed: () {
-                _cleanState();
-                widget.onNext();
-                setState(() {
-                  _updated = true;
-                });
-              },
-              main: true,
-            ) : Text(''),
-            ActionButton(
-              text: 'Play Again',
-              icon: Icons.replay,
-              main: !_didStar(oneStar),
-              onPressed: () {
-                _getHighScore();
-                setState(() {
-                  _showMenu = false;
-                  _clockTime = '00:00';
-                });
-              },
-            ),
-            ActionButton(
-              text: 'Select Level',
-              icon: Icons.list,
-              onPressed: () {
-                _cleanState();
-                widget.onClose();
-              },
-            ),
-          ],
-        )
-      ),
+              : Text(''),
+          ActionButton(
+            text: 'Play Again',
+            icon: Icons.replay,
+            main: !_didStar(oneStar),
+            onPressed: () {
+              _getHighScore();
+              setState(() {
+                _showMenu = false;
+                _clockTime = '00:00';
+              });
+            },
+          ),
+          ActionButton(
+            text: 'Select Level',
+            icon: Icons.list,
+            onPressed: () {
+              _cleanState();
+              widget.onClose();
+            },
+          ),
+        ],
+      )),
     );
   }
 
@@ -392,7 +439,7 @@ class _GameScreenState extends State<GameScreen> {
         onPanStart: running ? _handlePanStart : _blank,
         onPanEnd: running ? _handlePanEnd : _blank,
         onPanUpdate: running ? _handlePanUpdate : _blank,
-        onDoubleTap:  !_showMenu && !running ? _startTimer : () {},
+        onDoubleTap: !_showMenu && !running ? _startTimer : () {},
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
@@ -405,6 +452,7 @@ class _GameScreenState extends State<GameScreen> {
               time: _clockTime,
               houses: widget.level.houses,
               showHelper: _clockTime == '00:00' && !_showMenu,
+              background: background,
             ),
           ),
         ),
@@ -419,29 +467,33 @@ class _GameScreenState extends State<GameScreen> {
               });
               widget.onClose();
             },
-            label: Text("Back",
+            label: Text(
+              "Back",
               style: TextStyle(
                 fontSize: 20,
                 color: Colors.black87,
               ),
             ),
-            icon: Icon(Icons.arrow_back_ios,
+            icon: Icon(
+              Icons.arrow_back_ios,
               size: 18,
               color: Colors.black87,
-            ), 
+            ),
           ),
         ),
         alignment: Alignment.topLeft,
       ),
-      bottomSheet: _showMenu ? BottomSheet(
-        backgroundColor: Color.fromRGBO(25, 25, 25, 1),
-        builder: _buildMenu,
-        onClosing: () {
-          setState(() {
-            _showMenu = true;
-          });
-        },
-      ) : null,
+      bottomSheet: _showMenu
+          ? BottomSheet(
+              backgroundColor: Color.fromRGBO(25, 25, 25, 1),
+              builder: _buildMenu,
+              onClosing: () {
+                setState(() {
+                  _showMenu = true;
+                });
+              },
+            )
+          : null,
     );
   }
 }

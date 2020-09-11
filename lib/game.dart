@@ -77,9 +77,15 @@ class GamePainter extends CustomPainter {
         size: size,
         text: 'Score: ${this.score}',
         textStyle: TextStyle(
-          color: Colors.white,
-          fontSize: 30,
-        ));
+            color: Color.fromRGBO(254, 209, 40, 1),
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+            shadows: [
+              Shadow(
+                  blurRadius: 1.0,
+                  color: Color.fromRGBO(250, 28, 22, 1),
+                  offset: Offset(1.6, 1.6))
+            ]));
     final offset = Offset(0, (size.height / 6) - 15);
     textPainter.paint(canvas, offset);
   }
@@ -88,10 +94,7 @@ class GamePainter extends CustomPainter {
     final textPainter = drawText(
         size: size,
         text: 'High Score: ${this.highScore}',
-        textStyle: TextStyle(
-          color: Colors.white70,
-          fontSize: 20,
-        ),
+        textStyle: TextStyle(color: Colors.white70, fontSize: 20),
         textAlign: TextAlign.start);
     final offset = Offset(size.width - 30 - 130, 32);
     textPainter.paint(canvas, offset);
@@ -101,7 +104,16 @@ class GamePainter extends CustomPainter {
     final textPainter = drawText(
         size: size,
         text: 'Time: ${this.time}',
-        textStyle: TextStyle(fontSize: 25, color: Colors.white));
+        textStyle: TextStyle(
+            fontSize: 25,
+            color: Color.fromRGBO(254, 209, 40, 1),
+            fontWeight: FontWeight.bold,
+            shadows: [
+              Shadow(
+                  blurRadius: 1.0,
+                  color: Color.fromRGBO(250, 28, 22, 1),
+                  offset: Offset(1.5, 1.5))
+            ]));
     final offset = Offset(0, (size.height / 6) + 30);
     textPainter.paint(canvas, offset);
   }

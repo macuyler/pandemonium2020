@@ -434,7 +434,7 @@ class _GameScreenState extends State<GameScreen> {
       _updated = false;
     }
     return Scaffold(
-      appBar: getStatusBar(Brightness.light),
+      appBar: getStatusBar(Brightness.dark),
       body: GestureDetector(
         onPanStart: running ? _handlePanStart : _blank,
         onPanEnd: running ? _handlePanEnd : _blank,

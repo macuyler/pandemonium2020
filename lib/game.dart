@@ -65,9 +65,11 @@ class GamePainter extends CustomPainter {
   }
 
   void drawBackground(Canvas canvas, Size size, Paint paint) {
+    Rect dst = Rect.fromLTWH(0, 0, size.width, size.height * (1 / 3) + 1);
+    paint.color = Color.fromRGBO(25, 25, 25, 1);
+    canvas.drawRect(dst, paint);
     if (this.background != null) {
       Rect src = Rect.fromLTWH(0, 0, 1280, 720);
-      Rect dst = Rect.fromLTWH(0, 0, size.width, size.height * (1 / 3) + 1);
       canvas.drawImageRect(this.background, src, dst, paint);
     }
   }

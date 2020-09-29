@@ -38,6 +38,12 @@ class _HomeScreenState extends State<HomeScreen> {
         ? LevelScreen()
         : Scaffold(
             backgroundColor: Color.fromRGBO(25, 25, 25, 1),
+            appBar: AppBar(
+              brightness: Brightness.dark,
+              toolbarHeight: 0,
+              backgroundColor: Color.fromRGBO(25, 25, 25, 1),
+              elevation: 0,
+            ),
             body: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

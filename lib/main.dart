@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import './screens/levelscreen.dart';
-import './ui/statusbar.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -39,7 +38,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ? LevelScreen()
         : Scaffold(
             backgroundColor: Color.fromRGBO(25, 25, 25, 1),
-            appBar: getStatusBar(Brightness.dark),
             body: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

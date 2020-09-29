@@ -120,7 +120,8 @@ class _LevelScreenState extends State<LevelScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Text(level.name,
+                Text(
+                  level.name,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20,
@@ -143,29 +144,33 @@ class _LevelScreenState extends State<LevelScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return _currentLevel != null ? _getLevel() : Scaffold(
-      backgroundColor: Color.fromRGBO(25, 25, 25, 1),
-      appBar: AppBar(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        title: Text('Level Select'),
-        centerTitle: true,
-        brightness: Brightness.dark,
-      ),
-      body: ListView.builder(
-        itemBuilder: _buildButton,
-        itemCount: _levels.length,
-        shrinkWrap: true,
-        padding: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-      ),
-      floatingActionButton: _showUpdate ? FloatingActionButton.extended(
-        label: Text('Load New Levels!'),
-        onPressed: () {
-          _showUpdate = false;
-          _setLevels(_newLevels);
-        },
-      ) : null,
-    );
+    return _currentLevel != null
+        ? _getLevel()
+        : Scaffold(
+            backgroundColor: Color.fromRGBO(25, 25, 25, 1),
+            appBar: AppBar(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              title: Text('Level Select'),
+              centerTitle: true,
+              brightness: Brightness.dark,
+            ),
+            body: ListView.builder(
+              itemBuilder: _buildButton,
+              itemCount: _levels.length,
+              shrinkWrap: true,
+              padding: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+            ),
+            floatingActionButton: _showUpdate
+                ? FloatingActionButton.extended(
+                    label: Text('Load New Levels!'),
+                    onPressed: () {
+                      _showUpdate = false;
+                      _setLevels(_newLevels);
+                    },
+                  )
+                : null,
+          );
   }
 }

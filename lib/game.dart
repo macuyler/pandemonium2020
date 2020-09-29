@@ -96,7 +96,7 @@ class GamePainter extends CustomPainter {
         text: 'High Score: ${this.highScore}',
         textStyle: TextStyle(color: Colors.white70, fontSize: 20),
         textAlign: TextAlign.start);
-    final offset = Offset(size.width - 30 - 130, 32);
+    final offset = Offset(size.width - 30 - 130, 37);
     textPainter.paint(canvas, offset);
   }
 

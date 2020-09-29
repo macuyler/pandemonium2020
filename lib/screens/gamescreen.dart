@@ -9,7 +9,6 @@ import '../schemas/blocks.dart';
 import '../schemas/levels.dart';
 import '../ui/stars.dart';
 import '../ui/buttons.dart';
-import '../ui/statusbar.dart';
 import '../globals.dart';
 import '../db.dart';
 
@@ -434,7 +433,6 @@ class _GameScreenState extends State<GameScreen> {
       _updated = false;
     }
     return Scaffold(
-      appBar: getStatusBar(Brightness.dark),
       body: GestureDetector(
         onPanStart: running ? _handlePanStart : _blank,
         onPanEnd: running ? _handlePanEnd : _blank,
@@ -459,7 +457,7 @@ class _GameScreenState extends State<GameScreen> {
       ),
       floatingActionButton: Align(
         child: Padding(
-          padding: EdgeInsets.fromLTRB(15, 60, 0, 0),
+          padding: EdgeInsets.fromLTRB(15, 40, 0, 0),
           child: FlatButton.icon(
             onPressed: () {
               setState(() {

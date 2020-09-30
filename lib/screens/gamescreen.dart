@@ -459,21 +459,21 @@ class _GameScreenState extends State<GameScreen> {
             height: getSafeHeight(context),
             child: CustomPaint(
               painter: GamePainter(
-                blocks: _blocks,
-                hospital: _hospital,
-                score: _score,
-                highScore: _highScore,
-                time: _clockTime,
-                houses: widget.level.houses,
-                showHelper: _clockTime == '00:00' && !_showMenu,
-                background: background,
-              ),
+                  blocks: _blocks,
+                  hospital: _hospital,
+                  score: _score,
+                  highScore: _highScore,
+                  time: _clockTime,
+                  houses: widget.level.houses,
+                  showHelper: _clockTime == '00:00' && !_showMenu,
+                  background: background,
+                  padding: MediaQuery.of(context).padding),
             ),
           ),
         ),
         floatingActionButton: Align(
           child: Padding(
-            padding: EdgeInsets.fromLTRB(15, 40, 0, 0),
+            padding: EdgeInsets.fromLTRB(15, 20, 0, 0),
             child: FlatButton.icon(
               onPressed: () {
                 setState(() {

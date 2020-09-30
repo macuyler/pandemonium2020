@@ -12,6 +12,7 @@ class GamePainter extends CustomPainter {
   int houses;
   bool showHelper;
   UI.Image background;
+  EdgeInsets padding;
   GamePainter(
       {this.blocks,
       this.hospital,
@@ -20,7 +21,8 @@ class GamePainter extends CustomPainter {
       this.time,
       this.houses,
       this.showHelper,
-      this.background});
+      this.background,
+      this.padding});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -65,7 +67,8 @@ class GamePainter extends CustomPainter {
   }
 
   void drawBackground(Canvas canvas, Size size, Paint paint) {
-    Rect dst = Rect.fromLTWH(0, 0, size.width, size.height * (1 / 3) + 1);
+    Rect dst = Rect.fromLTWH(0, -this.padding.top, size.width,
+        size.height * (1 / 3) + 1 + this.padding.top);
     paint.color = Color.fromRGBO(25, 25, 25, 1);
     canvas.drawRect(dst, paint);
     if (this.background != null) {
@@ -98,7 +101,7 @@ class GamePainter extends CustomPainter {
         text: 'High Score: ${this.highScore}',
         textStyle: TextStyle(color: Colors.white70, fontSize: 20),
         textAlign: TextAlign.start);
-    final offset = Offset(size.width - 30 - 130, 37);
+    final offset = Offset(size.width - 30 - 130, 17);
     textPainter.paint(canvas, offset);
   }
 
@@ -132,8 +135,8 @@ class GamePainter extends CustomPainter {
   void drawBottom(Canvas canvas, Size size, Paint paint) {
     paint.color = Color.fromRGBO(25, 25, 25, 1);
     canvas.drawRect(
-        Rect.fromLTWH(
-            0, size.height * (1 / 3), size.width, size.height * (2 / 3)),
+        Rect.fromLTWH(0, size.height * (1 / 3), size.width,
+            size.height * (2 / 3) + this.padding.bottom),
         paint);
   }
 

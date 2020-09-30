@@ -28,9 +28,4 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
-    <supports-screens android:smallScreens="true"
-                  android:normalScreens="true"
-                  android:largeScreens="false"
-                  android:xlargeScreens="false"
-                  android:largestWidthLimitDp="840"/>
 </manifest>

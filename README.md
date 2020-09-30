@@ -1,6 +1,6 @@
-# pandemonium2020
+# Pandemonium 2020
 
-This is a flutter game based on the 2020 pandemic.
+This is a fun new game, where you try to save as many people from the pandemonium as possible. Earn stars on each level to gain bragging rights over your friends!
 
 ## Setup
 

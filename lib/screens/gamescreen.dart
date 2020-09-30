@@ -12,6 +12,19 @@ import '../ui/buttons.dart';
 import '../globals.dart';
 import '../db.dart';
 
+double paddingTop = 0;
+double paddingBottom = 0;
+double getSafeHeight(BuildContext context) {
+  MediaQueryData appDims = MediaQuery.of(context);
+  Size size = appDims.size;
+  EdgeInsets padding = appDims.padding;
+  if (padding.top > 0 && padding.bottom > 0) {
+    paddingTop = padding.top;
+    paddingBottom = padding.bottom;
+  }
+  return size.height - paddingTop - paddingBottom;
+}
+
 class GameScreen extends StatefulWidget {
   final Level level;
   final Function onClose;
@@ -167,7 +180,8 @@ class _GameScreenState extends State<GameScreen> {
 
   void _newBlock({bool canBeInfected = true}) {
     if (_blocks.length < widget.level.numPatients) {
-      final size = MediaQuery.of(context).size;
+      double width = MediaQuery.of(context).size.width;
+      double height = getSafeHeight(context);
       Random r = Random();
       List<List> sides = [leftColors, rightColors];
       double dx = Random().nextDouble();
@@ -176,11 +190,11 @@ class _GameScreenState extends State<GameScreen> {
       dy *= Random().nextBool() ? -1 : 1;
       _blocks.add(new Block(
         x: (Random().nextDouble() *
-                (size.width - (houseWidth * 2) - 10 - blockWidth)) +
+                (width - (houseWidth * 2) - 10 - blockWidth)) +
             houseWidth +
             5,
         y: (Random().nextDouble() *
-                (size.height * (2 / 3) - 40 - blockHeight - houseHeight)) +
+                (height * (2 / 3) - 40 - blockHeight - houseHeight)) +
             20 +
             houseHeight,
         color: sides[r.nextInt(2)][r.nextInt(widget.level.houses)],
@@ -198,8 +212,7 @@ class _GameScreenState extends State<GameScreen> {
 
   void _handlePanStart(details) {
     double tX = details.globalPosition.dx;
-    double tY = details.globalPosition.dy -
-        (MediaQuery.of(context).size.height * (1 / 3));
+    double tY = details.globalPosition.dy - (getSafeHeight(context) * (1 / 3));
     int forgivness = 2;
     bool checkBlock(Block block) =>
         tX >= block.x - forgivness &&
@@ -223,7 +236,8 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void _handlePanEnd(details) {
-    final size = MediaQuery.of(context).size;
+    double width = MediaQuery.of(context).size.width;
+    double height = getSafeHeight(context);
     bool scored = false;
     bool touched = false;
     bool infected = false;
@@ -233,14 +247,14 @@ class _GameScreenState extends State<GameScreen> {
       List<Color> colors = [];
       if (block.x >= 0 && block.x <= houseWidth) {
         colors = leftColors;
-      } else if (block.x + blockWidth >= size.width - houseWidth &&
-          block.x + blockWidth <= size.width) {
+      } else if (block.x + blockWidth >= width - houseWidth &&
+          block.x + blockWidth <= width) {
         colors = rightColors;
       }
       if (colors.length > 0) {
         int houses = widget.level.houses;
         for (var i = 0; i < houses; i++) {
-          double yFactor = (size.height * (2 / 3)) / houses;
+          double yFactor = (height * (2 / 3)) / houses;
           double y = (i * yFactor) + (yFactor / 2) - (houseHeight / 2);
           if (block.y + blockHeight >= y && block.y <= y + houseHeight) {
             house = colors[i];
@@ -257,7 +271,7 @@ class _GameScreenState extends State<GameScreen> {
       } else {
         double hX = houseWidth + 20;
         double hY = 5;
-        double hW = size.width - (houseWidth + 20) * 2;
+        double hW = width - (houseWidth + 20) * 2;
         double hH = houseHeight;
         if (block.x + blockWidth >= hX &&
             block.x <= hX + hW &&
@@ -267,7 +281,7 @@ class _GameScreenState extends State<GameScreen> {
             _hospital.contains(null)) {
           int hI = _hospital.indexWhere((a) => a == null);
           int beds = 3;
-          double xFactor = (size.width - (houseWidth + 20) * 2) / beds;
+          double xFactor = (width - (houseWidth + 20) * 2) / beds;
           block.x = (xFactor * hI) +
               (xFactor / 2) +
               houseWidth +
@@ -299,16 +313,16 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void _handlePanUpdate(details) {
-    final size = MediaQuery.of(context).size;
+    double width = MediaQuery.of(context).size.width;
+    double height = getSafeHeight(context);
     if (_blockToDrag != -1) {
       Block b = _blocks[_blockToDrag];
       b.updatePos(dx: details.delta.dx, dy: details.delta.dy);
-      if (b.x < 0 || b.x > size.width - blockWidth) {
+      if (b.x < 0 || b.x > width - blockWidth) {
         b.updatePos(dx: -details.delta.dx, dy: 0);
       }
       if (b.y < 0 ||
-          b.y >
-              size.height * (8 / 15) - blockHeight + (houseHeight * (3 / 2))) {
+          b.y > height * (8 / 15) - blockHeight + (houseHeight * (3 / 2))) {
         b.updatePos(dx: 0, dy: -details.delta.dy);
       }
       setState(() {
@@ -322,19 +336,20 @@ class _GameScreenState extends State<GameScreen> {
   void _blank(_) {}
 
   void _update() {
-    final size = MediaQuery.of(context).size;
+    double width = MediaQuery.of(context).size.width;
+    double height = getSafeHeight(context);
     _blocks.asMap().forEach((i, block) {
       if (i != _blockToDrag) {
         int ickFactor = block.infected ? 2 : 1;
         block.updatePos(dx: block.dx / ickFactor, dy: block.dy / ickFactor);
         if (block.x < houseWidth + 5) {
           block.setDirection(dx: block.dx.abs(), dy: block.dy);
-        } else if (block.x + blockWidth > size.width - houseWidth - 5) {
+        } else if (block.x + blockWidth > width - houseWidth - 5) {
           block.setDirection(dx: block.dx.abs() * -1, dy: block.dy);
         }
         if (block.y < 10 + houseHeight) {
           block.setDirection(dx: block.dx, dy: block.dy.abs());
-        } else if (block.y + blockHeight > size.height * (2 / 3) - 20) {
+        } else if (block.y + blockHeight > height * (2 / 3) - 20) {
           block.setDirection(dx: block.dx, dy: block.dy.abs() * -1);
         }
         _blocks.asMap().forEach((j, other) {
@@ -372,7 +387,7 @@ class _GameScreenState extends State<GameScreen> {
   Widget _buildMenu(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * (2 / 3) + 2,
+      height: getSafeHeight(context) * (2 / 3) + 2,
       child: Center(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -432,66 +447,68 @@ class _GameScreenState extends State<GameScreen> {
       _getHighScore();
       _updated = false;
     }
-    return Scaffold(
-      body: GestureDetector(
-        onPanStart: running ? _handlePanStart : _blank,
-        onPanEnd: running ? _handlePanEnd : _blank,
-        onPanUpdate: running ? _handlePanUpdate : _blank,
-        onDoubleTap: !_showMenu && !running ? _startTimer : () {},
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: CustomPaint(
-            painter: GamePainter(
-              blocks: _blocks,
-              hospital: _hospital,
-              score: _score,
-              highScore: _highScore,
-              time: _clockTime,
-              houses: widget.level.houses,
-              showHelper: _clockTime == '00:00' && !_showMenu,
-              background: background,
+    return SafeArea(
+      child: Scaffold(
+        body: GestureDetector(
+          onPanStart: running ? _handlePanStart : _blank,
+          onPanEnd: running ? _handlePanEnd : _blank,
+          onPanUpdate: running ? _handlePanUpdate : _blank,
+          onDoubleTap: !_showMenu && !running ? _startTimer : () {},
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: getSafeHeight(context),
+            child: CustomPaint(
+              painter: GamePainter(
+                blocks: _blocks,
+                hospital: _hospital,
+                score: _score,
+                highScore: _highScore,
+                time: _clockTime,
+                houses: widget.level.houses,
+                showHelper: _clockTime == '00:00' && !_showMenu,
+                background: background,
+              ),
             ),
           ),
         ),
-      ),
-      floatingActionButton: Align(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(15, 40, 0, 0),
-          child: FlatButton.icon(
-            onPressed: () {
-              setState(() {
-                _startTime = null;
-              });
-              widget.onClose();
-            },
-            label: Text(
-              "Back",
-              style: TextStyle(
-                fontSize: 20,
+        floatingActionButton: Align(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(15, 40, 0, 0),
+            child: FlatButton.icon(
+              onPressed: () {
+                setState(() {
+                  _startTime = null;
+                });
+                widget.onClose();
+              },
+              label: Text(
+                "Back",
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white70,
+                ),
+              ),
+              icon: Icon(
+                Icons.arrow_back_ios,
+                size: 18,
                 color: Colors.white70,
               ),
             ),
-            icon: Icon(
-              Icons.arrow_back_ios,
-              size: 18,
-              color: Colors.white70,
-            ),
           ),
+          alignment: Alignment.topLeft,
         ),
-        alignment: Alignment.topLeft,
+        bottomSheet: _showMenu
+            ? BottomSheet(
+                backgroundColor: Color.fromRGBO(25, 25, 25, 1),
+                builder: _buildMenu,
+                onClosing: () {
+                  setState(() {
+                    _showMenu = true;
+                  });
+                },
+              )
+            : null,
       ),
-      bottomSheet: _showMenu
-          ? BottomSheet(
-              backgroundColor: Color.fromRGBO(25, 25, 25, 1),
-              builder: _buildMenu,
-              onClosing: () {
-                setState(() {
-                  _showMenu = true;
-                });
-              },
-            )
-          : null,
     );
   }
 }

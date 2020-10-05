@@ -1,8 +1,23 @@
 import 'package:flutter/material.dart';
 
+class Step {
+  final String title;
+  final String description;
+  final AssetImage display;
+  Step({this.title, this.description, this.display});
+}
+
 class TutorialScreen extends StatefulWidget {
   final Function onClose;
   TutorialScreen({Key key, this.onClose}) : super(key: key);
+
+  final List<Step> steps = [
+    Step(
+        title: 'How Do I Play?',
+        description:
+            'The objective of the game is to get as many points as possible by dragging people to the house that matches their color to save them from the Pandemonium!',
+        display: AssetImage('assets/tutorial/step1.gif'))
+  ];
 
   @override
   _TutorialScreenState createState() => _TutorialScreenState();
@@ -18,43 +33,55 @@ class _TutorialScreenState extends State<TutorialScreen> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
-        title: Text('How To Play'),
+        title: Text(widget.steps[_step].title),
         centerTitle: true,
         brightness: Brightness.dark,
       ),
       backgroundColor: Color.fromRGBO(25, 25, 25, 1),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text('Welcome to the Tutorial',
-                style: TextStyle(color: Colors.white)),
-            Text('$_step'),
-            OutlineButton(
-              color: Colors.white,
-              splashColor: Color.fromRGBO(255, 255, 255, 0.6),
-              highlightColor: Color.fromRGBO(255, 255, 255, 0.6),
-              borderSide: BorderSide(
-                color: Color.fromRGBO(255, 255, 255, 0.8),
-                width: 1.0,
+            Padding(
+              padding: EdgeInsets.fromLTRB(12, 20, 12, 20),
+              child: Text(widget.steps[_step].description,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white, fontSize: 25)),
+            ),
+            Container(
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black, width: 2),
+                    borderRadius: BorderRadius.all(Radius.circular(4)),
+                    image: DecorationImage(
+                      image: widget.steps[_step].display,
+                      fit: BoxFit.cover,
+                    )),
+                child: SizedBox(
+                    width: MediaQuery.of(context).size.width - 12,
+                    height: MediaQuery.of(context).size.width - 12)),
+            Padding(
+              padding: EdgeInsets.only(top: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  OutlineButton(
+                      textColor: Colors.white,
+                      onPressed: () => print('Back!!!!'),
+                      borderSide: BorderSide(
+                        color: Color.fromRGBO(255, 255, 255, 0.8),
+                        width: 1.0,
+                      ),
+                      child: Text('Back', style: TextStyle(fontSize: 16))),
+                  OutlineButton(
+                      textColor: Colors.blue,
+                      onPressed: () => print('Next!!!!'),
+                      borderSide: BorderSide(
+                        color: Colors.blue,
+                        width: 1.0,
+                      ),
+                      child: Text('Next', style: TextStyle(fontSize: 16)))
+                ],
               ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(35),
-              ),
-              child: SizedBox(
-                  width: 160,
-                  height: 35,
-                  child: Center(
-                    child: Text(
-                      'Play Now',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 22),
-                    ),
-                  )),
-              onPressed: widget.onClose,
             ),
           ],
         ),

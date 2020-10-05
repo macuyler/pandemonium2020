@@ -43,3 +43,6 @@ lib/generated_plugin_registrant.dart
 # Signing
 *.jks
 android/key.properties
+
+# iOS BuildID
+ios/Flutter/.last_build_id

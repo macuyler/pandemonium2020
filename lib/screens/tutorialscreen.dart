@@ -64,14 +64,17 @@ class _TutorialScreenState extends State<TutorialScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                height: MediaQuery.of(context).size.height - 230,
+                height: MediaQuery.of(context).size.height -
+                    MediaQuery.of(context).padding.top -
+                    MediaQuery.of(context).padding.bottom -
+                    150,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Padding(
-                      padding: EdgeInsets.fromLTRB(12, 20, 12, 20),
+                      padding: EdgeInsets.fromLTRB(12, 20, 12, 10),
                       child: Text(widget.steps[_step].description,
-                          style: TextStyle(color: Colors.white, fontSize: 22)),
+                          style: TextStyle(color: Colors.white, fontSize: 20)),
                     ),
                     Container(
                         decoration: BoxDecoration(
@@ -82,13 +85,13 @@ class _TutorialScreenState extends State<TutorialScreen> {
                               fit: BoxFit.cover,
                             )),
                         child: SizedBox(
-                            width: MediaQuery.of(context).size.width - 12,
-                            height: MediaQuery.of(context).size.width - 12)),
+                            width: MediaQuery.of(context).size.width - 40,
+                            height: MediaQuery.of(context).size.width - 40)),
                   ],
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 20),
+                padding: EdgeInsets.symmetric(vertical: 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [

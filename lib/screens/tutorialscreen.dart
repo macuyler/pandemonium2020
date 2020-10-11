@@ -15,12 +15,27 @@ class TutorialScreen extends StatefulWidget {
     Step(
         title: 'How Do I Play?',
         description:
-            'The objective of the game is to get as many points as possible by dragging people to the house that matches their color to save them from the Pandemonium!',
+            'The object of the game is to get as many points as possible by dragging people to the house that matches their color to save them from the Pandemonium!',
         display: AssetImage('assets/tutorial/step1.gif')),
     Step(
         title: 'What is Scooping?',
         description:
-            'You can use a technique called scooping to drastically improve your speed! How to scoop: You can scoop by starting to drag at any place on the screen, and then dragging over a person to scoop them up!',
+            'You can use a technique called scooping to drastically improve your speed! You can scoop by starting to drag at any place on the screen, and then dragging over someone to scoop them up!',
+        display: AssetImage('assets/tutorial/step1.gif')),
+    Step(
+        title: 'Who are those Mask Guys?',
+        description:
+            'If a person is wearing a mask, then they are infected! Infected people will infect others if they get too close! Don\'t let them in the houses!',
+        display: AssetImage('assets/tutorial/step1.gif')),
+    Step(
+        title: 'What is that Thing at the Top?',
+        description:
+            'That is the hospital! Drag infected patients in, and after they are better you can drag them back out! But be careful you can only fit 3 people in at a time!',
+        display: AssetImage('assets/tutorial/step1.gif')),
+    Step(
+        title: 'How do I Win?',
+        description:
+            'You get a point for putting a person in the right house, and lose a point for putting them in the wrong one. If someone infected get\'s in a house, it will loose all of it\'s points!',
         display: AssetImage('assets/tutorial/step1.gif')),
   ];
 

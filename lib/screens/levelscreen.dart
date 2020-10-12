@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './gamescreen.dart';
+import './tutorialscreen.dart';
 import '../schemas/levels.dart';
 import '../ui/stars.dart';
 import '../db.dart';
@@ -20,6 +21,7 @@ class _LevelScreenState extends State<LevelScreen> {
   int _levelIndex = -1;
   Level _currentLevel;
   bool _showUpdate = false;
+  bool _showTutorial = false;
 
   get levelIndex => _levelIndex;
   set levelIndex(int i) {
@@ -81,20 +83,26 @@ class _LevelScreenState extends State<LevelScreen> {
   }
 
   Widget _getLevel() {
-    return GameScreen(
-      level: _currentLevel,
-      onClose: () {
-        _getHighScores();
-        setState(() {
-          levelIndex = -1;
-        });
-      },
-      onNext: () {
-        setState(() {
-          levelIndex += 1;
-        });
-      },
-    );
+    return _showTutorial
+        ? TutorialScreen(onClose: () {
+            setState(() {
+              _showTutorial = false;
+            });
+          })
+        : GameScreen(
+            level: _currentLevel,
+            onClose: () {
+              _getHighScores();
+              setState(() {
+                levelIndex = -1;
+              });
+            },
+            onNext: () {
+              setState(() {
+                levelIndex += 1;
+              });
+            },
+          );
   }
 
   Widget _buildButton(BuildContext context, int i) {
@@ -134,7 +142,14 @@ class _LevelScreenState extends State<LevelScreen> {
           ),
         ),
         onPressed: () {
+          bool showTutorial = true;
+          _highScores.forEach((hs) {
+            if (hs > 0) {
+              showTutorial = false;
+            }
+          });
           setState(() {
+            _showTutorial = showTutorial;
             levelIndex = i;
           });
         },
@@ -150,8 +165,8 @@ class _LevelScreenState extends State<LevelScreen> {
             backgroundColor: Color.fromRGBO(25, 25, 25, 1),
             appBar: AppBar(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
+                  borderRadius:
+                      BorderRadius.vertical(bottom: Radius.circular(10))),
               title: Text('Level Select'),
               centerTitle: true,
               brightness: Brightness.dark,

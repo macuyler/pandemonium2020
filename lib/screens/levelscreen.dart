@@ -165,8 +165,8 @@ class _LevelScreenState extends State<LevelScreen> {
             backgroundColor: Color.fromRGBO(25, 25, 25, 1),
             appBar: AppBar(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
+                  borderRadius:
+                      BorderRadius.vertical(bottom: Radius.circular(10))),
               title: Text('Level Select'),
               centerTitle: true,
               brightness: Brightness.dark,

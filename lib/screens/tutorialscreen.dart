@@ -51,8 +51,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
     return Scaffold(
       appBar: AppBar(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(10))),
         title: Text(widget.steps[_step].title),
         centerTitle: true,
         brightness: Brightness.dark,
@@ -64,18 +63,10 @@ class _TutorialScreenState extends State<TutorialScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                height: MediaQuery.of(context).size.height -
-                    MediaQuery.of(context).padding.top -
-                    MediaQuery.of(context).padding.bottom -
-                    150,
+                padding: EdgeInsets.only(top: 30),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(12, 20, 12, 10),
-                      child: Text(widget.steps[_step].description,
-                          style: TextStyle(color: Colors.white, fontSize: 20)),
-                    ),
                     Container(
                         decoration: BoxDecoration(
                             border: Border.all(color: Colors.black, width: 2),
@@ -87,11 +78,16 @@ class _TutorialScreenState extends State<TutorialScreen> {
                         child: SizedBox(
                             width: MediaQuery.of(context).size.width - 40,
                             height: MediaQuery.of(context).size.width - 40)),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(12, 20, 12, 10),
+                      child: Text(widget.steps[_step].description,
+                          style: TextStyle(color: Colors.white, fontSize: 20)),
+                    ),
                   ],
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 5),
+                padding: EdgeInsets.symmetric(vertical: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [

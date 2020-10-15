@@ -22,21 +22,21 @@ class _AdsState extends State<Ads> {
     testDevices: <String>[],
   );
 
-  String unitId = "ca-app-pub-3940256099942544/1033173712"; // Test ID
+  String _unitId = "ca-app-pub-3940256099942544/1033173712"; // Test ID
 
   void _setUnitId() {
     if (!widget.isInDebugMode) {
       if (Platform.isAndroid) {
-        this.unitId = "ca-app-pub-4873890200560512/8350729783"; // Android ID
+        _unitId = "ca-app-pub-4873890200560512/8350729783"; // Android ID
       } else if (Platform.isIOS) {
-        this.unitId = "ca-app-pub-4873890200560512/6702676001"; // iOS ID
+        _unitId = "ca-app-pub-4873890200560512/6702676001"; // iOS ID
       }
     }
   }
 
   InterstitialAd getAd() {
     return InterstitialAd(
-      adUnitId: this.unitId,
+      adUnitId: _unitId,
       targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {
         print("InterstitialAd event is $event");

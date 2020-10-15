@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_core/firebase_core.dart';
 import './screens/levelscreen.dart';
+import './screens/splashscreen.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -12,13 +14,21 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Pandemonium 2020',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: HomeScreen(),
-    );
+    return FutureBuilder(
+        future: Firebase.initializeApp(),
+        builder: (context, snapshot) {
+          print(snapshot);
+          return MaterialApp(
+            title: 'Pandemonium 2020',
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+            ),
+            home: snapshot.connectionState == ConnectionState.done &&
+                    !snapshot.hasError
+                ? HomeScreen()
+                : SplashScreen(),
+          );
+        });
   }
 }
 

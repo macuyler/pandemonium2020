@@ -9,6 +9,7 @@ import '../schemas/blocks.dart';
 import '../schemas/levels.dart';
 import '../ui/stars.dart';
 import '../ui/buttons.dart';
+import '../ui/ads.dart';
 import '../globals.dart';
 import '../db.dart';
 
@@ -392,6 +393,7 @@ class _GameScreenState extends State<GameScreen> {
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
+          Ads(),
           Stars(score: _score, dur: widget.level.gameDuration, size: 80),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 25),

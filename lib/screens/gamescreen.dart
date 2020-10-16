@@ -57,6 +57,7 @@ class _GameScreenState extends State<GameScreen> {
   String _clockTime = '00:00';
   bool _showMenu = false;
   bool _updated = false;
+  bool _showAd = true;
   UI.Image background;
 
   @override
@@ -385,6 +386,18 @@ class _GameScreenState extends State<GameScreen> {
   bool _didStar(int star) =>
       _score >= star * (widget.level.gameDuration / secToStar);
 
+  Widget _getAds() {
+    if (_showAd)
+      return Ads(
+        onClose: (int i) {
+          setState(() {
+            _showAd = false;
+          });
+        },
+      );
+    return Container();
+  }
+
   Widget _buildMenu(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -393,7 +406,7 @@ class _GameScreenState extends State<GameScreen> {
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Ads(),
+          _getAds(),
           Stars(score: _score, dur: widget.level.gameDuration, size: 80),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 25),
@@ -407,13 +420,16 @@ class _GameScreenState extends State<GameScreen> {
               ? ActionButton(
                   text: 'Next Level',
                   icon: Icons.keyboard_arrow_right,
-                  onPressed: () {
-                    _cleanState();
-                    widget.onNext();
-                    setState(() {
-                      _updated = true;
-                    });
-                  },
+                  onPressed: _showAd
+                      ? () {}
+                      : () {
+                          _cleanState();
+                          widget.onNext();
+                          setState(() {
+                            _updated = true;
+                            _showAd = true;
+                          });
+                        },
                   main: true,
                 )
               : Text(''),
@@ -421,21 +437,26 @@ class _GameScreenState extends State<GameScreen> {
             text: 'Play Again',
             icon: Icons.replay,
             main: !_didStar(oneStar),
-            onPressed: () {
-              _getHighScore();
-              setState(() {
-                _showMenu = false;
-                _clockTime = '00:00';
-              });
-            },
+            onPressed: _showAd
+                ? () {}
+                : () {
+                    _getHighScore();
+                    setState(() {
+                      _showMenu = false;
+                      _clockTime = '00:00';
+                      _showAd = true;
+                    });
+                  },
           ),
           ActionButton(
             text: 'Select Level',
             icon: Icons.list,
-            onPressed: () {
-              _cleanState();
-              widget.onClose();
-            },
+            onPressed: _showAd
+                ? () {}
+                : () {
+                    _cleanState();
+                    widget.onClose();
+                  },
           ),
         ],
       )),

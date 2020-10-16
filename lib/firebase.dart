@@ -2,20 +2,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import './schemas/levels.dart';
 
 Future<List<Level>> getCloudLevels() async {
-  dynamic fs = Firestore();
+  dynamic fs = FirebaseFirestore.instance;
   QuerySnapshot snap = await fs.collection('levels').getDocuments();
   List<Level> levels = [];
-  snap.documents.asMap().forEach((i, doc) {
+  snap.docs.asMap().forEach((i, doc) {
+    Map<String, dynamic> data = doc.data();
     Level l = new Level(
-      id: doc.documentID,
-      name: doc.data['name'],
-      gameDuration: doc.data['gameDuration'],
-      numPatients: doc.data['numPatients'],
-      infectionRate: doc.data['infectionRate'],
-      houses: doc.data['houses'],
-      healTime: doc.data['healTime'],
-      order: doc.data['order']
-    );
+        id: doc.id,
+        name: data['name'],
+        gameDuration: data['gameDuration'],
+        numPatients: data['numPatients'],
+        infectionRate: data['infectionRate'],
+        houses: data['houses'],
+        healTime: data['healTime'],
+        order: data['order']);
     levels.add(l);
   });
   return levels;

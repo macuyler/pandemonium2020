@@ -20,3 +20,17 @@ Future<List<Level>> getCloudLevels() async {
   });
   return levels;
 }
+
+Future<List<Map<String, String>>> getCloudTutorials() async {
+  dynamic fs = FirebaseFirestore.instance;
+  QuerySnapshot snap = await fs.collection('tutorials').getDocuments();
+  List<Map<String, String>> tutorials = new List(5);
+  snap.docs.asMap().forEach((i, doc) {
+    Map<String, dynamic> data = doc.data();
+    tutorials[data['id']] = {
+      'description': data['description'],
+      'title': data['title']
+    };
+  });
+  return tutorials;
+}

@@ -32,7 +32,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
     Step(
         title: 'What is scooping?',
         description:
-            'You can use a technique called scooping to drastically improve your speed! You can scoop by starting to drag at any place on the screen, and then dragging over someone to scoop them up!',
+            'There is a technique called scooping that can drastically improve your speed! You can scoop by starting to drag at any place on the screen, and then dragging over someone to scoop them up!',
         censoredDesc: '',
         display: AssetImage('assets/tutorial/step2.gif')),
     Step(

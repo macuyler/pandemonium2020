@@ -61,9 +61,9 @@ class _TutorialScreenState extends State<TutorialScreen> {
     getCloudTutorials().then((tutorials) {
       tutorials.asMap().forEach((i, t) {
         newSteps.add(Step(
-            title: _steps[i].title,
+            title: t['title'],
             description: _steps[i].description,
-            censoredDesc: t,
+            censoredDesc: t['description'],
             display: _steps[i].display));
       });
       setState(() {

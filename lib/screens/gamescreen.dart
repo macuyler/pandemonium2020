@@ -402,64 +402,72 @@ class _GameScreenState extends State<GameScreen> {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: getSafeHeight(context) * (2 / 3) + 2,
-      child: Center(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          _getAds(),
-          Stars(score: _score, dur: widget.level.gameDuration, size: 80),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 25),
-            child: Text(_didStar(oneStar) ? 'Level Complete!' : 'Game Over!',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 40)),
-          ),
-          _didStar(oneStar)
-              ? ActionButton(
-                  text: 'Next Level',
-                  icon: Icons.keyboard_arrow_right,
-                  onPressed: _showAd
-                      ? () {}
-                      : () {
-                          _cleanState();
-                          widget.onNext();
-                          setState(() {
-                            _updated = true;
-                            _showAd = true;
-                          });
-                        },
-                  main: true,
-                )
-              : Text(''),
-          ActionButton(
-            text: 'Play Again',
-            icon: Icons.replay,
-            main: !_didStar(oneStar),
-            onPressed: _showAd
-                ? () {}
-                : () {
-                    _getHighScore();
-                    setState(() {
-                      _showMenu = false;
-                      _clockTime = '00:00';
-                      _showAd = true;
-                    });
-                  },
-          ),
-          ActionButton(
-            text: 'Select Level',
-            icon: Icons.list,
-            onPressed: _showAd
-                ? () {}
-                : () {
-                    _cleanState();
-                    widget.onClose();
-                  },
-          ),
-        ],
-      )),
+      child: Stack(children: [
+        Center(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            _getAds(),
+            Stars(score: _score, dur: widget.level.gameDuration, size: 80),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 25),
+              child: Text(_didStar(oneStar) ? 'Level Complete!' : 'Game Over!',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 40)),
+            ),
+            _didStar(oneStar)
+                ? ActionButton(
+                    text: 'Next Level',
+                    icon: Icons.keyboard_arrow_right,
+                    onPressed: _showAd
+                        ? null
+                        : () {
+                            _cleanState();
+                            widget.onNext();
+                            setState(() {
+                              _updated = true;
+                              _showAd = true;
+                            });
+                          },
+                    main: true,
+                  )
+                : Text(''),
+            ActionButton(
+              text: 'Play Again',
+              icon: Icons.replay,
+              main: !_didStar(oneStar),
+              onPressed: _showAd
+                  ? null
+                  : () {
+                      _getHighScore();
+                      setState(() {
+                        _showMenu = false;
+                        _clockTime = '00:00';
+                        _showAd = true;
+                      });
+                    },
+            ),
+            ActionButton(
+              text: 'Select Level',
+              icon: Icons.list,
+              onPressed: _showAd
+                  ? null
+                  : () {
+                      _cleanState();
+                      widget.onClose();
+                    },
+            ),
+          ],
+        )),
+        _showAd
+            ? Center(
+                child: Container(
+                    margin: EdgeInsets.only(top: 120),
+                    child: CircularProgressIndicator()))
+            : Container(),
+      ]),
     );
   }
 

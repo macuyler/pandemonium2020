@@ -28,31 +28,37 @@ class _TutorialScreenState extends State<TutorialScreen> {
         description:
             'The object of the game is to get as many points as possible by dragging people to the house that matches their color to save them from the Pandemonium!',
         censoredDesc: '',
-        display: AssetImage('assets/tutorial/step1.gif')),
+        display: AssetImage('assets/tutorial/tut1.gif')),
     Step(
         title: 'What is scooping?',
         description:
             'There is a technique called scooping that can drastically improve your speed! You can scoop by starting to drag at any place on the screen, and then dragging over someone to scoop them up!',
         censoredDesc: '',
-        display: AssetImage('assets/tutorial/step2.gif')),
+        display: AssetImage('assets/tutorial/tut2.gif')),
     Step(
         title: 'Who are those mask guys?',
         description:
             'If a person is wearing a mask, then they are infected! Infected people will infect others if they get too close! Don\'t let them in the houses!',
         censoredDesc: '',
-        display: AssetImage('assets/tutorial/step3.gif')),
+        display: AssetImage(Platform.isIOS
+            ? 'assets/tutorial/tut3-ios.gif'
+            : 'assets/tutorial/tut3-android.gif')),
     Step(
         title: 'What is that thing at the top?',
         description:
             'That is the hospital! Drag infected patients in, and after they are better you can drag them back out! But be careful you can only fit 3 people in at a time!',
         censoredDesc: '',
-        display: AssetImage('assets/tutorial/step4.gif')),
+        display: AssetImage(Platform.isIOS
+            ? 'assets/tutorial/tut4-ios.gif'
+            : 'assets/tutorial/tut4-android.gif')),
     Step(
         title: 'How do I win?',
         description:
             'You get a point for putting a person in the right house, and lose a point for putting them in the wrong one. If someone infected get\'s in a house, it will lose all of it\'s points!',
         censoredDesc: '',
-        display: AssetImage('assets/tutorial/step5.gif')),
+        display: AssetImage(Platform.isIOS
+            ? 'assets/tutorial/tut3-ios.gif'
+            : 'assets/tutorial/tut5-android.gif')),
   ];
 
   @override

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:ui' as UI;
+import 'dart:io' show Platform;
+import 'dart:math' as math;
 import './schemas/blocks.dart';
 import './globals.dart';
 
@@ -184,49 +186,94 @@ class GamePainter extends CustomPainter {
     }
   }
 
-  void drawBlock(Canvas canvas, Size size, Paint paint, Block block) {
-    double x = block.x;
-    double y = block.y + size.height * (1 / 3);
-    paint.color = block.color;
+  void drawGhost(Canvas canvas, Paint paint, double x, double y) {
+    paint.color = Colors.white;
     // Face
     canvas.drawRect(Rect.fromLTWH(x, y, blockWidth, blockHeight), paint);
     paint.color = Colors.black;
     // Left eye
-    canvas.drawRect(
-        Rect.fromLTWH(
-            x + (blockWidth / 4) - (blockWidth / 16),
-            y + (blockHeight / 4) - (blockHeight / 16),
-            blockWidth / 8,
-            blockHeight / 8),
-        paint);
+    canvas.drawArc(
+      Rect.fromLTWH(
+          x + (blockWidth / 4) - (blockWidth / 16) - 2,
+          y + (blockHeight / 4) - (blockHeight / 16) - 2,
+          blockWidth / 8 + 4,
+          blockHeight / 8 + 4),
+      180,
+      360,
+      false,
+      paint,
+    );
     // Right eye
-    canvas.drawRect(
-        Rect.fromLTWH(
-            x + (blockWidth * 3 / 4) - (blockWidth / 16),
-            y + (blockHeight / 4) - (blockHeight / 16),
-            blockWidth / 8,
-            blockHeight / 8),
-        paint);
-    if (block.infected) {
-      paint.color = Colors.white;
-      // Mask
-      canvas.drawRect(
-          Rect.fromLTWH(x + (blockWidth / 4), y + (blockHeight / 2),
-              blockWidth / 2, blockHeight / 2),
-          paint);
-      // Mask Strap
-      canvas.drawRect(
-          Rect.fromLTWH(x, y + (blockHeight / 2), blockWidth, blockHeight / 16),
-          paint);
+    canvas.drawArc(
+      Rect.fromLTWH(
+          x + (blockWidth * 3 / 4) - (blockWidth / 16) - 2,
+          y + (blockHeight / 4) - (blockHeight / 16) - 2,
+          blockWidth / 8 + 4,
+          blockHeight / 8 + 4),
+      180,
+      360,
+      false,
+      paint,
+    );
+    // Mouth
+    canvas.drawArc(
+      Rect.fromLTWH(x + (blockWidth / 4), y + (blockHeight / 2) - 2,
+          blockWidth / 2, blockHeight / 2),
+      180,
+      360,
+      false,
+      paint,
+    );
+  }
+
+  void drawBlock(Canvas canvas, Size size, Paint paint, Block block) {
+    double x = block.x;
+    double y = block.y + size.height * (1 / 3);
+    if (block.infected && Platform.isIOS) {
+      drawGhost(canvas, paint, x, y);
     } else {
-      // Mouth
-      canvas.drawArc(
-          Rect.fromLTWH(x + (blockWidth / 4), y + (blockHeight / 2) - 2,
-              blockWidth / 2, blockHeight / 2),
-          180,
-          360,
-          true,
+      paint.color = block.color;
+      // Face
+      canvas.drawRect(Rect.fromLTWH(x, y, blockWidth, blockHeight), paint);
+      paint.color = Colors.black;
+      // Left eye
+      canvas.drawRect(
+          Rect.fromLTWH(
+              x + (blockWidth / 4) - (blockWidth / 16),
+              y + (blockHeight / 4) - (blockHeight / 16),
+              blockWidth / 8,
+              blockHeight / 8),
           paint);
+      // Right eye
+      canvas.drawRect(
+          Rect.fromLTWH(
+              x + (blockWidth * 3 / 4) - (blockWidth / 16),
+              y + (blockHeight / 4) - (blockHeight / 16),
+              blockWidth / 8,
+              blockHeight / 8),
+          paint);
+      if (block.infected) {
+        paint.color = Colors.white;
+        // Mask
+        canvas.drawRect(
+            Rect.fromLTWH(x + (blockWidth / 4), y + (blockHeight / 2),
+                blockWidth / 2, blockHeight / 2),
+            paint);
+        // Mask Strap
+        canvas.drawRect(
+            Rect.fromLTWH(
+                x, y + (blockHeight / 2), blockWidth, blockHeight / 16),
+            paint);
+      } else {
+        // Mouth
+        canvas.drawArc(
+            Rect.fromLTWH(x + (blockWidth / 4), y + (blockHeight / 8) * 3 - 2,
+                blockWidth / 2, blockHeight / 2),
+            math.pi,
+            -math.pi,
+            true,
+            paint);
+      }
     }
   }
 

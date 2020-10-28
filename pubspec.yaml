@@ -34,9 +34,12 @@ flutter:
 
   assets:
    - assets/images/city.jpeg
-   - assets/tutorial/step1.gif
-   - assets/tutorial/step2.gif
-   - assets/tutorial/step3.gif
-   - assets/tutorial/step4.gif
-   - assets/tutorial/step5.gif
+   - assets/tutorial/tut1.gif
+   - assets/tutorial/tut2.gif
+   - assets/tutorial/tut3-android.gif
+   - assets/tutorial/tut4-android.gif
+   - assets/tutorial/tut5-android.gif
+   - assets/tutorial/tut3-ios.gif
+   - assets/tutorial/tut4-ios.gif
+   - assets/tutorial/tut5-ios.gif
 

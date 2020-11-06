@@ -1,3 +1,5 @@
+import 'leaderboards.dart';
+
 class Level {
   String id;
   String name;
@@ -7,7 +9,17 @@ class Level {
   int houses; // number of
   int healTime; // seconds
   int order;
-  Level({ this.id, this.name, this.gameDuration, this.numPatients, this.infectionRate, this.houses, this.healTime, this.order });
+  Leaderboard leaderboard;
+  Level(
+      {this.id,
+      this.name,
+      this.gameDuration,
+      this.numPatients,
+      this.infectionRate,
+      this.houses,
+      this.healTime,
+      this.order,
+      this.leaderboard});
 
   Map<String, dynamic> toMap() {
     return {
@@ -28,7 +40,8 @@ bool equalLevels(List<Level> l1s, List<Level> l2s) {
   if (l1s.length != l2s.length) return false;
   for (int i = 0; i < l1s.length; i++) {
     Map<String, dynamic> l1 = l1s[i].toMap();
-    Map<String, dynamic> l2 = l2s.where((e) => e.id == l1['levelID']).single.toMap();
+    Map<String, dynamic> l2 =
+        l2s.where((e) => e.id == l1['levelID']).single.toMap();
     l1.keys.forEach((key) {
       if (l1[key] != l2[key]) {
         r = false;

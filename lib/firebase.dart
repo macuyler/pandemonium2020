@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pandemonium2020/schemas/leaderboards.dart';
+import './schemas/leaderboards.dart';
 import './schemas/levels.dart';
 
 Future<List<Level>> getCloudLevels() async {
@@ -15,7 +17,9 @@ Future<List<Level>> getCloudLevels() async {
         infectionRate: data['infectionRate'],
         houses: data['houses'],
         healTime: data['healTime'],
-        order: data['order']);
+        order: data['order'],
+        leaderboard: new Leaderboard());
+    l.leaderboard.loadLeaders(data['leaderboard']);
     levels.add(l);
   });
   return levels;

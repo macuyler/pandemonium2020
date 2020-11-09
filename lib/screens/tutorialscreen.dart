@@ -35,6 +35,11 @@ class _TutorialScreenState extends State<TutorialScreen> {
             'If a person is wearing a mask, then they are infected! Infected people will infect others if they get too close! Don\'t let them in the houses!',
         display: AssetImage('assets/tutorial/tut3-android.gif')),
     Step(
+        title: 'What happens when dragged?',
+        description:
+            'If a player is being dragged around, they can\'t get infected or infect another player.',
+        display: AssetImage('assets/tutorial/tut6.gif')),
+    Step(
         title: 'What is that thing at the top?',
         description:
             'That is the hospital! Drag infected patients in, and after they are better you can drag them back out! But be careful you can only fit 3 people in at a time!',

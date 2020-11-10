@@ -33,7 +33,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
         title: 'Who are those mask guys?',
         description:
             'If a person is wearing a mask, then they are infected! Infected people will infect others if they get too close! Don\'t let them in the houses!',
-        display: AssetImage('assets/tutorial/tut3-android.gif')),
+        display: AssetImage('assets/tutorial/tut3.gif')),
     Step(
         title: 'What happens when dragged?',
         description:
@@ -43,12 +43,12 @@ class _TutorialScreenState extends State<TutorialScreen> {
         title: 'What is that thing at the top?',
         description:
             'That is the hospital! Drag infected patients in, and after they are better you can drag them back out! But be careful you can only fit 3 people in at a time!',
-        display: AssetImage('assets/tutorial/tut4-android.gif')),
+        display: AssetImage('assets/tutorial/tut4.gif')),
     Step(
         title: 'How do I win?',
         description:
             'You get a point for putting a person in the right house, and lose a point for putting them in the wrong one. If someone infected get\'s in a house, it will lose all of it\'s points!',
-        display: AssetImage('assets/tutorial/tut5-android.gif')),
+        display: AssetImage('assets/tutorial/tut5.gif')),
   ];
 
   @override

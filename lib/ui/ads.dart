@@ -2,6 +2,7 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 import 'package:firebase_admob/firebase_admob.dart';
+import 'package:flutter/services.dart';
 
 class Ads extends StatefulWidget {
   final Function onClose;
@@ -30,7 +31,10 @@ class _AdsState extends State<Ads> {
       targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {
         if (event == MobileAdEvent.closed) {
+          SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
           widget.onClose(0);
+        } else if (event == MobileAdEvent.clicked) {
+          SystemChrome.setEnabledSystemUIOverlays([]);
         } else if (event == MobileAdEvent.failedToLoad) {
           widget.onClose(1);
         }

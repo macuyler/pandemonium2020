@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:pandemonium2020/ui/gamemenu.dart';
 import 'dart:math';
 import 'dart:async';
 import 'dart:typed_data';
@@ -7,10 +8,8 @@ import 'dart:ui' as UI;
 import '../game.dart';
 import '../schemas/blocks.dart';
 import '../schemas/levels.dart';
-import '../ui/stars.dart';
-import '../ui/buttons.dart';
-import '../ui/ads.dart';
 import '../ui/gamesheet.dart';
+import '../ui/gamemenu.dart';
 import '../globals.dart';
 import '../db.dart';
 
@@ -58,7 +57,6 @@ class _GameScreenState extends State<GameScreen> {
   String _clockTime = '00:00';
   bool _showMenu = false;
   bool _updated = false;
-  bool _showAd = true;
   UI.Image background;
 
   @override
@@ -384,107 +382,37 @@ class _GameScreenState extends State<GameScreen> {
     });
   }
 
-  bool _didStar(int star) =>
-      _score >= star * (widget.level.gameDuration / secToStar);
-
-  Widget _getAds() {
-    if (_showAd)
-      return Ads(
-        onClose: (int i) {
-          setState(() {
-            _showAd = false;
-          });
-        },
-      );
-    return Container();
-  }
-
   Widget _buildBottomSheet(BuildContext context) {
-    return GameSheet(
-        height: getSafeHeight(context) * (2 / 3) + 2,
-        items: [_buildMenu(context), _buildLeaderboard(context)]);
-  }
-
-  Widget _buildLeaderboard(BuildContext context) {
-    return Container(
-        width: MediaQuery.of(context).size.width,
-        height: getSafeHeight(context) * (2 / 3) + 2,
-        child: Column(
-          children: [Text('Hello World')],
-        ));
-  }
-
-  Widget _buildMenu(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: getSafeHeight(context) * (2 / 3) + 2,
-      child: Stack(children: [
-        Center(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            _getAds(),
-            Stars(score: _score, dur: widget.level.gameDuration, size: 80),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 25),
-              child: Text(_didStar(oneStar) ? 'Level Complete!' : 'Game Over!',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 40)),
-            ),
-            _didStar(oneStar)
-                ? ActionButton(
-                    text: 'Next Level',
-                    icon: Icons.keyboard_arrow_right,
-                    onPressed: _showAd
-                        ? null
-                        : () {
-                            _cleanState();
-                            widget.onNext();
-                            setState(() {
-                              _updated = true;
-                              _showAd = true;
-                            });
-                          },
-                    main: true,
-                  )
-                : Text(''),
-            ActionButton(
-              text: 'Play Again',
-              icon: Icons.replay,
-              main: !_didStar(oneStar),
-              onPressed: _showAd
-                  ? null
-                  : () {
-                      _getHighScore();
-                      setState(() {
-                        _showMenu = false;
-                        _clockTime = '00:00';
-                        _showAd = true;
-                      });
-                    },
-            ),
-            ActionButton(
-              text: 'Select Level',
-              icon: Icons.list,
-              onPressed: _showAd
-                  ? null
-                  : () {
-                      _cleanState();
-                      widget.onClose();
-                    },
-            ),
-          ],
-        )),
-        _showAd
-            ? Center(
-                child: Container(
-                    margin: EdgeInsets.only(top: 120),
-                    child: CircularProgressIndicator()))
-            : Container(),
-      ]),
-    );
+    return GameSheet(height: getSafeHeight(context) * (2 / 3) + 2, items: [
+      GameMenu(
+          height: getSafeHeight(context) * (2 / 3) + 2,
+          score: _score,
+          duration: widget.level.gameDuration,
+          onNextLevel: () {
+            _cleanState();
+            widget.onNext();
+            setState(() {
+              _updated = true;
+            });
+          },
+          onPlayAgain: () {
+            _getHighScore();
+            setState(() {
+              _showMenu = false;
+              _clockTime = '00:00';
+            });
+          },
+          onSelectLevel: () {
+            _cleanState();
+            widget.onClose();
+          }),
+      Container(
+          width: MediaQuery.of(context).size.width,
+          height: getSafeHeight(context) * (2 / 3) + 2,
+          child: Column(
+            children: [Text('Hello World')],
+          ))
+    ]);
   }
 
   @override

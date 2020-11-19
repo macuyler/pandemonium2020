@@ -10,6 +10,7 @@ import '../schemas/levels.dart';
 import '../ui/stars.dart';
 import '../ui/buttons.dart';
 import '../ui/ads.dart';
+import '../ui/gamesheet.dart';
 import '../globals.dart';
 import '../db.dart';
 
@@ -398,6 +399,21 @@ class _GameScreenState extends State<GameScreen> {
     return Container();
   }
 
+  Widget _buildBottomSheet(BuildContext context) {
+    return GameSheet(
+        height: getSafeHeight(context) * (2 / 3) + 2,
+        items: [_buildMenu(context), _buildLeaderboard(context)]);
+  }
+
+  Widget _buildLeaderboard(BuildContext context) {
+    return Container(
+        width: MediaQuery.of(context).size.width,
+        height: getSafeHeight(context) * (2 / 3) + 2,
+        child: Column(
+          children: [Text('Hello World')],
+        ));
+  }
+
   Widget _buildMenu(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -531,7 +547,7 @@ class _GameScreenState extends State<GameScreen> {
         bottomSheet: _showMenu
             ? BottomSheet(
                 backgroundColor: Color.fromRGBO(25, 25, 25, 1),
-                builder: _buildMenu,
+                builder: _buildBottomSheet,
                 onClosing: () {
                   setState(() {
                     _showMenu = true;

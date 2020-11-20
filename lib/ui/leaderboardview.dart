@@ -14,18 +14,28 @@ class LeaderboardView extends StatefulWidget {
 class _LeaderboardViewtate extends State<LeaderboardView> {
   Widget _buildScores() {
     if (widget.leaderboard?.scores != null) {
+      List<dynamic> scores = List<dynamic>.from(widget.leaderboard.scores);
+      scores.sort((a, b) => b['score'] - a['score']);
       return ListView.builder(
+          padding: EdgeInsets.fromLTRB(20, 30, 20, 10),
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-          itemCount: widget.leaderboard.scores.length,
+          itemCount: scores.length,
           itemBuilder: (BuildContext context, int index) {
-            Map<String, dynamic> entry = widget.leaderboard.scores[index];
+            Map<String, dynamic> entry = scores[index];
             return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(entry['name'], style: TextStyle(color: Colors.white)),
+                Text(entry['name'],
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold)),
                 Text(entry['score'].toString(),
-                    style: TextStyle(color: Colors.white))
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold))
               ],
             );
           });

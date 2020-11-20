@@ -11,6 +11,7 @@ import '../schemas/levels.dart';
 import '../ui/ads.dart';
 import '../ui/gamesheet.dart';
 import '../ui/gamemenu.dart';
+import '../ui/leaderboard.dart';
 import '../globals.dart';
 import '../db.dart';
 
@@ -429,12 +430,9 @@ class _GameScreenState extends State<GameScreen> {
                     _cleanState();
                     widget.onClose();
                   }),
-              Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: getSafeHeight(context) * (2 / 3) + 2,
-                  child: Column(
-                    children: [Text('TODO: Add the leaderboard')],
-                  ))
+              Leaderboard(
+                height: getSafeHeight(context) * (2 / 3) + 2,
+              ),
             ])
           ],
         ));

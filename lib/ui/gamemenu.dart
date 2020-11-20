@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import './stars.dart';
 import './buttons.dart';
-import '../ui/ads.dart';
 import '../globals.dart';
 
 class GameMenu extends StatefulWidget {
   final double height;
   final int score;
   final int duration;
+  final bool isLoading;
   final Function onNextLevel;
   final Function onPlayAgain;
   final Function onSelectLevel;
@@ -16,6 +16,7 @@ class GameMenu extends StatefulWidget {
       this.height,
       this.score,
       this.duration,
+      this.isLoading,
       this.onNextLevel,
       this.onPlayAgain,
       this.onSelectLevel})
@@ -26,21 +27,8 @@ class GameMenu extends StatefulWidget {
 }
 
 class _GameMenuState extends State<GameMenu> {
-  bool _showAd = true;
   bool _didStar(int star) =>
       widget.score >= star * (widget.duration / secToStar);
-
-  Widget _getAds() {
-    if (_showAd)
-      return Ads(
-        onClose: (int i) {
-          setState(() {
-            _showAd = false;
-          });
-        },
-      );
-    return Container();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +40,6 @@ class _GameMenuState extends State<GameMenu> {
             child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            _getAds(),
             Stars(score: widget.score, dur: widget.duration, size: 80),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 25),
@@ -66,14 +53,7 @@ class _GameMenuState extends State<GameMenu> {
                 ? ActionButton(
                     text: 'Next Level',
                     icon: Icons.keyboard_arrow_right,
-                    onPressed: _showAd
-                        ? null
-                        : () {
-                            widget.onNextLevel();
-                            setState(() {
-                              _showAd = true;
-                            });
-                          },
+                    onPressed: widget.isLoading ? null : widget.onNextLevel,
                     main: true,
                   )
                 : Text(''),
@@ -81,23 +61,16 @@ class _GameMenuState extends State<GameMenu> {
               text: 'Play Again',
               icon: Icons.replay,
               main: !_didStar(oneStar),
-              onPressed: _showAd
-                  ? null
-                  : () {
-                      widget.onPlayAgain();
-                      setState(() {
-                        _showAd = true;
-                      });
-                    },
+              onPressed: widget.isLoading ? null : widget.onPlayAgain,
             ),
             ActionButton(
               text: 'Select Level',
               icon: Icons.list,
-              onPressed: _showAd ? null : widget.onSelectLevel,
+              onPressed: widget.isLoading ? null : widget.onSelectLevel,
             ),
           ],
         )),
-        _showAd
+        widget.isLoading
             ? Center(
                 child: Container(
                     margin: EdgeInsets.only(top: 120),

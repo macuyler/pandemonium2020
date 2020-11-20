@@ -8,6 +8,7 @@ import 'dart:ui' as UI;
 import '../game.dart';
 import '../schemas/blocks.dart';
 import '../schemas/levels.dart';
+import '../ui/ads.dart';
 import '../ui/gamesheet.dart';
 import '../ui/gamemenu.dart';
 import '../globals.dart';
@@ -57,6 +58,7 @@ class _GameScreenState extends State<GameScreen> {
   String _clockTime = '00:00';
   bool _showMenu = false;
   bool _updated = false;
+  bool _showAd = true;
   UI.Image background;
 
   @override
@@ -382,37 +384,60 @@ class _GameScreenState extends State<GameScreen> {
     });
   }
 
+  Widget _getAds() {
+    if (_showAd)
+      return Ads(
+        onClose: (int i) {
+          setState(() {
+            _showAd = false;
+          });
+        },
+      );
+    return Container();
+  }
+
   Widget _buildBottomSheet(BuildContext context) {
-    return GameSheet(height: getSafeHeight(context) * (2 / 3) + 2, items: [
-      GameMenu(
-          height: getSafeHeight(context) * (2 / 3) + 2,
-          score: _score,
-          duration: widget.level.gameDuration,
-          onNextLevel: () {
-            _cleanState();
-            widget.onNext();
-            setState(() {
-              _updated = true;
-            });
-          },
-          onPlayAgain: () {
-            _getHighScore();
-            setState(() {
-              _showMenu = false;
-              _clockTime = '00:00';
-            });
-          },
-          onSelectLevel: () {
-            _cleanState();
-            widget.onClose();
-          }),
-      Container(
-          width: MediaQuery.of(context).size.width,
-          height: getSafeHeight(context) * (2 / 3) + 2,
-          child: Column(
-            children: [Text('Hello World')],
-          ))
-    ]);
+    return Container(
+        width: MediaQuery.of(context).size.width,
+        height: getSafeHeight(context) * (2 / 3) + 2,
+        child: Column(
+          children: [
+            _getAds(),
+            GameSheet(height: getSafeHeight(context) * (2 / 3) + 2, items: [
+              GameMenu(
+                  height: getSafeHeight(context) * (2 / 3) + 2,
+                  score: _score,
+                  duration: widget.level.gameDuration,
+                  isLoading: _showAd,
+                  onNextLevel: () {
+                    _cleanState();
+                    widget.onNext();
+                    setState(() {
+                      _updated = true;
+                      _showAd = true;
+                    });
+                  },
+                  onPlayAgain: () {
+                    _getHighScore();
+                    setState(() {
+                      _showMenu = false;
+                      _clockTime = '00:00';
+                      _showAd = true;
+                    });
+                  },
+                  onSelectLevel: () {
+                    _cleanState();
+                    widget.onClose();
+                  }),
+              Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: getSafeHeight(context) * (2 / 3) + 2,
+                  child: Column(
+                    children: [Text('TODO: Add the leaderboard')],
+                  ))
+            ])
+          ],
+        ));
   }
 
   @override

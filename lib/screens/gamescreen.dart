@@ -11,9 +11,9 @@ import '../schemas/levels.dart';
 import '../ui/ads.dart';
 import '../ui/gamesheet.dart';
 import '../ui/gamemenu.dart';
-import '../ui/leaderboard.dart';
+import '../ui/leaderboardview.dart';
 import '../globals.dart';
-import '../db.dart';
+import '../db/index.dart';
 
 double paddingTop = 0;
 double paddingBottom = 0;
@@ -430,8 +430,9 @@ class _GameScreenState extends State<GameScreen> {
                     _cleanState();
                     widget.onClose();
                   }),
-              Leaderboard(
+              LeaderboardView(
                 height: getSafeHeight(context) * (2 / 3) + 2,
+                level: widget.level,
               ),
             ])
           ],

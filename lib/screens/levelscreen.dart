@@ -3,7 +3,7 @@ import './gamescreen.dart';
 import './tutorialscreen.dart';
 import '../schemas/levels.dart';
 import '../ui/stars.dart';
-import '../db.dart';
+import '../db/index.dart';
 import '../firebase.dart';
 
 class LevelScreen extends StatefulWidget {

@@ -30,7 +30,8 @@ class Level {
       'infectionRate': this.infectionRate,
       'houses': this.houses,
       'healTime': this.healTime,
-      'levelOrder': this.order
+      'levelOrder': this.order,
+      'leaderboardID': this.leaderboard.id,
     };
   }
 }

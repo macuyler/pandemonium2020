@@ -432,7 +432,7 @@ class _GameScreenState extends State<GameScreen> {
                   }),
               LeaderboardView(
                 height: getSafeHeight(context) * (2 / 3) + 2,
-                level: widget.level,
+                leaderboard: widget.level.leaderboard,
               ),
             ])
           ],

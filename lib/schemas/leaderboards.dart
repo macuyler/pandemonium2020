@@ -20,7 +20,6 @@ class Leaderboard {
       if (doc.exists) {
         Map<String, dynamic> data = doc.data();
         this.scores = data['scores'];
-        print('${this.scores}');
       }
     }
   }

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import '../schemas/levels.dart';
+import 'package:pandemonium2020/schemas/leaderboards.dart';
+import '../schemas/leaderboards.dart';
 
 class LeaderboardView extends StatefulWidget {
   final double height;
-  final Level level;
-  LeaderboardView({Key key, this.height, this.level}) : super(key: key);
+  final Leaderboard leaderboard;
+  LeaderboardView({Key key, this.height, this.leaderboard}) : super(key: key);
 
   @override
   _LeaderboardViewtate createState() => _LeaderboardViewtate();
@@ -12,17 +13,23 @@ class LeaderboardView extends StatefulWidget {
 
 class _LeaderboardViewtate extends State<LeaderboardView> {
   Widget _buildScores() {
-    print(widget.level.leaderboard);
-    // if (widget.leaderboard?.scores != null) {
-    //   return ListView.builder(
-    //       scrollDirection: Axis.vertical,
-    //       shrinkWrap: true,
-    //       itemCount: widget.leaderboard.scores.length,
-    //       itemBuilder: (BuildContext context, int index) {
-    //         print(widget.leaderboard.scores[index]);
-    //         return Text('hello');
-    //       });
-    // }
+    if (widget.leaderboard?.scores != null) {
+      return ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: widget.leaderboard.scores.length,
+          itemBuilder: (BuildContext context, int index) {
+            Map<String, dynamic> entry = widget.leaderboard.scores[index];
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(entry['name'], style: TextStyle(color: Colors.white)),
+                Text(entry['score'].toString(),
+                    style: TextStyle(color: Colors.white))
+              ],
+            );
+          });
+    }
     return Container();
   }
 

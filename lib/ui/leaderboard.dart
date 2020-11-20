@@ -9,6 +9,8 @@ class Leaderboard extends StatefulWidget {
 }
 
 class _LeaderboardState extends State<Leaderboard> {
+  List<String> items = ['Hello', 'World'];
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,6 +25,13 @@ class _LeaderboardState extends State<Leaderboard> {
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.bold, fontSize: 40),
           ),
+          ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: items.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Text(items[index]);
+              })
         ],
       )),
     );

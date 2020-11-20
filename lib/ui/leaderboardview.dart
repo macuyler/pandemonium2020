@@ -43,6 +43,18 @@ class _LeaderboardViewtate extends State<LeaderboardView> {
     return Container();
   }
 
+  Widget _buildEmptyMessage() {
+    if (widget.leaderboard?.scores == null ||
+        widget.leaderboard.scores.length < 1) {
+      return Text('No High Scores Yet!',
+          style: TextStyle(
+              color: Color.fromRGBO(255, 255, 255, 0.6),
+              fontSize: 24,
+              fontWeight: FontWeight.bold));
+    }
+    return Container();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -58,6 +70,7 @@ class _LeaderboardViewtate extends State<LeaderboardView> {
                 color: Colors.white, fontWeight: FontWeight.bold, fontSize: 40),
           ),
           _buildScores(),
+          _buildEmptyMessage(),
         ],
       )),
     );

@@ -23,7 +23,7 @@ class _GameSheetState extends State<GameSheet> {
           children: [
             CarouselSlider(
                 options: CarouselOptions(
-                    height: widget.height - 60,
+                    height: widget.height - 40,
                     initialPage: 0,
                     enableInfiniteScroll: false,
                     viewportFraction: 1.0,

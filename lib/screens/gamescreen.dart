@@ -57,9 +57,9 @@ class _GameScreenState extends State<GameScreen> {
   Map<Color, int> _houseScores = {};
   DateTime _startTime;
   String _clockTime = '00:00';
-  bool _showMenu = true;
+  bool _showMenu = false;
   bool _updated = false;
-  bool _showAd = false;
+  bool _showAd = true;
   UI.Image background;
 
   @override

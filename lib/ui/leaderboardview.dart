@@ -16,29 +16,46 @@ class _LeaderboardViewtate extends State<LeaderboardView> {
     if (widget.leaderboard?.scores != null) {
       List<dynamic> scores = List<dynamic>.from(widget.leaderboard.scores);
       scores.sort((a, b) => b['score'] - a['score']);
-      return ListView.builder(
+      return Padding(
           padding: EdgeInsets.fromLTRB(20, 30, 20, 10),
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemCount: scores.length,
-          itemBuilder: (BuildContext context, int index) {
-            Map<String, dynamic> entry = scores[index];
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(entry['name'],
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold)),
-                Text(entry['score'].toString(),
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold))
-              ],
-            );
-          });
+          child: Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                      top: BorderSide(
+                          width: 1.0,
+                          color: Color.fromRGBO(255, 255, 255, 0.3)))),
+              child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: scores.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    Map<String, dynamic> entry = scores[index];
+                    return Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                                bottom: BorderSide(
+                                    width: 1.0,
+                                    color:
+                                        Color.fromRGBO(255, 255, 255, 0.3)))),
+                        child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(entry['name'],
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold)),
+                                Text(entry['score'].toString(),
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.bold))
+                              ],
+                            )));
+                  })));
     }
     return Container();
   }

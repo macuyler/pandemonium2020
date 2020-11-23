@@ -42,12 +42,36 @@ class _LeaderboardViewtate extends State<LeaderboardView> {
                                 vertical: 5, horizontal: 10),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text(entry['name'],
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold)),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(right: 12),
+                                      child: SizedBox(
+                                        width: 28,
+                                        child: Container(
+                                            child: Text(
+                                                index < 9
+                                                    ? '0${index + 1}'
+                                                    : (index + 1).toString(),
+                                                textAlign: TextAlign.end,
+                                                style: TextStyle(
+                                                    color: Color.fromRGBO(
+                                                        255, 255, 255, 0.6),
+                                                    fontSize: 20,
+                                                    fontWeight:
+                                                        FontWeight.bold))),
+                                      ),
+                                    ),
+                                    Text(entry['name'],
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 22,
+                                            fontWeight: FontWeight.bold)),
+                                  ],
+                                ),
                                 Text(entry['score'].toString(),
                                     style: TextStyle(
                                         color: Colors.white,

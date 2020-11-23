@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import './gamescreen.dart';
 import './tutorialscreen.dart';
 import '../schemas/levels.dart';
@@ -159,6 +160,7 @@ class _LevelScreenState extends State<LevelScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     return _currentLevel != null
         ? _getLevel()
         : Scaffold(

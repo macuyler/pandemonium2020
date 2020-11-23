@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/services.dart';
 import 'package:pandemonium2020/ui/gamemenu.dart';
 import 'dart:math';
 import 'dart:async';
@@ -442,6 +442,7 @@ class _GameScreenState extends State<GameScreen> {
   @override
   Widget build(BuildContext context) {
     bool running = _startTime != null;
+    SystemChrome.setEnabledSystemUIOverlays([]);
     if (_updated) {
       _getHighScore();
       _updated = false;

@@ -4,6 +4,7 @@ import './gamescreen.dart';
 import './tutorialscreen.dart';
 import '../schemas/levels.dart';
 import '../ui/stars.dart';
+import '../ui/appdrawer.dart';
 import '../db/index.dart';
 import '../firebase.dart';
 
@@ -188,6 +189,7 @@ class _LevelScreenState extends State<LevelScreen> {
                     },
                   )
                 : null,
+            drawer: AppDrawer(),
           );
   }
 }

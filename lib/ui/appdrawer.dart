@@ -35,9 +35,47 @@ class _AppDrawerState extends State<AppDrawer> {
                               padding: EdgeInsets.symmetric(
                                   vertical: 12, horizontal: 24),
                               children: [
-                                Text('Hello World',
+                                Text('Display Name',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: 25))
+                                        color: Colors.white, fontSize: 22)),
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(0, 4, 0, 6),
+                                  child: Text(
+                                      'This will appear on the leaderboard.',
+                                      style: TextStyle(
+                                          color: Colors.white24, fontSize: 12)),
+                                ),
+                                TextField(
+                                    decoration: InputDecoration(
+                                        isDense: true,
+                                        contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 12, vertical: 5),
+                                        enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                width: 2.0,
+                                                color: Colors.white10)),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                width: 2.0,
+                                                color: Colors.white30)),
+                                        hintText: 'Display Name',
+                                        hintStyle:
+                                            TextStyle(color: Colors.white24),
+                                        suffixIcon: IconButton(
+                                          visualDensity: VisualDensity.compact,
+                                          padding: EdgeInsets.zero,
+                                          iconSize: 18,
+                                          color: Colors.white,
+                                          icon: Icon(Icons.check),
+                                          onPressed: () {},
+                                          tooltip: 'Save',
+                                        ),
+                                        suffixIconConstraints:
+                                            BoxConstraints.loose(
+                                                Size.fromHeight(18))),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    )),
                               ],
                             ),
                           )),

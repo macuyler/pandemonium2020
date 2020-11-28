@@ -13,7 +13,7 @@ import '../ui/gamesheet.dart';
 import '../ui/gamemenu.dart';
 import '../ui/leaderboardview.dart';
 import '../globals.dart';
-import '../db/index.dart';
+import '../api/scores.dart';
 
 double paddingTop = 0;
 double paddingBottom = 0;
@@ -48,7 +48,7 @@ Future<UI.Image> _loadImage(AssetBundleImageKey key) async {
 }
 
 class _GameScreenState extends State<GameScreen> {
-  DatabaseHelper _db = DatabaseHelper.instance;
+  ScoresApi _scoresApi = new ScoresApi();
   List<Block> _blocks = [];
   List<Block> _hospital = new List(3);
   int _blockToDrag = -1;
@@ -76,7 +76,7 @@ class _GameScreenState extends State<GameScreen> {
 
   void _cleanState() {
     setState(() {
-      _db = DatabaseHelper.instance;
+      _scoresApi = new ScoresApi();
       _blocks = [];
       _hospital = new List(3);
       _blockToDrag = -1;
@@ -97,7 +97,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void _getHighScore() async {
-    List<int> scores = await _db.getLevelScores(widget.level.id);
+    List<int> scores = await _scoresApi.getLevelScores(widget.level.id);
     scores.sort((a, b) => b - a);
     if (scores.length > 0) {
       setState(() {
@@ -110,8 +110,8 @@ class _GameScreenState extends State<GameScreen> {
     int s = _score;
     int hs = _highScore;
     if (s > hs) {
-      await _db.clearLevelScores(widget.level.id);
-      await _db.insertScore(s, widget.level.id);
+      await _scoresApi.clearLevelScores(widget.level.id);
+      await _scoresApi.insertScore(s, widget.level.id);
     }
   }
 

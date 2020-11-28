@@ -3,7 +3,7 @@
  * up to date with the current schemas.
  */
 
-part of 'index.dart';
+import './names.dart';
 
 final List<String> migrations = [
   """

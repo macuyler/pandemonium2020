@@ -18,6 +18,7 @@ class _DisplayNameState extends State<DisplayName> {
   }
 
   void _handleSubmit() {
+    // TODO: Save Display Name to local DB
     print('Name: $_displayName');
     nameController.clear();
     setState(() {
@@ -31,11 +32,14 @@ class _DisplayNameState extends State<DisplayName> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Display Name',
-            style: TextStyle(color: Colors.white, fontSize: 22)),
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.w500)),
         Padding(
           padding: EdgeInsets.fromLTRB(0, 4, 0, 6),
           child: Text('This will appear on the leaderboard.',
-              style: TextStyle(color: Colors.white24, fontSize: 12)),
+              style: TextStyle(color: Colors.white30, fontSize: 12)),
         ),
         TextField(
             controller: nameController,

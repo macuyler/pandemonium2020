@@ -2,13 +2,10 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
-import '../schemas/levels.dart';
-import '../schemas/leaderboards.dart';
+import './names.dart';
+import './migrations.dart';
 
 // Reference: https://pusher.com/tutorials/local-data-flutter
-
-part 'names.dart';
-part 'migrations.dart';
 
 // singleton class to manage the database
 class DatabaseHelper {
@@ -63,6 +60,11 @@ class DatabaseHelper {
       FOREIGN KEY($columnLevelId) REFERENCES $tableLevels($columnLevelId)
       )
       ''');
+    await db.execute('''
+    CREATE TABLE $tableSettings (
+      $columnDisplayName TEXT NOT NULL
+    )
+    ''');
   }
 
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
@@ -71,69 +73,5 @@ class DatabaseHelper {
         await db.execute(migrations[i - 5]);
       }
     }
-  }
-
-  // Levels API
-  Future<int> insertLevel(Level level) async {
-    Database db = await database;
-    int id = await db.insert(tableLevels, level.toMap());
-    return id;
-  }
-
-  Future<List> getLevels() async {
-    Database db = await database;
-    List<Map> levelMaps = await db.query(tableLevels);
-    List<Level> levels = [];
-    levelMaps.forEach((m) {
-      Level l = new Level(
-          id: m[columnLevelId],
-          name: m[columnName],
-          gameDuration: m[columnGameDur],
-          numPatients: m[columnNumPat],
-          infectionRate: m[columnInfecRate],
-          houses: m[columnHouses],
-          healTime: m[columnHealTime],
-          order: m[columnOrder],
-          leaderboard: new Leaderboard());
-      l.leaderboard.loadLeaders(m[columnLeaderboardId]);
-      levels.add(l);
-    });
-    return levels;
-  }
-
-  Future<int> clearLevels() async {
-    Database db = await database;
-    return await db
-        .delete(tableLevels, where: '$columnId != ?', whereArgs: [-1]);
-  }
-
-  // Scores API
-  Future<int> insertScore(int score, String levelId) async {
-    Database db = await database;
-    Map<String, dynamic> scoreMap = {
-      columnScore: score,
-      columnLevelId: levelId,
-    };
-    int id = await db.insert(tableScores, scoreMap);
-    return id;
-  }
-
-  Future<List> getLevelScores(String levelId) async {
-    Database db = await database;
-    List<Map> scoreMaps = await db.query(tableScores,
-        columns: [columnScore],
-        where: '$columnLevelId = ?',
-        whereArgs: [levelId]);
-    List<int> scores = [];
-    scoreMaps.forEach((m) {
-      scores.add(m[columnScore]);
-    });
-    return scores;
-  }
-
-  Future<int> clearLevelScores(String levelId) async {
-    Database db = await database;
-    return await db
-        .delete(tableScores, where: '$columnLevelId = ?', whereArgs: [levelId]);
   }
 }

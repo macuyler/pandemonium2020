@@ -19,7 +19,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(top: 20),
+                      padding: EdgeInsets.only(top: 0),
                       child: Text('Settings',
                           textAlign: TextAlign.center,
                           style: TextStyle(

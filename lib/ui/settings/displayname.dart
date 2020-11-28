@@ -43,10 +43,12 @@ class _DisplayNameState extends State<DisplayName> {
             decoration: InputDecoration(
                 isDense: true,
                 contentPadding:
-                    EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                    EdgeInsets.symmetric(horizontal: 16, vertical: 5),
                 enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(width: 2.0, color: Colors.white10)),
                 focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(width: 2.0, color: Colors.white30)),
                 hintText: 'Display Name',
                 hintStyle: TextStyle(color: Colors.white24),

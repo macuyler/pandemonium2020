@@ -19,7 +19,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20),
+                      padding: EdgeInsets.only(top: 20),
                       child: Text('Settings',
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -28,6 +28,19 @@ class _AppDrawerState extends State<AppDrawer> {
                             fontWeight: FontWeight.bold,
                           )),
                     ),
+                    Container(
+                        color: Color.fromRGBO(25, 25, 25, 1),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: 20,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                                color: Colors.blue,
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10))),
+                          ),
+                        )),
                     Expanded(
                       child: Container(
                           color: Color.fromRGBO(25, 25, 25, 1),

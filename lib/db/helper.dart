@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
-import './names.dart';
-import './migrations.dart';
+import 'names.dart';
+import 'migrations.dart';
 
 // Reference: https://pusher.com/tutorials/local-data-flutter
 

@@ -1,5 +1,5 @@
 import 'package:sqflite/sqflite.dart';
-import '../db/index.dart';
+import '../db/helper.dart';
 import '../db/names.dart';
 import '../schemas/levels.dart';
 import '../schemas/leaderboards.dart';

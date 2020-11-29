@@ -20,7 +20,6 @@ class Leaderboard {
     if (listener != null) listener.cancel();
     if (ref != null) {
       listener = ref.collection('scores').snapshots().listen((snap) {
-        print('Setting Scores...');
         this.scores = snap.docs
             .map((doc) => {'name': doc.id, 'score': doc.data()['score']})
             .toList();

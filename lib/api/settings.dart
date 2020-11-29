@@ -14,4 +14,13 @@ class SettingsApi {
     if (qry.isNotEmpty) return qry[0][columnDisplayName];
     return '';
   }
+
+  Future<int> setDisplayName(String name) async {
+    Database db = await _dh.database;
+    await db.delete(tableSettings, where: 'true'); // Clear old displayName.
+    Map<String, dynamic> settings = {};
+    settings[columnDisplayName] = name;
+    int id = await db.insert(tableSettings, settings);
+    return id;
+  }
 }

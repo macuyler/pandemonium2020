@@ -11,6 +11,7 @@ class DisplayName extends StatefulWidget {
 class _DisplayNameState extends State<DisplayName> {
   SettingsApi _settingsApi = new SettingsApi();
   TextEditingController nameController = TextEditingController();
+  String _originalName = '';
   String _displayName = '';
   bool _isLoading = true;
 
@@ -18,8 +19,9 @@ class _DisplayNameState extends State<DisplayName> {
   void initState() {
     super.initState();
     _settingsApi.getDisplayName().then((dn) {
-      print('Display name: $dn');
+      nameController.value = TextEditingValue(text: dn);
       setState(() {
+        _originalName = dn;
         _displayName = dn;
         _isLoading = false;
       });
@@ -33,12 +35,12 @@ class _DisplayNameState extends State<DisplayName> {
   }
 
   void _handleSubmit() {
-    // TODO: Save Display Name to local DB
-    print('Name: $_displayName');
-    nameController.clear();
-    setState(() {
-      _displayName = '';
-    });
+    if (_displayName.length > 0 && _displayName != _originalName) {
+      _settingsApi.setDisplayName(_displayName);
+      setState(() {
+        _displayName = '';
+      });
+    }
   }
 
   @override
@@ -78,7 +80,10 @@ class _DisplayNameState extends State<DisplayName> {
                   iconSize: 18,
                   color: Colors.white,
                   icon: Icon(Icons.check),
-                  onPressed: _displayName.length == 0 ? null : _handleSubmit,
+                  onPressed:
+                      _displayName.length == 0 || _displayName == _originalName
+                          ? null
+                          : _handleSubmit,
                   tooltip: 'Save',
                 ),
                 suffixIconConstraints:

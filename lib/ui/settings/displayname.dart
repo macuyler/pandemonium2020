@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../api/settings.dart';
 
 class DisplayName extends StatefulWidget {
   DisplayName({Key key}) : super(key: key);
@@ -8,8 +9,22 @@ class DisplayName extends StatefulWidget {
 }
 
 class _DisplayNameState extends State<DisplayName> {
+  SettingsApi _settingsApi = new SettingsApi();
   TextEditingController nameController = TextEditingController();
   String _displayName = '';
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _settingsApi.getDisplayName().then((dn) {
+      print('Display name: $dn');
+      setState(() {
+        _displayName = dn;
+        _isLoading = false;
+      });
+    });
+  }
 
   void _handleChange(String name) {
     setState(() {
@@ -44,6 +59,7 @@ class _DisplayNameState extends State<DisplayName> {
         TextField(
             controller: nameController,
             onChanged: _handleChange,
+            enabled: !_isLoading,
             decoration: InputDecoration(
                 isDense: true,
                 contentPadding:
@@ -54,7 +70,7 @@ class _DisplayNameState extends State<DisplayName> {
                 focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(width: 2.0, color: Colors.white30)),
-                hintText: 'Display Name',
+                hintText: _isLoading ? 'Loading...' : 'Display Name',
                 hintStyle: TextStyle(color: Colors.white24),
                 suffixIcon: IconButton(
                   visualDensity: VisualDensity.compact,

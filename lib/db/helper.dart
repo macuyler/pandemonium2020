@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
-import 'names.dart';
+import 'tables.dart';
 import 'migrations.dart';
 
 // Reference: https://pusher.com/tutorials/local-data-flutter
@@ -36,40 +36,15 @@ class DatabaseHelper {
         version: _databaseVersion, onCreate: _onCreate, onUpgrade: _onUpgrade);
   }
 
-  // SQL string to create the database
+  // When a new Database is created.
   Future _onCreate(Database db, int version) async {
-    await db.execute('''
-      CREATE TABLE $tableLevels (
-      $columnId INTEGER PRIMARY KEY,
-      $columnLevelId TEXT NOT NULL,
-      $columnName TEXT NOT NULL,
-      $columnGameDur INTEGER NOT NULL,
-      $columnNumPat INTEGER NOT NULL,
-      $columnInfecRate INTEGER NOT NULL,
-      $columnHouses INTEGER NOT NULL,
-      $columnHealTime INTEGER NOT NULL,
-      $columnOrder INTEGER NOT NULL,
-      $columnLeaderboardId TEXT NOT NULL
-      )
-      ''');
-    await db.execute('''
-      CREATE TABLE $tableScores (
-      $columnId INTEGER PRIMARY KEY,
-      $columnScore INTEGER NOT NULL,
-      $columnLevelId TEXT NOT NULL,
-      FOREIGN KEY($columnLevelId) REFERENCES $tableLevels($columnLevelId)
-      )
-      ''');
-    await db.execute('''
-    CREATE TABLE $tableSettings (
-      $columnDisplayName TEXT NOT NULL,
-      $columnUseFullScreen INTEGER NOT NULL DEFAULT 1 CHECK($columnUseFullScreen IN (0,1))
-    )
-    ''');
+    tables.forEach((tableQry) async {
+      await db.execute(tableQry);
+    });
   }
 
+  // When an existing Database is upgraded.
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    print('old: $oldVersion, new: $newVersion');
     for (int i = oldVersion; i < newVersion; i++) {
       String migration = migrations[i - 1];
       if (migration != '!') {

@@ -6,7 +6,15 @@
 import './names.dart';
 
 final List<String> migrations = [
+  '!', // Version 1 --> 2
+  '!', // Version 2 --> 3
+  '!', // Version 3 --> 4
   """
   ALTER TABLE $tableLevels ADD COLUMN $columnLeaderboardId TEXT DEFAULT '';
   """, // Version 4 --> 5
+  """
+  CREATE TABLE $tableSettings (
+    $columnDisplayName TEXT NOT NULL
+  );
+  """, // Version 5 --> 6
 ];

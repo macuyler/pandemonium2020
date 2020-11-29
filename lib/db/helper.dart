@@ -12,7 +12,7 @@ class DatabaseHelper {
   // This is the actual database filename that is saved in the docs directory.
   static final _databaseName = "Pandemonium.db";
   // Increment this version when you need to change the schema.
-  static final _databaseVersion = 5;
+  static final _databaseVersion = 6;
 
   // Make this a singleton class.
   DatabaseHelper._privateConstructor();
@@ -68,9 +68,10 @@ class DatabaseHelper {
   }
 
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    for (int i = oldVersion; i <= newVersion; i++) {
-      if (i >= 5) {
-        await db.execute(migrations[i - 5]);
+    for (int i = oldVersion; i < newVersion; i++) {
+      String migration = migrations[i - 1];
+      if (migration != '!') {
+        await db.execute(migrations[i - 1]);
       }
     }
   }

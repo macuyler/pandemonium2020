@@ -1,14 +1,33 @@
 import 'package:flutter/material.dart';
 import './settings/displayname.dart';
+import './settings/fullscreen.dart';
 
-class AppDrawer extends StatefulWidget {
+class AppDrawer extends StatelessWidget {
   AppDrawer({Key key}) : super(key: key);
 
-  @override
-  _AppDrawerState createState() => _AppDrawerState();
-}
+  final List<Widget> settings = [
+    DisplayName(),
+    FullScreen(),
+  ];
 
-class _AppDrawerState extends State<AppDrawer> {
+  Widget buildDivider() {
+    return Padding(
+        padding: EdgeInsets.only(top: 20, bottom: 16),
+        child: Divider(
+          color: Colors.white10,
+          thickness: 1,
+        ));
+  }
+
+  List<Widget> buildSettings() {
+    List<Widget> newSettings = settings.sublist(0, 1);
+    settings.sublist(1).forEach((s) {
+      newSettings.add(buildDivider());
+      newSettings.add(s);
+    });
+    return newSettings;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -48,9 +67,7 @@ class _AppDrawerState extends State<AppDrawer> {
                             child: ListView(
                               padding: EdgeInsets.symmetric(
                                   vertical: 12, horizontal: 24),
-                              children: [
-                                DisplayName(),
-                              ],
+                              children: buildSettings(),
                             ),
                           )),
                     ),

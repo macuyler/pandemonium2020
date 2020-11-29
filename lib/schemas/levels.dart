@@ -1,4 +1,5 @@
 import 'leaderboards.dart';
+import '../db/names.dart';
 
 class Level {
   String id;
@@ -23,15 +24,15 @@ class Level {
 
   Map<String, dynamic> toMap() {
     return {
-      'levelID': this.id,
-      'name': this.name,
-      'gameDuration': this.gameDuration,
-      'numPatients': this.numPatients,
-      'infectionRate': this.infectionRate,
-      'houses': this.houses,
-      'healTime': this.healTime,
-      'levelOrder': this.order,
-      'leaderboardID': this.leaderboard.id,
+      columnLevelId: this.id,
+      columnName: this.name,
+      columnGameDur: this.gameDuration,
+      columnNumPat: this.numPatients,
+      columnInfecRate: this.infectionRate,
+      columnHouses: this.houses,
+      columnHealTime: this.healTime,
+      columnOrder: this.order,
+      columnLeaderboardId: this.leaderboard.id,
     };
   }
 }
@@ -42,7 +43,7 @@ bool equalLevels(List<Level> l1s, List<Level> l2s) {
   for (int i = 0; i < l1s.length; i++) {
     Map<String, dynamic> l1 = l1s[i].toMap();
     Map<String, dynamic> l2 =
-        l2s.where((e) => e.id == l1['levelID']).single.toMap();
+        l2s.where((e) => e.id == l1[columnLevelId]).single.toMap();
     l1.keys.forEach((key) {
       if (l1[key] != l2[key]) {
         r = false;

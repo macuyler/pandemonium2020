@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pandemonium2020/api/settings.dart';
 import 'package:pandemonium2020/ui/gamemenu.dart';
 import 'dart:math';
 import 'dart:async';
@@ -15,6 +16,7 @@ import '../ui/leaderboardview.dart';
 import '../globals.dart';
 import '../firebase.dart';
 import '../api/scores.dart';
+import '../api/settings.dart';
 
 double paddingTop = 0;
 double paddingBottom = 0;
@@ -50,6 +52,7 @@ Future<UI.Image> _loadImage(AssetBundleImageKey key) async {
 
 class _GameScreenState extends State<GameScreen> {
   ScoresApi _scoresApi = new ScoresApi();
+  SettingsApi _settingsApi = new SettingsApi();
   List<Block> _blocks = [];
   List<Block> _hospital = new List(3);
   int _blockToDrag = -1;
@@ -62,12 +65,18 @@ class _GameScreenState extends State<GameScreen> {
   bool _updated = false;
   bool _showAd = true;
   UI.Image background;
+  bool _useFullScreen = false;
 
   @override
   void initState() {
     super.initState();
     _getHighScore();
     _getBackground();
+    _settingsApi.getUseFullScreen().then((ufs) {
+      setState(() {
+        _useFullScreen = ufs;
+      });
+    });
   }
 
   @override
@@ -444,7 +453,8 @@ class _GameScreenState extends State<GameScreen> {
   @override
   Widget build(BuildContext context) {
     bool running = _startTime != null;
-    SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChrome.setEnabledSystemUIOverlays(
+        _useFullScreen ? [] : SystemUiOverlay.values);
     if (_updated) {
       _getHighScore();
       _updated = false;

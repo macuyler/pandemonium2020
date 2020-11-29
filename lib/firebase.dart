@@ -28,6 +28,7 @@ Future<List<Level>> getCloudLevels() async {
   return levels;
 }
 
+// TODO: Prevent saving lower scores.
 void saveHighScores() async {
   dynamic fs = FirebaseFirestore.instance;
   ScoresApi scoresApi = new ScoresApi();
@@ -42,7 +43,8 @@ void saveHighScores() async {
           .collection('leaderboards')
           .doc(level.leaderboard.id)
           .collection('scores')
-          .add({'score': highScore, 'name': displayName});
+          .doc(displayName)
+          .set({'score': highScore});
     }
   });
 }

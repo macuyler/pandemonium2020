@@ -17,3 +17,4 @@ final String columnScore = 'score';
 final String columnLevelId = 'levelID';
 final String columnLeaderboardId = 'leaderboardID';
 final String columnDisplayName = 'displayName';
+final String columnUseFullScreen = 'useFullScreen';

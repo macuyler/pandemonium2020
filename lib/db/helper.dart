@@ -62,12 +62,14 @@ class DatabaseHelper {
       ''');
     await db.execute('''
     CREATE TABLE $tableSettings (
-      $columnDisplayName TEXT NOT NULL
+      $columnDisplayName TEXT NOT NULL,
+      $columnUseFullScreen INTEGER NOT NULL DEFAULT 1 CHECK($columnUseFullScreen IN (0,1))
     )
     ''');
   }
 
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    print('old: $oldVersion, new: $newVersion');
     for (int i = oldVersion; i < newVersion; i++) {
       String migration = migrations[i - 1];
       if (migration != '!') {

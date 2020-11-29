@@ -14,7 +14,8 @@ final List<String> migrations = [
   """, // Version 4 --> 5
   """
   CREATE TABLE $tableSettings (
-    $columnDisplayName TEXT NOT NULL
+    $columnDisplayName TEXT NOT NULL,
+    $columnUseFullScreen INTEGER NOT NULL DEFAULT 1 CHECK($columnUseFullScreen IN (0,1))
   );
   """, // Version 5 --> 6
 ];

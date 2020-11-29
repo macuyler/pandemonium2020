@@ -16,11 +16,10 @@ class Leaderboard {
       this.id = l;
     }
     if (ref != null) {
-      DocumentSnapshot doc = await ref.get();
-      if (doc.exists) {
-        Map<String, dynamic> data = doc.data();
-        this.scores = data['scores'];
-      }
+      QuerySnapshot snap = await ref.collection('scores').get();
+      this.scores = snap.docs
+          .map((doc) => {'name': doc.id, 'score': doc.data()['score']})
+          .toList();
     }
   }
 }

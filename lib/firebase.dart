@@ -28,7 +28,6 @@ Future<List<Level>> getCloudLevels() async {
   return levels;
 }
 
-// TODO: Prevent saving lower scores.
 void saveHighScores() async {
   dynamic fs = FirebaseFirestore.instance;
   ScoresApi scoresApi = new ScoresApi();

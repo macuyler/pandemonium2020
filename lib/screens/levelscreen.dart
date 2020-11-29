@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import './gamescreen.dart';
@@ -43,6 +41,7 @@ class _LevelScreenState extends State<LevelScreen> {
   void initState() {
     super.initState();
     _syncLevelsDB();
+    saveHighScores();
   }
 
   void _syncLevelsDB() async {

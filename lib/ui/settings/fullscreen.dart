@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../api/settings.dart';
 
 class FullScreen extends StatefulWidget {
   FullScreen({Key key}) : super(key: key);
@@ -8,7 +9,26 @@ class FullScreen extends StatefulWidget {
 }
 
 class _FullScreenState extends State<FullScreen> {
+  SettingsApi _settingsApi = new SettingsApi();
   bool _useFullScreen = true;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _settingsApi.getUseFullScreen().then((ufs) {
+      setState(() {
+        _useFullScreen = ufs;
+        _isLoading = false;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _settingsApi.setUseFullScreen(_useFullScreen);
+  }
 
   void handleChange(bool value) {
     setState(() {
@@ -37,7 +57,7 @@ class _FullScreenState extends State<FullScreen> {
           children: [
             Switch(
               value: _useFullScreen,
-              onChanged: handleChange,
+              onChanged: _isLoading ? null : handleChange,
               inactiveTrackColor: Colors.white10,
             ),
             Text('Enable Full Screen',

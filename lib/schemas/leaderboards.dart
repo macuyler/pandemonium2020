@@ -5,6 +5,8 @@ class Leaderboard {
   List<dynamic> scores;
   Leaderboard({this.id, this.scores});
 
+  dynamic listener;
+
   void loadLeaders(dynamic l) async {
     DocumentReference ref;
     if (l is DocumentReference) {
@@ -15,11 +17,14 @@ class Leaderboard {
       ref = fs.collection('leaderboards').doc(l);
       this.id = l;
     }
+    if (listener != null) listener.cancel();
     if (ref != null) {
-      QuerySnapshot snap = await ref.collection('scores').get();
-      this.scores = snap.docs
-          .map((doc) => {'name': doc.id, 'score': doc.data()['score']})
-          .toList();
+      listener = ref.collection('scores').snapshots().listen((snap) {
+        print('Setting Scores...');
+        this.scores = snap.docs
+            .map((doc) => {'name': doc.id, 'score': doc.data()['score']})
+            .toList();
+      });
     }
   }
 }

@@ -40,7 +40,7 @@ void saveHighScore(Level level) async {
   String displayName = await settingsApi.getDisplayName();
   List<int> scores = await scoresApi.getLevelScores(level.id);
   int highScore = scores.isNotEmpty ? scores.reduce(max) : 0;
-  if (highScore > 0) {
+  if (highScore > 0 && displayName.length > 0) {
     fs
         .collection('leaderboards')
         .doc(level.leaderboard.id)

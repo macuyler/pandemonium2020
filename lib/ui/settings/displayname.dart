@@ -35,10 +35,10 @@ class _DisplayNameState extends State<DisplayName> {
   }
 
   void _handleSubmit() {
-    if (_displayName.length > 0 && _displayName != _originalName) {
+    if (_displayName != _originalName) {
       _settingsApi.setDisplayName(_displayName);
       setState(() {
-        _displayName = '';
+        _originalName = _displayName;
       });
     }
   }
@@ -55,7 +55,9 @@ class _DisplayNameState extends State<DisplayName> {
                 fontWeight: FontWeight.w500)),
         Padding(
           padding: EdgeInsets.fromLTRB(0, 4, 0, 6),
-          child: Text('This will appear on the leaderboard.',
+          child: Text(
+              'This will appear on the leaderboard.\n'
+              '(Leave blank to keep your scores private)',
               style: TextStyle(color: Colors.white30, fontSize: 12)),
         ),
         TextField(
@@ -79,11 +81,10 @@ class _DisplayNameState extends State<DisplayName> {
                   padding: EdgeInsets.zero,
                   iconSize: 18,
                   color: Colors.white,
+                  disabledColor: Colors.white10,
                   icon: Icon(Icons.check),
                   onPressed:
-                      _displayName.length == 0 || _displayName == _originalName
-                          ? null
-                          : _handleSubmit,
+                      _displayName == _originalName ? null : _handleSubmit,
                   tooltip: 'Save',
                 ),
                 suffixIconConstraints:

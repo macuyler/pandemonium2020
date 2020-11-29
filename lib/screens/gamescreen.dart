@@ -13,6 +13,7 @@ import '../ui/gamesheet.dart';
 import '../ui/gamemenu.dart';
 import '../ui/leaderboardview.dart';
 import '../globals.dart';
+import '../firebase.dart';
 import '../api/scores.dart';
 
 double paddingTop = 0;
@@ -112,6 +113,7 @@ class _GameScreenState extends State<GameScreen> {
     if (s > hs) {
       await _scoresApi.clearLevelScores(widget.level.id);
       await _scoresApi.insertScore(s, widget.level.id);
+      saveHighScore(widget.level);
     }
   }
 

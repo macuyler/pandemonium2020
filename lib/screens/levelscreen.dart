@@ -41,7 +41,7 @@ class _LevelScreenState extends State<LevelScreen> {
   void initState() {
     super.initState();
     _syncLevelsDB();
-    saveHighScores();
+    saveAllHighScores();
   }
 
   void _syncLevelsDB() async {

@@ -28,22 +28,24 @@ Future<List<Level>> getCloudLevels() async {
   return levels;
 }
 
-void saveHighScores() async {
+void saveAllHighScores() async {
+  List<Level> levels = await getCloudLevels();
+  levels.forEach(saveHighScore);
+}
+
+void saveHighScore(Level level) async {
   dynamic fs = FirebaseFirestore.instance;
   ScoresApi scoresApi = new ScoresApi();
   SettingsApi settingsApi = new SettingsApi();
-  List<Level> levels = await getCloudLevels();
   String displayName = await settingsApi.getDisplayName();
-  levels.forEach((level) async {
-    List<int> scores = await scoresApi.getLevelScores(level.id);
-    int highScore = scores.isNotEmpty ? scores.reduce(max) : 0;
-    if (highScore > 0) {
-      fs
-          .collection('leaderboards')
-          .doc(level.leaderboard.id)
-          .collection('scores')
-          .doc(displayName)
-          .set({'score': highScore});
-    }
-  });
+  List<int> scores = await scoresApi.getLevelScores(level.id);
+  int highScore = scores.isNotEmpty ? scores.reduce(max) : 0;
+  if (highScore > 0) {
+    fs
+        .collection('leaderboards')
+        .doc(level.leaderboard.id)
+        .collection('scores')
+        .doc(displayName)
+        .set({'score': highScore});
+  }
 }

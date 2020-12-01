@@ -1,10 +1,10 @@
 name: pandemonium2020
 description: A new Flutter project.
 
-version: 1.4.0
+version: 1.5.0
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: '>=2.1.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -25,20 +25,18 @@ dev_dependencies:
     sdk: flutter
 
 flutter_icons:
-  android: "launcher_icon"
+  android: 'launcher_icon'
   ios: true
-  image_path: "assets/icons/icon.png"
-
+  image_path: 'assets/icons/icon.png'
 
 flutter:
   uses-material-design: true
 
   assets:
-   - assets/images/city.jpeg
-   - assets/tutorial/tut1.gif
-   - assets/tutorial/tut2.gif
-   - assets/tutorial/tut3.gif
-   - assets/tutorial/tut4.gif
-   - assets/tutorial/tut5.gif
-   - assets/tutorial/tut6.gif
-
+    - assets/images/city.jpeg
+    - assets/tutorial/tut1.gif
+    - assets/tutorial/tut2.gif
+    - assets/tutorial/tut3.gif
+    - assets/tutorial/tut4.gif
+    - assets/tutorial/tut5.gif
+    - assets/tutorial/tut6.gif

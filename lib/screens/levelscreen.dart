@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import './gamescreen.dart';
 import './tutorialscreen.dart';
 import '../schemas/levels.dart';
 import '../ui/stars.dart';
-import '../db.dart';
+import '../ui/appdrawer.dart';
+import '../api/levels.dart';
+import '../api/scores.dart';
 import '../firebase.dart';
 
 class LevelScreen extends StatefulWidget {
@@ -14,7 +17,8 @@ class LevelScreen extends StatefulWidget {
 }
 
 class _LevelScreenState extends State<LevelScreen> {
-  DatabaseHelper _db = DatabaseHelper.instance;
+  LevelsApi _levelsApi = new LevelsApi();
+  ScoresApi _scoresApi = new ScoresApi();
   List<Level> _levels = [];
   List<Level> _newLevels = [];
   List<int> _highScores = [];
@@ -37,18 +41,19 @@ class _LevelScreenState extends State<LevelScreen> {
   void initState() {
     super.initState();
     _syncLevelsDB();
+    saveAllHighScores();
   }
 
   void _syncLevelsDB() async {
-    List<Level> levels = await _db.getLevels();
+    List<Level> levels = await _levelsApi.getLevels();
     _setLevels(levels);
     List<Level> cloudLevels = await getCloudLevels();
     if (!equalLevels(levels, cloudLevels)) {
-      await _db.clearLevels();
+      await _levelsApi.clearLevels();
       cloudLevels.forEach((l) async {
-        await _db.insertLevel(l);
+        await _levelsApi.insertLevel(l);
       });
-      levels = await _db.getLevels();
+      levels = await _levelsApi.getLevels();
       setState(() {
         _showUpdate = true;
         _newLevels = levels;
@@ -69,7 +74,7 @@ class _LevelScreenState extends State<LevelScreen> {
     List<int> highScores = [];
     for (int i = 0; i < _levels.length; i++) {
       Level level = _levels[i];
-      List<int> scores = await _db.getLevelScores(level.id);
+      List<int> scores = await _scoresApi.getLevelScores(level.id);
       scores.sort((a, b) => b - a);
       if (scores.length > 0) {
         highScores.add(scores[0]);
@@ -159,6 +164,7 @@ class _LevelScreenState extends State<LevelScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     return _currentLevel != null
         ? _getLevel()
         : Scaffold(
@@ -186,6 +192,7 @@ class _LevelScreenState extends State<LevelScreen> {
                     },
                   )
                 : null,
+            drawer: AppDrawer(),
           );
   }
 }

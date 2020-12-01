@@ -34,10 +34,12 @@ class Block {
   }
 
   void checkHealth(int healTime) {
-    if (
-      this.infected && this.startHospit != null &&
-      (DateTime.now().millisecondsSinceEpoch - this.startHospit.millisecondsSinceEpoch) / 1000 > healTime
-    ) {
+    if (this.infected &&
+        this.startHospit != null &&
+        (DateTime.now().millisecondsSinceEpoch -
+                    this.startHospit.millisecondsSinceEpoch) /
+                1000 >
+            healTime) {
       this.setInfected(false);
     }
   }

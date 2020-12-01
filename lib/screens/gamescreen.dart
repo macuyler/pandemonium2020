@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/services.dart';
+import 'package:pandemonium2020/api/settings.dart';
+import 'package:pandemonium2020/ui/gamemenu.dart';
 import 'dart:math';
 import 'dart:async';
 import 'dart:typed_data';
@@ -7,11 +9,14 @@ import 'dart:ui' as UI;
 import '../game.dart';
 import '../schemas/blocks.dart';
 import '../schemas/levels.dart';
-import '../ui/stars.dart';
-import '../ui/buttons.dart';
 import '../ui/ads.dart';
+import '../ui/gamesheet.dart';
+import '../ui/gamemenu.dart';
+import '../ui/leaderboardview.dart';
 import '../globals.dart';
-import '../db.dart';
+import '../firebase.dart';
+import '../api/scores.dart';
+import '../api/settings.dart';
 
 double paddingTop = 0;
 double paddingBottom = 0;
@@ -46,7 +51,8 @@ Future<UI.Image> _loadImage(AssetBundleImageKey key) async {
 }
 
 class _GameScreenState extends State<GameScreen> {
-  DatabaseHelper _db = DatabaseHelper.instance;
+  ScoresApi _scoresApi = new ScoresApi();
+  SettingsApi _settingsApi = new SettingsApi();
   List<Block> _blocks = [];
   List<Block> _hospital = new List(3);
   int _blockToDrag = -1;
@@ -59,12 +65,18 @@ class _GameScreenState extends State<GameScreen> {
   bool _updated = false;
   bool _showAd = true;
   UI.Image background;
+  bool _useFullScreen = false;
 
   @override
   void initState() {
     super.initState();
     _getHighScore();
     _getBackground();
+    _settingsApi.getUseFullScreen().then((ufs) {
+      setState(() {
+        _useFullScreen = ufs;
+      });
+    });
   }
 
   @override
@@ -74,7 +86,7 @@ class _GameScreenState extends State<GameScreen> {
 
   void _cleanState() {
     setState(() {
-      _db = DatabaseHelper.instance;
+      _scoresApi = new ScoresApi();
       _blocks = [];
       _hospital = new List(3);
       _blockToDrag = -1;
@@ -95,7 +107,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void _getHighScore() async {
-    List<int> scores = await _db.getLevelScores(widget.level.id);
+    List<int> scores = await _scoresApi.getLevelScores(widget.level.id);
     scores.sort((a, b) => b - a);
     if (scores.length > 0) {
       setState(() {
@@ -108,8 +120,9 @@ class _GameScreenState extends State<GameScreen> {
     int s = _score;
     int hs = _highScore;
     if (s > hs) {
-      await _db.clearLevelScores(widget.level.id);
-      await _db.insertScore(s, widget.level.id);
+      await _scoresApi.clearLevelScores(widget.level.id);
+      await _scoresApi.insertScore(s, widget.level.id);
+      saveHighScore(widget.level);
     }
   }
 
@@ -383,9 +396,6 @@ class _GameScreenState extends State<GameScreen> {
     });
   }
 
-  bool _didStar(int star) =>
-      _score >= star * (widget.level.gameDuration / secToStar);
-
   Widget _getAds() {
     if (_showAd)
       return Ads(
@@ -398,82 +408,53 @@ class _GameScreenState extends State<GameScreen> {
     return Container();
   }
 
-  Widget _buildMenu(BuildContext context) {
+  Widget _buildBottomSheet(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width,
-      height: getSafeHeight(context) * (2 / 3) + 2,
-      child: Stack(children: [
-        Center(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+        width: MediaQuery.of(context).size.width,
+        height: getSafeHeight(context) * (2 / 3) + 2,
+        child: Column(
+          children: [
             _getAds(),
-            Stars(score: _score, dur: widget.level.gameDuration, size: 80),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 25),
-              child: Text(_didStar(oneStar) ? 'Level Complete!' : 'Game Over!',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 40)),
-            ),
-            _didStar(oneStar)
-                ? ActionButton(
-                    text: 'Next Level',
-                    icon: Icons.keyboard_arrow_right,
-                    onPressed: _showAd
-                        ? null
-                        : () {
-                            _cleanState();
-                            widget.onNext();
-                            setState(() {
-                              _updated = true;
-                              _showAd = true;
-                            });
-                          },
-                    main: true,
-                  )
-                : Text(''),
-            ActionButton(
-              text: 'Play Again',
-              icon: Icons.replay,
-              main: !_didStar(oneStar),
-              onPressed: _showAd
-                  ? null
-                  : () {
-                      _getHighScore();
-                      setState(() {
-                        _showMenu = false;
-                        _clockTime = '00:00';
-                        _showAd = true;
-                      });
-                    },
-            ),
-            ActionButton(
-              text: 'Select Level',
-              icon: Icons.list,
-              onPressed: _showAd
-                  ? null
-                  : () {
-                      _cleanState();
-                      widget.onClose();
-                    },
-            ),
+            GameSheet(height: getSafeHeight(context) * (2 / 3) + 2, items: [
+              GameMenu(
+                  height: getSafeHeight(context) * (2 / 3) + 2,
+                  score: _score,
+                  duration: widget.level.gameDuration,
+                  isLoading: _showAd,
+                  onNextLevel: () {
+                    _cleanState();
+                    widget.onNext();
+                    setState(() {
+                      _updated = true;
+                      _showAd = true;
+                    });
+                  },
+                  onPlayAgain: () {
+                    _getHighScore();
+                    setState(() {
+                      _showMenu = false;
+                      _clockTime = '00:00';
+                      _showAd = true;
+                    });
+                  },
+                  onSelectLevel: () {
+                    _cleanState();
+                    widget.onClose();
+                  }),
+              LeaderboardView(
+                height: getSafeHeight(context) * (2 / 3) + 2,
+                leaderboard: widget.level.leaderboard,
+              ),
+            ])
           ],
-        )),
-        _showAd
-            ? Center(
-                child: Container(
-                    margin: EdgeInsets.only(top: 120),
-                    child: CircularProgressIndicator()))
-            : Container(),
-      ]),
-    );
+        ));
   }
 
   @override
   Widget build(BuildContext context) {
     bool running = _startTime != null;
+    SystemChrome.setEnabledSystemUIOverlays(
+        _useFullScreen ? [] : SystemUiOverlay.values);
     if (_updated) {
       _getHighScore();
       _updated = false;
@@ -531,7 +512,7 @@ class _GameScreenState extends State<GameScreen> {
         bottomSheet: _showMenu
             ? BottomSheet(
                 backgroundColor: Color.fromRGBO(25, 25, 25, 1),
-                builder: _buildMenu,
+                builder: _buildBottomSheet,
                 onClosing: () {
                   setState(() {
                     _showMenu = true;

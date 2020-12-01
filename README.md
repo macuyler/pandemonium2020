@@ -1,9 +1,9 @@
-![Pandemonium 2020](https://files-5141a.web.app/img/github/2020/pandemonium-banner.png)
+![Pandemonium 2020](https://files.macuyler.com/img/github/2020/pandemonium-banner.png)
 
 This is a fun new game, where you try to save as many people from the pandemonium as possible. Earn stars on each level to gain bragging rights over your friends!
 
-[<img src="https://files-5141a.web.app/img/github/apps/google-play.png" alt="Get it on Google Play" height="70px">](https://play.google.com/store/apps/details?id=com.macuyler.pandemonium2020)
-[<img src="https://files-5141a.web.app/img/github/apps/app-store.png" alt="Download on the App Store" height="70px">](https://testflight.apple.com/join/eW91KKLW)
+[<img src="https://files.macuyler.com/img/github/apps/google-play.png" alt="Get it on Google Play" height="70px">](https://play.google.com/store/apps/details?id=com.macuyler.pandemonium2020)
+[<img src="https://files.macuyler.com/img/github/apps/test-flight.png" alt="Download with Test Flight" height="70px">](https://testflight.apple.com/join/eW91KKLW)
 
 
 ## Setup

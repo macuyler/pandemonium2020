@@ -38,7 +38,7 @@ class AppDrawer extends StatelessWidget {
                 child: Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(top: 0),
+                      padding: EdgeInsets.only(top: 1),
                       child: Text('Settings',
                           textAlign: TextAlign.center,
                           style: TextStyle(

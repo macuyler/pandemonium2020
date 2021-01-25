@@ -4,7 +4,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 class GameSheet extends StatefulWidget {
   final double height;
   final List<Widget> items;
-  GameSheet({Key key, this.height, this.items}) : super(key: key);
+  final bool disabled;
+  GameSheet({Key key, this.height, this.items, this.disabled})
+      : super(key: key);
 
   @override
   _GameSheetState createState() => _GameSheetState();
@@ -12,6 +14,12 @@ class GameSheet extends StatefulWidget {
 
 class _GameSheetState extends State<GameSheet> {
   int currentIndex = 0;
+
+  List<Widget> _getItems() {
+    return widget.disabled && widget.items.length > 0
+        ? [widget.items[0]]
+        : widget.items;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +40,7 @@ class _GameSheetState extends State<GameSheet> {
                         currentIndex = index;
                       });
                     }),
-                items: widget.items),
+                items: _getItems()),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: widget.items.map((item) {

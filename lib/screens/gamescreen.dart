@@ -415,37 +415,40 @@ class _GameScreenState extends State<GameScreen> {
         child: Column(
           children: [
             _getAds(),
-            GameSheet(height: getSafeHeight(context) * (2 / 3) + 2, items: [
-              GameMenu(
-                  height: getSafeHeight(context) * (2 / 3) + 2,
-                  score: _score,
-                  duration: widget.level.gameDuration,
-                  isLoading: _showAd,
-                  onNextLevel: () {
-                    _cleanState();
-                    widget.onNext();
-                    setState(() {
-                      _updated = true;
-                      _showAd = true;
-                    });
-                  },
-                  onPlayAgain: () {
-                    _getHighScore();
-                    setState(() {
-                      _showMenu = false;
-                      _clockTime = '00:00';
-                      _showAd = true;
-                    });
-                  },
-                  onSelectLevel: () {
-                    _cleanState();
-                    widget.onClose();
-                  }),
-              LeaderboardView(
+            GameSheet(
+                disabled: _showAd,
                 height: getSafeHeight(context) * (2 / 3) + 2,
-                leaderboard: widget.level.leaderboard,
-              ),
-            ])
+                items: [
+                  GameMenu(
+                      height: getSafeHeight(context) * (2 / 3) + 2,
+                      score: _score,
+                      duration: widget.level.gameDuration,
+                      isLoading: _showAd,
+                      onNextLevel: () {
+                        _cleanState();
+                        widget.onNext();
+                        setState(() {
+                          _updated = true;
+                          _showAd = true;
+                        });
+                      },
+                      onPlayAgain: () {
+                        _getHighScore();
+                        setState(() {
+                          _showMenu = false;
+                          _clockTime = '00:00';
+                          _showAd = true;
+                        });
+                      },
+                      onSelectLevel: () {
+                        _cleanState();
+                        widget.onClose();
+                      }),
+                  LeaderboardView(
+                    height: getSafeHeight(context) * (2 / 3) + 2,
+                    leaderboard: widget.level.leaderboard,
+                  ),
+                ])
           ],
         ));
   }

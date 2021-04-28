@@ -10,7 +10,7 @@ This is a fun new game, where you try to save as many people from the pandemoniu
 2. Download:
 
 ```
-git clone https://github.com/Macuyler/pandemonium2020.git
+git clone https://github.com/macuyler/pandemonium2020.git
 cd pandemonium2020
 ```
 
@@ -18,5 +18,6 @@ cd pandemonium2020
 4. Run:
 
 ```
+flutter pub get
 flutter run
 ```

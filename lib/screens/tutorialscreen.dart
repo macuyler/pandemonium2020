@@ -68,7 +68,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: EdgeInsets.only(top: 30),
+                padding: EdgeInsets.only(top: 10),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -108,7 +108,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
                             ? setState(() {
                                 _step -= 1;
                               })
-                            : {},
+                            : widget.onClose(toHome: true),
                         child: Text('Back', style: TextStyle(fontSize: 16))),
                     OutlinedButton(
                         style: OutlinedButton.styleFrom(

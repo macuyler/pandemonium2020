@@ -89,9 +89,10 @@ class _LevelScreenState extends State<LevelScreen> {
 
   Widget _getLevel() {
     return _showTutorial
-        ? TutorialScreen(onClose: () {
+        ? TutorialScreen(onClose: ({toHome: false}) {
             setState(() {
               _showTutorial = false;
+              levelIndex = toHome ? -1 : levelIndex;
             });
           })
         : GameScreen(

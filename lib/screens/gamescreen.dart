@@ -54,7 +54,7 @@ class _GameScreenState extends State<GameScreen> {
   ScoresApi _scoresApi = new ScoresApi();
   SettingsApi _settingsApi = new SettingsApi();
   List<Block> _blocks = [];
-  List<Block> _hospital = new List(3);
+  List<Block> _hospital = new List.filled(3, null);
   int _blockToDrag = -1;
   int _score = 0;
   int _highScore = 0;
@@ -88,7 +88,7 @@ class _GameScreenState extends State<GameScreen> {
     setState(() {
       _scoresApi = new ScoresApi();
       _blocks = [];
-      _hospital = new List(3);
+      _hospital = new List.filled(3, null);
       _blockToDrag = -1;
       _score = 0;
       _highScore = 0;
@@ -142,7 +142,7 @@ class _GameScreenState extends State<GameScreen> {
       _score = 0;
       _houseScores = {};
       _blocks = [];
-      _hospital = new List(3);
+      _hospital = new List.filled(3, null);
       for (int i = 0; i < widget.level.numPatients; i++) {
         _newBlock(canBeInfected: false);
       }
@@ -157,7 +157,7 @@ class _GameScreenState extends State<GameScreen> {
       _showMenu = true;
       _houseScores = {};
       _blocks = [];
-      _hospital = new List(3);
+      _hospital = new List.filled(3, null);
     });
     _saveScore();
   }

@@ -489,7 +489,7 @@ class _GameScreenState extends State<GameScreen> {
         floatingActionButton: Align(
           child: Padding(
             padding: EdgeInsets.fromLTRB(15, 20, 0, 0),
-            child: FlatButton.icon(
+            child: TextButton.icon(
               onPressed: () {
                 setState(() {
                   _startTime = null;

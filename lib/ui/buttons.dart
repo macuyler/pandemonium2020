@@ -38,10 +38,12 @@ class ActionButton extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(bottom: 18),
       child: this.main
-          ? RaisedButton(
-              color: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(40),
+          ? ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(40),
+                ),
               ),
               child: _buildBox(context),
               onPressed: this.onPressed,

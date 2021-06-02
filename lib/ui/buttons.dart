@@ -46,18 +46,17 @@ class ActionButton extends StatelessWidget {
               child: _buildBox(context),
               onPressed: this.onPressed,
             )
-          : OutlineButton(
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(40),
+          : OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                primary: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(40),
+                ),
+                side: BorderSide(
+                  color: Color.fromRGBO(255, 255, 255, 0.8),
+                  width: 1.0,
+                ),
               ),
-              splashColor: Color.fromRGBO(255, 255, 255, 0.6),
-              highlightColor: Color.fromRGBO(255, 255, 255, 0.6),
-              borderSide: BorderSide(
-                color: Color.fromRGBO(255, 255, 255, 0.8),
-                width: 1.0,
-              ),
-              disabledBorderColor: Color.fromRGBO(100, 100, 100, 0.5),
               child: _buildBox(context),
               onPressed: this.onPressed,
             ),

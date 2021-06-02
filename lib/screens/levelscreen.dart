@@ -114,16 +114,16 @@ class _LevelScreenState extends State<LevelScreen> {
     Level level = _levels[i];
     return Padding(
       padding: EdgeInsets.only(bottom: 15),
-      child: OutlineButton(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(45),
-        ),
-        splashColor: Color.fromRGBO(255, 255, 255, 0.6),
-        highlightColor: Color.fromRGBO(255, 255, 255, 0.6),
-        borderSide: BorderSide(
-          color: Color.fromRGBO(255, 255, 255, 0.8),
-          width: 1.0,
+      child: OutlinedButton(
+        style: OutlinedButton.styleFrom(
+          primary: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(45),
+          ),
+          side: BorderSide(
+            color: Color.fromRGBO(255, 255, 255, 0.8),
+            width: 1.0,
+          ),
         ),
         child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.75,

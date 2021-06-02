@@ -83,16 +83,16 @@ class _HomeScreenState extends State<HomeScreen> {
                               offset: Offset(3.0, 3.0))
                         ]),
                   ),
-                  OutlineButton(
-                    color: Colors.white,
-                    splashColor: Color.fromRGBO(255, 255, 255, 0.6),
-                    highlightColor: Color.fromRGBO(255, 255, 255, 0.6),
-                    borderSide: BorderSide(
-                      color: Color.fromRGBO(255, 255, 255, 0.8),
-                      width: 1.0,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(35),
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      primary: Colors.white,
+                      side: BorderSide(
+                        color: Color.fromRGBO(255, 255, 255, 0.8),
+                        width: 1.0,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(35),
+                      ),
                     ),
                     child: SizedBox(
                         width: 160,

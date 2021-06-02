@@ -108,7 +108,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
                             ? setState(() {
                                 _step -= 1;
                               })
-                            : {},
+                            : widget.onClose(toHome: true),
                         child: Text('Back', style: TextStyle(fontSize: 16))),
                     OutlinedButton(
                         style: OutlinedButton.styleFrom(

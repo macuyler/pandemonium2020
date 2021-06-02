@@ -96,29 +96,33 @@ class _TutorialScreenState extends State<TutorialScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    OutlineButton(
-                        textColor: Colors.white,
+                    OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          primary: Colors.white,
+                          side: BorderSide(
+                            color: Color.fromRGBO(255, 255, 255, 0.8),
+                            width: 1.0,
+                          ),
+                        ),
                         onPressed: () => _step - 1 >= 0
                             ? setState(() {
                                 _step -= 1;
                               })
                             : {},
-                        borderSide: BorderSide(
-                          color: Color.fromRGBO(255, 255, 255, 0.8),
-                          width: 1.0,
-                        ),
                         child: Text('Back', style: TextStyle(fontSize: 16))),
-                    OutlineButton(
-                        textColor: Colors.blue,
+                    OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          primary: Colors.blue,
+                          side: BorderSide(
+                            color: Colors.blue,
+                            width: 1.0,
+                          ),
+                        ),
                         onPressed: () => _step + 1 < _steps.length
                             ? setState(() {
                                 _step += 1;
                               })
                             : widget.onClose(),
-                        borderSide: BorderSide(
-                          color: Colors.blue,
-                          width: 1.0,
-                        ),
                         child: Text(_step + 1 < _steps.length ? 'Next' : 'Done',
                             style: TextStyle(fontSize: 16)))
                   ],

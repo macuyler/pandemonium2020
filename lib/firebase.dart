@@ -8,7 +8,7 @@ import './api/settings.dart';
 
 Future<List<Level>> getCloudLevels() async {
   dynamic fs = FirebaseFirestore.instance;
-  QuerySnapshot snap = await fs.collection('levels').getDocuments();
+  QuerySnapshot snap = await fs.collection('levels').get();
   List<Level> levels = [];
   snap.docs.asMap().forEach((i, doc) {
     Map<String, dynamic> data = doc.data();

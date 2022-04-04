@@ -9,7 +9,6 @@ import 'dart:ui' as UI;
 import '../game.dart';
 import '../schemas/blocks.dart';
 import '../schemas/levels.dart';
-import '../ui/ads.dart';
 import '../ui/gamesheet.dart';
 import '../ui/gamemenu.dart';
 import '../ui/leaderboardview.dart';
@@ -63,7 +62,6 @@ class _GameScreenState extends State<GameScreen> {
   String _clockTime = '00:00';
   bool _showMenu = false;
   bool _updated = false;
-  bool _showAd = true;
   UI.Image background;
   bool _useFullScreen = false;
 
@@ -396,40 +394,26 @@ class _GameScreenState extends State<GameScreen> {
     });
   }
 
-  Widget _getAds() {
-    if (_showAd)
-      return Ads(
-        onClose: (int i) {
-          setState(() {
-            _showAd = false;
-          });
-        },
-      );
-    return Container();
-  }
-
   Widget _buildBottomSheet(BuildContext context) {
     return Container(
         width: MediaQuery.of(context).size.width,
         height: getSafeHeight(context) * (2 / 3) + 2,
         child: Column(
           children: [
-            _getAds(),
             GameSheet(
-                disabled: _showAd,
+                disabled: false,
                 height: getSafeHeight(context) * (2 / 3) + 2,
                 items: [
                   GameMenu(
                       height: getSafeHeight(context) * (2 / 3) + 2,
                       score: _score,
                       duration: widget.level.gameDuration,
-                      isLoading: _showAd,
+                      isLoading: false,
                       onNextLevel: () {
                         _cleanState();
                         widget.onNext();
                         setState(() {
                           _updated = true;
-                          _showAd = true;
                         });
                       },
                       onPlayAgain: () {
@@ -437,7 +421,6 @@ class _GameScreenState extends State<GameScreen> {
                         setState(() {
                           _showMenu = false;
                           _clockTime = '00:00';
-                          _showAd = true;
                         });
                       },
                       onSelectLevel: () {

@@ -39,6 +39,8 @@ lib/generated_plugin_registrant.dart
 # firebase
 **/google-services.json
 **/GoogleService-Info.plist
+**/firebase_app_id_file.json
+lib/firebase_options.dart
 
 # Signing
 *.jks

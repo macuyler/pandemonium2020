@@ -70,6 +70,7 @@ android {
     lint {
         disable 'InvalidPackage'
     }
+    namespace 'com.example.pandemonium2020'
 }
 
 flutter {

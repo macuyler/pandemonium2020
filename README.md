@@ -2,8 +2,6 @@
 
 This is a fun game, where you try to save as many people from the pandemonium as possible. Earn stars on each level to gain bragging rights over your friends!
 
-[<img src="https://files.macuyler.com/img/github/apps/google-play.png" alt="Get it on Google Play" height="70px">](https://play.google.com/store/apps/details?id=com.macuyler.pandemonium2020)
-
 ## Setup
 
 1. [Install Flutter](https://flutter.dev/docs/get-started/install)
